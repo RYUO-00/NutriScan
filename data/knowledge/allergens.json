@@ -1,0 +1,272 @@
+[
+  {
+    "id": 1,
+    "allergen_group": "Milk",
+    "keyword": "milk",
+    "source": "FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion)."
+  },
+  {
+    "id": 2,
+    "allergen_group": "Milk",
+    "keyword": "milk powder",
+    "source": "FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion)."
+  },
+  {
+    "id": 3,
+    "allergen_group": "Milk",
+    "keyword": "whey",
+    "source": "FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion)."
+  },
+  {
+    "id": 4,
+    "allergen_group": "Milk",
+    "keyword": "casein",
+    "source": "FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion)."
+  },
+  {
+    "id": 5,
+    "allergen_group": "Milk",
+    "keyword": "caseinate",
+    "source": "FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion)."
+  },
+  {
+    "id": 6,
+    "allergen_group": "Milk",
+    "keyword": "lactose",
+    "source": "FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion)."
+  },
+  {
+    "id": 7,
+    "allergen_group": "Milk",
+    "keyword": "milk solids",
+    "source": "FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion)."
+  },
+  {
+    "id": 8,
+    "allergen_group": "Milk",
+    "keyword": "whey powder",
+    "source": "FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion)."
+  },
+  {
+    "id": 9,
+    "allergen_group": "Wheat or Gluten",
+    "keyword": "wheat",
+    "source": "FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion)."
+  },
+  {
+    "id": 10,
+    "allergen_group": "Wheat or Gluten",
+    "keyword": "wheat flour",
+    "source": "FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion)."
+  },
+  {
+    "id": 11,
+    "allergen_group": "Wheat or Gluten",
+    "keyword": "atta",
+    "source": "FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion)."
+  },
+  {
+    "id": 12,
+    "allergen_group": "Wheat or Gluten",
+    "keyword": "maida",
+    "source": "FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion)."
+  },
+  {
+    "id": 13,
+    "allergen_group": "Wheat or Gluten",
+    "keyword": "semolina",
+    "source": "FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion)."
+  },
+  {
+    "id": 14,
+    "allergen_group": "Wheat or Gluten",
+    "keyword": "durum wheat",
+    "source": "FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion)."
+  },
+  {
+    "id": 15,
+    "allergen_group": "Wheat or Gluten",
+    "keyword": "barley",
+    "source": "FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion)."
+  },
+  {
+    "id": 16,
+    "allergen_group": "Wheat or Gluten",
+    "keyword": "rye",
+    "source": "FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion)."
+  },
+  {
+    "id": 17,
+    "allergen_group": "Wheat or Gluten",
+    "keyword": "oats",
+    "source": "FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion)."
+  },
+  {
+    "id": 18,
+    "allergen_group": "Wheat or Gluten",
+    "keyword": "gluten",
+    "source": "FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion)."
+  },
+  {
+    "id": 19,
+    "allergen_group": "Soy",
+    "keyword": "soy",
+    "source": "FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion)."
+  },
+  {
+    "id": 20,
+    "allergen_group": "Soy",
+    "keyword": "soybean",
+    "source": "FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion)."
+  },
+  {
+    "id": 21,
+    "allergen_group": "Soy",
+    "keyword": "soya",
+    "source": "FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion)."
+  },
+  {
+    "id": 22,
+    "allergen_group": "Soy",
+    "keyword": "soy protein",
+    "source": "FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion)."
+  },
+  {
+    "id": 23,
+    "allergen_group": "Soy",
+    "keyword": "soy lecithin",
+    "source": "FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion)."
+  },
+  {
+    "id": 24,
+    "allergen_group": "Peanut",
+    "keyword": "peanut",
+    "source": "FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion)."
+  },
+  {
+    "id": 25,
+    "allergen_group": "Peanut",
+    "keyword": "groundnut",
+    "source": "FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion)."
+  },
+  {
+    "id": 26,
+    "allergen_group": "Tree nut",
+    "keyword": "almond",
+    "source": "FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion)."
+  },
+  {
+    "id": 27,
+    "allergen_group": "Tree nut",
+    "keyword": "cashew",
+    "source": "FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion)."
+  },
+  {
+    "id": 28,
+    "allergen_group": "Tree nut",
+    "keyword": "pistachio",
+    "source": "FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion)."
+  },
+  {
+    "id": 29,
+    "allergen_group": "Tree nut",
+    "keyword": "walnut",
+    "source": "FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion)."
+  },
+  {
+    "id": 30,
+    "allergen_group": "Tree nut",
+    "keyword": "hazelnut",
+    "source": "FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion)."
+  },
+  {
+    "id": 31,
+    "allergen_group": "Tree nut",
+    "keyword": "pecan",
+    "source": "FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion)."
+  },
+  {
+    "id": 32,
+    "allergen_group": "Tree nut",
+    "keyword": "brazil nut",
+    "source": "FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion)."
+  },
+  {
+    "id": 33,
+    "allergen_group": "Tree nut",
+    "keyword": "macadamia",
+    "source": "FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion)."
+  },
+  {
+    "id": 34,
+    "allergen_group": "Egg",
+    "keyword": "egg",
+    "source": "FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion)."
+  },
+  {
+    "id": 35,
+    "allergen_group": "Egg",
+    "keyword": "egg white",
+    "source": "FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion)."
+  },
+  {
+    "id": 36,
+    "allergen_group": "Egg",
+    "keyword": "egg yolk",
+    "source": "FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion)."
+  },
+  {
+    "id": 37,
+    "allergen_group": "Fish",
+    "keyword": "fish",
+    "source": "FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion)."
+  },
+  {
+    "id": 38,
+    "allergen_group": "Fish",
+    "keyword": "fish sauce",
+    "source": "FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion)."
+  },
+  {
+    "id": 39,
+    "allergen_group": "Shellfish",
+    "keyword": "shrimp",
+    "source": "FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion)."
+  },
+  {
+    "id": 40,
+    "allergen_group": "Shellfish",
+    "keyword": "prawn",
+    "source": "FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion)."
+  },
+  {
+    "id": 41,
+    "allergen_group": "Shellfish",
+    "keyword": "crab",
+    "source": "FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion)."
+  },
+  {
+    "id": 42,
+    "allergen_group": "Shellfish",
+    "keyword": "crustacean",
+    "source": "FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion)."
+  },
+  {
+    "id": 43,
+    "allergen_group": "Sesame",
+    "keyword": "sesame",
+    "source": "FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion)."
+  },
+  {
+    "id": 44,
+    "allergen_group": "Mustard",
+    "keyword": "mustard",
+    "source": "FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion)."
+  },
+  {
+    "id": 45,
+    "allergen_group": "Sulphite",
+    "keyword": "sulphite",
+    "source": "FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion)."
+  }
+]

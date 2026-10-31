@@ -1,0 +1,65 @@
+{
+  "image": "noisy.png",
+  "ingredient_tokens": [
+    "Whole wheat flour",
+    "rice flour",
+    "sugar",
+    "palm oil",
+    "salt",
+    "spices",
+    "soy lecithin (322)",
+    "sodium benzoate (E 211)"
+  ],
+  "additive_codes": [
+    "211",
+    "322"
+  ],
+  "allergen_groups": [
+    "Wheat or Gluten",
+    "Soy",
+    "Milk",
+    "Peanut"
+  ],
+  "nutrients": {
+    "energy": {
+      "value": 425,
+      "unit": "kcal",
+      "basis": "100g"
+    },
+    "total_fat": {
+      "value": 17,
+      "unit": "g",
+      "basis": "100g"
+    },
+    "saturated_fat": {
+      "value": 5,
+      "unit": "g",
+      "basis": "100g"
+    },
+    "trans_fat": {
+      "value": 0.1,
+      "unit": "g",
+      "basis": "100g"
+    },
+    "sugar": {
+      "value": 12,
+      "unit": "g",
+      "basis": "100g"
+    },
+    "sodium": {
+      "value": 580,
+      "unit": "mg",
+      "basis": "100g"
+    },
+    "protein": {
+      "value": 7,
+      "unit": "g",
+      "basis": "100g"
+    },
+    "fibre": {
+      "value": 4,
+      "unit": "g",
+      "basis": "100g"
+    }
+  }
+}

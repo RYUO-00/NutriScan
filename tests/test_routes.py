@@ -1,0 +1,194 @@
+from io import BytesIO
+from pathlib import Path
+
+import pytest
+
+import app as app_module
+import config
+from ocr import OCRNoTextError, OCRSetupError
+from storage import StorageError
+
+
+SAMPLE_TEXT = """Ingredients: whole wheat flour, rice flour, sugar, palm oil, salt, spices, soy lecithin (322), sodium benzoate (E 211)
+Contains: Peanut, Milk
+Nutrition Information per 100 g
+Energy 425 kcal
+Total fat 17 g
+Saturated fat 5 g
+Trans fat 0.1 g
+Total sugars 12 g
+Sodium 580 mg
+Protein 7 g
+Dietary fibre 4 g"""
+
+
+@pytest.fixture
+def client(tmp_path, monkeypatch):
+    upload_dir = tmp_path / "uploads"
+    monkeypatch.setattr(config, "UPLOAD_DIR", upload_dir)
+    monkeypatch.setattr(config, "PROCESSED_DIR", upload_dir / "processed")
+    monkeypatch.setattr(config, "HISTORY_PATH", tmp_path / "data" / "scan_history.json")
+    monkeypatch.setattr(app_module, "recognize_text", lambda *_args: {
+        "text": SAMPLE_TEXT, "mean_confidence": 91.5, "word_confidences": [91.5],
+        "retried": False, "attempt_count": 1, "psm": 6, "used_original": False, "attempts": [],
+    })
+    return app_module.create_app({"TESTING": True}).test_client()
+
+
+def _sample_bytes():
+    return Path(config.SAMPLE_LABEL_DIR / "clear_flat.png").read_bytes()
+
+
+def test_human_datetime_format_keeps_iso_fallback():
+    assert app_module._human_datetime("2026-10-31T20:11:00+05:30") == "31 Oct 2026, 8:11 PM"
+    assert app_module._human_datetime("unknown timestamp") == "unknown timestamp"
+
+
+def test_scan_history_api_saved_result_and_result_page(client):
+    assert client.get("/").status_code == 200
+    assert b"Try a sample label" in client.get("/").data
+    assert Path(config.HISTORY_PATH).read_text(encoding="utf-8") == "[]\n"
+    assert client.get("/history").status_code == 200
+    assert client.get("/api/history").get_json() == []
+
+    response = client.post(
+        "/scan",
+        data={
+            "image": (BytesIO(_sample_bytes()), "../../my snack label.png", "image/png"),
+            "user_allergens": ["Peanut"],
+        },
+        content_type="multipart/form-data",
+        headers={"Accept": "application/json"},
+    )
+    assert response.status_code == 200
+    result = response.get_json()
+    assert result["image_name"] == "my_snack_label.png"
+    assert result["image_path"].startswith("uploads/scan_")
+    assert result["processed_image_path"].startswith("uploads/processed/scan_")
+    assert result["health_score"] < 100
+    assert result["score_band"] in {"Good", "Moderate", "Poor"}
+    assert any(item["ins_code"] == "211" for item in result["additives"])
+    assert any(item["ins_code"] == "322" for item in result["additives"])
+    assert "sodium benzoate (E 211)" not in result["unrecognised_tokens"]
+    assert any(item["allergen_group"] == "Peanut" and item["severity"] == "critical" for item in result["allergen_alerts"])
+    assert any(item["name"] == "sodium" for item in result["nutrients"])
+    assert result["starting_score"] == 100
+    assert result["health_score"] == 68
+    nutrient_status = {item["name"]: item["status"] for item in result["nutrients"]}
+    assert nutrient_status["energy"] == "Informational"
+    assert nutrient_status["protein"] == "Informational"
+    assert nutrient_status["fibre"] == "Informational"
+    assert "not medical advice" in result["disclaimer"].lower()
+
+    history = client.get("/api/history").get_json()
+    assert len(history) == 1
+    assert history[0]["scan_id"] == result["scan_id"]
+    assert history[0]["scanned_at"] == result["scanned_at"]
+    reopened = client.get(f"/api/history/{result['scan_id']}")
+    assert reopened.status_code == 200
+    assert reopened.get_json() == result
+    page = client.get(f"/history?scan_id={result['scan_id']}")
+    assert page.status_code == 200
+    assert app_module._human_datetime(result["scanned_at"]).encode() in page.data
+    assert b"Health Score" in page.data
+    assert b"Sodium benzoate" in page.data
+    assert b"Informational screening only" in page.data
+    assert b"Before screening:" in page.data
+    assert b"After configured deductions and credits:" in page.data
+    assert b"How this was calculated and sources" in page.data
+    assert page.data.count(b"Codex Alimentarius CXG 36-1989, functional class column.") == 1
+    assert page.data.count(b"numeric values are defined only in config.py") == 1
+    assert b"class=\"source-note\"" not in page.data
+    page_html = page.get_data(as_text=True)
+    comparison = page_html[page_html.index('<div class="comparison"'):page_html.index('Image comparison position')]
+    assert comparison.index("comparison-labels") < comparison.index("comparison-viewport")
+    assert comparison.count('class="comparison-image') == 2
+    assert 'id="comparison-slider"' in page_html
+    critical_section = page_html.split('<section class="alert-section"', 1)[1].split("</section>", 1)[0]
+    assert "Peanut" in critical_section
+    assert "Milk" not in critical_section
+    also_contains = page_html.split('<section class="also-contains-section"', 1)[1].split("</section>", 1)[0]
+    assert "Milk" in also_contains
+    assert "Wheat or Gluten" in also_contains
+
+
+@pytest.mark.parametrize(
+    "data,status,message",
+    [
+        ({}, 400, "Choose a JPG or PNG"),
+        ({"image": (BytesIO(b"gif"), "label.gif", "image/gif")}, 400, "Unsupported file type"),
+        ({"image": (BytesIO(b""), "empty.png", "image/png")}, 400, "image is empty"),
+        ({"image": (BytesIO(b"not an image"), "fake.png", "image/png")}, 400, "could not be decoded"),
+        ({"image": (BytesIO(b"\x89PNG\r\n\x1a\n"), "wrong.jpg", "image/png")}, 400, "extension and image MIME type do not match"),
+        ({"image": (BytesIO(b"x" * (config.MAX_CONTENT_LENGTH + 1)), "large.png", "image/png")}, 413, "larger than the 5 MB"),
+    ],
+)
+def test_upload_validation_failures_are_specific(client, data, status, message):
+    response = client.post("/scan", data=data, content_type="multipart/form-data", headers={"Accept": "application/json"})
+    assert response.status_code == status
+    assert message.lower() in response.get_json()["error"].lower()
+
+
+def test_tesseract_and_unreadable_text_failures_are_friendly(client, monkeypatch):
+    for error, status in ((OCRSetupError("Install Tesseract 5 with English data."), 503), (OCRNoTextError("No readable label text was found."), 422)):
+        monkeypatch.setattr(app_module, "recognize_text", lambda *_args, exc=error: (_ for _ in ()).throw(exc))
+        response = client.post(
+            "/scan", data={"image": (BytesIO(_sample_bytes()), "label.png", "image/png")},
+            content_type="multipart/form-data", headers={"Accept": "application/json"},
+        )
+        assert response.status_code == status
+        assert response.get_json()["error"] == str(error)
+
+
+def test_failed_history_write_cleans_saved_images(client, monkeypatch, tmp_path):
+    monkeypatch.setattr(app_module, "add_scan", lambda _scan: (_ for _ in ()).throw(StorageError("History write failed clearly.")))
+    response = client.post(
+        "/scan", data={"image": (BytesIO(_sample_bytes()), "label.png", "image/png")},
+        content_type="multipart/form-data", headers={"Accept": "application/json"},
+    )
+    assert response.status_code == 500
+    assert response.get_json()["error"] == "History write failed clearly."
+    assert list((tmp_path / "uploads").rglob("scan_*")) == []
+
+
+def test_unexpected_scan_failure_is_friendly_and_cleans_images(client, monkeypatch, tmp_path):
+    monkeypatch.setattr(app_module, "_run_pipeline", lambda *_args: (_ for _ in ()).throw(RuntimeError("internal detail")))
+    response = client.post(
+        "/scan", data={"image": (BytesIO(_sample_bytes()), "label.png", "image/png")},
+        content_type="multipart/form-data", headers={"Accept": "application/json"},
+    )
+    assert response.status_code == 500
+    assert "could not complete this scan" in response.get_json()["error"].lower()
+    assert "internal detail" not in response.get_data(as_text=True)
+    assert list((tmp_path / "uploads").rglob("scan_*")) == []
+
+
+def test_malformed_history_and_all_404_routes_are_friendly(client, tmp_path, monkeypatch):
+    history_path = config.HISTORY_PATH
+    history_path.parent.mkdir(parents=True, exist_ok=True)
+    history_path.write_text("{bad", encoding="utf-8")
+    response = client.get("/api/history")
+    assert response.status_code == 500
+    assert "history is malformed" in response.get_json()["error"].lower()
+    history_path.write_text("[]", encoding="utf-8")
+    assert client.get("/api/history/missing").status_code == 404
+    assert client.get("/missing").status_code == 404
+
+
+def test_sample_image_is_served_locally_without_cdn(client):
+    response = client.get("/static/images/sample_label.png")
+    assert response.status_code == 200
+    assert response.mimetype == "image/png"
+
+
+def test_unselected_detected_allergens_never_create_red_banner(client):
+    response = client.post(
+        "/scan", data={"image": (BytesIO(_sample_bytes()), "label.png", "image/png")},
+        content_type="multipart/form-data",
+    )
+    assert response.status_code == 200
+    page = response.get_data(as_text=True)
+    assert '<section class="alert-section"' not in page
+    assert 'class="allergen-alert critical"' not in page
+    assert '<section class="also-contains-section"' in page
+    assert "Also contains" in page

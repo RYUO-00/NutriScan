@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Scan a label · NutriScan{% endblock %}
+{% block content %}
+<section class="intro"><h1>Understand the label in your hands.</h1><p>Upload a clear photo of an ingredient list, nutrition panel, or both. NutriScan explains what it can identify and shows what it cannot.</p></section>
+<section class="panel"><h2>Choose a label photo</h2><p>JPG or PNG, up to 5 MB. Keep the text close, flat, and well lit.</p><form id="scan-form" action="/scan" method="post" enctype="multipart/form-data">
+  <label class="dropzone" for="label-image"><span class="drop-title">Drop a photo here or browse</span><span>JPG / PNG · up to 5 MB</span><input id="label-image" name="image" type="file" accept="image/jpeg,image/png" capture="environment" required></label>
+  <figure id="preview-wrap" hidden><img id="preview" src="{{ url_for('static', filename='images/sample_label.png') }}" alt="Preview of selected label"><figcaption id="preview-name"></figcaption></figure>
+  <div class="allergen-picker"><h3>Allergens to watch for</h3><p>Saved on this device for your next scan. Alerts are shown separately from the score.</p><div id="allergen-chips" class="chips"></div></div>
+  <button class="button" type="submit">Scan this label</button><button class="button button-quiet" id="sample-button" type="button">Try a sample label</button>
+  <p id="scan-status" role="status" aria-live="polite"></p>
+  <ol id="scan-progress" class="scan-progress" aria-label="Scan stages" hidden><li>Validate</li><li>Prepare</li><li>Read text</li><li>Match</li><li>Nutrition</li><li>Score</li><li>Save</li></ol>
+</form></section>
+<aside class="tip"><strong>Photo tip</strong><span>Fill the frame with the label and avoid glare across small print.</span></aside>
+{% endblock %}

@@ -1,0 +1,457 @@
+[
+  {
+    "id": 1,
+    "keyword": "partially hydrogenated vegetable oil",
+    "flag_type": "harmful",
+    "reason": "Screen for potentially industrial trans fat from partially hydrogenated oil; the image cannot confirm processing conditions or dose.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 2,
+    "keyword": "added sugar",
+    "flag_type": "caution",
+    "reason": "The label explicitly identifies added sugar; the nutrition panel gives the declared sugar values.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 3,
+    "keyword": "sugar",
+    "flag_type": "caution",
+    "reason": "Sugar is listed as a direct ingredient, but the ingredient list does not state its exact amount.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 4,
+    "keyword": "glucose syrup",
+    "flag_type": "caution",
+    "reason": "Glucose syrup is listed; its quantity is not given in the ingredient list.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 5,
+    "keyword": "glucose-fructose syrup",
+    "flag_type": "caution",
+    "reason": "This syrup contains both glucose and fructose in its name; its quantity is not stated.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 6,
+    "keyword": "maltodextrin",
+    "flag_type": "caution",
+    "reason": "Maltodextrin is listed as a starch-derived ingredient; its quantity is not stated.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 7,
+    "keyword": "invert syrup",
+    "flag_type": "caution",
+    "reason": "Invert syrup is listed as a sugar syrup; the ingredient list does not give its quantity.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 8,
+    "keyword": "liquid glucose",
+    "flag_type": "caution",
+    "reason": "Liquid glucose is listed; its quantity is not given in the ingredient list.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 9,
+    "keyword": "dextrose",
+    "flag_type": "caution",
+    "reason": "Dextrose is listed as a named sugar; its quantity is not stated in the ingredient list.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 10,
+    "keyword": "fructose syrup",
+    "flag_type": "caution",
+    "reason": "Fructose syrup is listed; its quantity is not given in the ingredient list.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 11,
+    "keyword": "jaggery",
+    "flag_type": "caution",
+    "reason": "Jaggery is listed as a sweetening ingredient; its quantity is not stated.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 12,
+    "keyword": "honey",
+    "flag_type": "caution",
+    "reason": "Honey is listed as a sweetening ingredient; its quantity is not stated.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 13,
+    "keyword": "refined wheat flour",
+    "flag_type": "caution",
+    "reason": "Refined wheat flour is listed; ingredient order does not show its exact share of the product.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 14,
+    "keyword": "maida",
+    "flag_type": "caution",
+    "reason": "Maida is a refined wheat flour named on the label; its exact share is not stated.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 15,
+    "keyword": "rice flour",
+    "flag_type": "caution",
+    "reason": "Rice flour is listed; the ingredient list does not state its proportion in the product.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 16,
+    "keyword": "starch",
+    "flag_type": "caution",
+    "reason": "Starch is listed without a source or quantity, so its type and share are unclear from this entry.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 17,
+    "keyword": "modified starch",
+    "flag_type": "caution",
+    "reason": "Modified starch is listed, but this wording does not identify its source or quantity.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 18,
+    "keyword": "potato starch",
+    "flag_type": "caution",
+    "reason": "Potato starch is listed; the ingredient list does not state its proportion.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 19,
+    "keyword": "palm oil",
+    "flag_type": "caution",
+    "reason": "Palm oil is named on the label; the ingredient list does not state its amount.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 20,
+    "keyword": "palmolein",
+    "flag_type": "caution",
+    "reason": "Palmolein is named on the label; the ingredient list does not state its amount.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 21,
+    "keyword": "coconut oil",
+    "flag_type": "caution",
+    "reason": "Coconut oil is named on the label; the ingredient list does not state its amount.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 22,
+    "keyword": "hydrogenated vegetable fat",
+    "flag_type": "caution",
+    "reason": "The label identifies hydrogenated vegetable fat but does not state its amount or hydrogenation level.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 23,
+    "keyword": "vanaspati",
+    "flag_type": "caution",
+    "reason": "Vanaspati is named on the label; the ingredient list does not give its amount or composition.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 24,
+    "keyword": "edible vegetable oil",
+    "flag_type": "caution",
+    "reason": "The label gives a general vegetable-oil term, so the specific oil is not identified here.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 25,
+    "keyword": "refined palm oil",
+    "flag_type": "caution",
+    "reason": "Refined palm oil is named on the label; the ingredient list does not state its amount.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 26,
+    "keyword": "refined soybean oil",
+    "flag_type": "caution",
+    "reason": "Refined soybean oil is named on the label; the ingredient list does not state its amount.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 27,
+    "keyword": "salt",
+    "flag_type": "caution",
+    "reason": "Salt is listed; use a declared salt value on the nutrition panel to assess its quantity.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 28,
+    "keyword": "sodium chloride",
+    "flag_type": "caution",
+    "reason": "Sodium chloride is the named salt ingredient; its amount is not stated in the ingredient list.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 29,
+    "keyword": "baking soda",
+    "flag_type": "caution",
+    "reason": "Baking soda is listed as a leavening ingredient; its amount is not stated.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 30,
+    "keyword": "caramel syrup",
+    "flag_type": "caution",
+    "reason": "Caramel syrup is listed, but this entry does not state its amount or role in the recipe.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 31,
+    "keyword": "shortening",
+    "flag_type": "caution",
+    "reason": "Shortening is listed as a fat ingredient; its specific composition and amount are not stated.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 32,
+    "keyword": "butter",
+    "flag_type": "caution",
+    "reason": "Butter is listed as an ingredient; its amount is not stated in the ingredient list.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 33,
+    "keyword": "cream",
+    "flag_type": "caution",
+    "reason": "Cream is listed as an ingredient; its amount is not stated in the ingredient list.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 34,
+    "keyword": "cheese powder",
+    "flag_type": "caution",
+    "reason": "Cheese powder is listed; its amount and contribution to the product are not stated.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 35,
+    "keyword": "cheese seasoning",
+    "flag_type": "caution",
+    "reason": "Cheese seasoning is listed as a compound ingredient; its component amounts are not shown here.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 36,
+    "keyword": "flavour enhancer",
+    "flag_type": "caution",
+    "reason": "The label uses a general flavour-enhancer term without naming the specific additive.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 37,
+    "keyword": "artificial flavour",
+    "flag_type": "caution",
+    "reason": "The label identifies an artificial flavour but does not name the flavouring substance.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 38,
+    "keyword": "added colour",
+    "flag_type": "caution",
+    "reason": "The label identifies an added colour without naming the colour or its code in this entry.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 39,
+    "keyword": "preservatives",
+    "flag_type": "caution",
+    "reason": "The label uses a general preservative term, so the specific preservative is not identified here.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 40,
+    "keyword": "monosodium glutamate",
+    "flag_type": "caution",
+    "reason": "Monosodium glutamate is named; the ingredient list does not state the amount used.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 41,
+    "keyword": "phosphates",
+    "flag_type": "caution",
+    "reason": "The label uses the group term phosphates without identifying the specific phosphate additive.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 42,
+    "keyword": "whole wheat flour",
+    "flag_type": "beneficial",
+    "reason": "This ingredient can contribute whole grains, fibre, protein, or unsaturated fats; its quantity and the full product still matter.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 43,
+    "keyword": "whole grain oats",
+    "flag_type": "beneficial",
+    "reason": "This ingredient can contribute whole grains, fibre, protein, or unsaturated fats; its quantity and the full product still matter.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 44,
+    "keyword": "oats",
+    "flag_type": "beneficial",
+    "reason": "This ingredient can contribute whole grains, fibre, protein, or unsaturated fats; its quantity and the full product still matter.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 45,
+    "keyword": "ragi",
+    "flag_type": "beneficial",
+    "reason": "This ingredient can contribute whole grains, fibre, protein, or unsaturated fats; its quantity and the full product still matter.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 46,
+    "keyword": "finger millet",
+    "flag_type": "beneficial",
+    "reason": "This ingredient can contribute whole grains, fibre, protein, or unsaturated fats; its quantity and the full product still matter.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 47,
+    "keyword": "whole millet",
+    "flag_type": "beneficial",
+    "reason": "This ingredient can contribute whole grains, fibre, protein, or unsaturated fats; its quantity and the full product still matter.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 48,
+    "keyword": "jowar",
+    "flag_type": "beneficial",
+    "reason": "This ingredient can contribute whole grains, fibre, protein, or unsaturated fats; its quantity and the full product still matter.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 49,
+    "keyword": "bajra",
+    "flag_type": "beneficial",
+    "reason": "This ingredient can contribute whole grains, fibre, protein, or unsaturated fats; its quantity and the full product still matter.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 50,
+    "keyword": "brown rice",
+    "flag_type": "beneficial",
+    "reason": "This ingredient can contribute whole grains, fibre, protein, or unsaturated fats; its quantity and the full product still matter.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 51,
+    "keyword": "brown rice flour",
+    "flag_type": "beneficial",
+    "reason": "This ingredient can contribute whole grains, fibre, protein, or unsaturated fats; its quantity and the full product still matter.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 52,
+    "keyword": "chickpeas",
+    "flag_type": "beneficial",
+    "reason": "This ingredient can contribute whole grains, fibre, protein, or unsaturated fats; its quantity and the full product still matter.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 53,
+    "keyword": "bengal gram",
+    "flag_type": "beneficial",
+    "reason": "This ingredient can contribute whole grains, fibre, protein, or unsaturated fats; its quantity and the full product still matter.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 54,
+    "keyword": "lentils",
+    "flag_type": "beneficial",
+    "reason": "This ingredient can contribute whole grains, fibre, protein, or unsaturated fats; its quantity and the full product still matter.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 55,
+    "keyword": "red lentils",
+    "flag_type": "beneficial",
+    "reason": "This ingredient can contribute whole grains, fibre, protein, or unsaturated fats; its quantity and the full product still matter.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 56,
+    "keyword": "green gram",
+    "flag_type": "beneficial",
+    "reason": "This ingredient can contribute whole grains, fibre, protein, or unsaturated fats; its quantity and the full product still matter.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 57,
+    "keyword": "peas",
+    "flag_type": "beneficial",
+    "reason": "This ingredient can contribute whole grains, fibre, protein, or unsaturated fats; its quantity and the full product still matter.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 58,
+    "keyword": "roasted chana",
+    "flag_type": "beneficial",
+    "reason": "This ingredient can contribute whole grains, fibre, protein, or unsaturated fats; its quantity and the full product still matter.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 59,
+    "keyword": "peanuts",
+    "flag_type": "beneficial",
+    "reason": "This ingredient can contribute whole grains, fibre, protein, or unsaturated fats; its quantity and the full product still matter.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 60,
+    "keyword": "almonds",
+    "flag_type": "beneficial",
+    "reason": "This ingredient can contribute whole grains, fibre, protein, or unsaturated fats; its quantity and the full product still matter.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 61,
+    "keyword": "cashew",
+    "flag_type": "beneficial",
+    "reason": "This ingredient can contribute whole grains, fibre, protein, or unsaturated fats; its quantity and the full product still matter.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 62,
+    "keyword": "sesame seeds",
+    "flag_type": "beneficial",
+    "reason": "This ingredient can contribute whole grains, fibre, protein, or unsaturated fats; its quantity and the full product still matter.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 63,
+    "keyword": "flaxseed",
+    "flag_type": "beneficial",
+    "reason": "This ingredient can contribute whole grains, fibre, protein, or unsaturated fats; its quantity and the full product still matter.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 64,
+    "keyword": "chia seeds",
+    "flag_type": "beneficial",
+    "reason": "This ingredient can contribute whole grains, fibre, protein, or unsaturated fats; its quantity and the full product still matter.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  },
+  {
+    "id": 65,
+    "keyword": "pumpkin seeds",
+    "flag_type": "beneficial",
+    "reason": "This ingredient can contribute whole grains, fibre, protein, or unsaturated fats; its quantity and the full product still matter.",
+    "source": "Project assumption - needs verification (screening keyword and flag)."
+  }
+]

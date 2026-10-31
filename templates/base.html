@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f1e8">
+  <title>{% block title %}NutriScan{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script defer src="{{ url_for('static', filename='js/app.js') }}"></script>
+</head>
+<body>
+  <header class="site-header"><a class="brand" href="/">NutriScan <span>Label reader</span></a>
+    <nav aria-label="Main navigation"><a href="/">Scan</a><a href="/history">History</a></nav>
+  </header>
+  <main id="main">{% block content %}{% endblock %}</main>
+  <footer><p>Informational screening only. Not medical advice or a guarantee of food safety.</p></footer>
+</body>
+</html>

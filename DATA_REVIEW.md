@@ -1,0 +1,323 @@
+# Data Review Queue
+
+Additive identity and functional-class sources are recorded in the JSON data. The provisional screening labels, keyword expansions, and nutrition cutoffs remain project assumptions and require review before academic submission.
+
+## Additive functional classes needing review
+
+- INS 170i Calcium carbonate: Codex lists several functional classes for calcium carbonate, so this dataset does not select a single one.
+- INS 338 Phosphoric acid: The Codex entry lists multiple functions for phosphoric acid; confirm the intended primary class for this record.
+- INS 339 Sodium phosphates: The sodium phosphate group has several Codex functional classes; confirm the intended primary class for this group record.
+- INS 340 Potassium phosphates: The potassium phosphate group has several Codex functional classes; confirm the intended primary class for this group record.
+- INS 341 Calcium phosphates: The calcium phosphate group has several Codex functional classes; confirm the intended primary class for this group record.
+- INS 450i Disodium diphosphate: Diphosphates have several Codex functional classes; confirm the intended primary class for this group record.
+- INS 450iii Tetrasodium diphosphate: Diphosphates have several Codex functional classes; confirm the intended primary class for this group record.
+- INS 451i Pentasodium triphosphate: Triphosphates have several Codex functional classes; confirm the intended primary class for this group record.
+- INS 452i Sodium polyphosphates: Polyphosphates have several Codex functional classes; confirm the intended primary class for this group record.
+- INS 514 Sodium sulfates: No confident code-specific functional class was assigned; verify against the Codex INS table.
+- INS 516 Calcium sulfate: Codex lists multiple functional classes for calcium sulfate; confirm the intended primary class for this record.
+- INS 576 Sodium gluconate: Codex lists several functional classes for sodium gluconate; confirm the intended primary class for this record.
+
+## Project-assumption records
+
+Assumption records: 300 of 300.
+
+- `additives.json` record 100i (Curcumin): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 100ii (Turmeric): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 101ii (Riboflavin 5'-phosphate sodium): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 102 (Tartrazine): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 104 (Quinoline yellow): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 107 (Yellow 2G): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 110 (Sunset yellow FCF): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 120 (Carmines): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 122 (Azorubine (Carmoisine)): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 123 (Amaranth): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 124 (Ponceau 4R): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 127 (Erythrosine): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 129 (Allura red AC): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 131 (Patent blue V): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 132 (Indigotine (Indigo carmine)): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 133 (Brilliant blue FCF): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 140 (Chlorophylls): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 141i (Chlorophylls, copper complexes): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 141ii (Chlorophyllins, copper complexes, potassium and sodium salts): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 142 (Green S): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 143 (Fast green FCF): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 150a (Caramel I - plain caramel): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 150b (Caramel II - sulphite caramel): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 150c (Caramel III - ammonia caramel): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 150d (Caramel IV - sulphite ammonia caramel): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 151 (Brilliant black (Black PN)): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 153 (Vegetable carbon): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 155 (Brown HT): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 160a (Carotenes): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 160ai (Carotenes, beta-, synthetic): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 160aii (Carotenes, beta-, vegetable): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 160aiii (Carotenes, beta-, Blakeslea trispora): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 160aiv (Beta-carotene-rich extract from Dunaliella salina): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 160bi (Annatto extracts, bixin-based): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 160bii (Annatto extracts, norbixin-based): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 160ci (Paprika oleoresin): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 160cii (Paprika extract): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 160di (Lycopene, synthetic): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 160dii (Lycopene, tomato): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 160e (Carotenal, beta-apo-8-): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 160f (Carotenoic acid, ethyl ester, beta-apo-8-): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 161bi (Lutein from Tagetes erecta): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 161bii (Tagetes extract): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 161hi (Zeaxanthin, synthetic): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 162 (Beet red): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 163 (Anthocyanins): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 170i (Calcium carbonate): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 200 (Sorbic acid): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 201 (Sodium sorbate): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 202 (Potassium sorbate): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 203 (Calcium sorbate): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 210 (Benzoic acid): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 211 (Sodium benzoate): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 212 (Potassium benzoate): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 213 (Calcium benzoate): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 220 (Sulphur dioxide): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 221 (Sodium sulfite): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 222 (Sodium hydrogen sulfite): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 223 (Sodium metabisulfite): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 224 (Potassium metabisulfite): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 234 (Nisin): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 235 (Natamycin (Pimaricin)): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 242 (Dimethyl dicarbonate): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 249 (Potassium nitrite): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 250 (Sodium nitrite): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 251 (Sodium nitrate): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 252 (Potassium nitrate): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 260 (Acetic acid, glacial): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 261 (Potassium acetates): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 262 (Sodium acetates): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 263 (Calcium acetate): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 270 (Lactic acid): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 280 (Propionic acid): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 281 (Sodium propionate): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 282 (Calcium propionate): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 283 (Potassium propionate): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 290 (Carbon dioxide): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 296 (Malic acid): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 297 (Fumaric acid): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 300 (Ascorbic acid): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 301 (Sodium ascorbate): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 302 (Calcium ascorbate): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 304 (Ascorbyl palmitate): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 306 (Tocopherol-rich extract): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 307c (Tocopherol concentrate, mixed): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 310 (Propyl gallate): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 311 (Octyl gallate): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 312 (Dodecyl gallate): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 315 (Erythorbic acid): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 316 (Sodium erythorbate): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 319 (Tertiary butylhydroquinone (TBHQ)): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 320 (Butylated hydroxyanisole (BHA)): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 321 (Butylated hydroxytoluene (BHT)): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 322 (Lecithins): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label and synonym expansion).
+- `additives.json` record 325 (Sodium lactate): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 326 (Potassium lactate): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 327 (Calcium lactate): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 330 (Citric acid): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 331 (Sodium citrates): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 332 (Potassium citrates): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 333 (Calcium citrates): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 334 (Tartaric acid (L(+)-)): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 335 (Sodium tartrates): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 336 (Potassium tartrates): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 337 (Sodium potassium tartrate): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 338 (Phosphoric acid): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 339 (Sodium phosphates): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 340 (Potassium phosphates): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 341 (Calcium phosphates): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 350 (Sodium malates): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 351 (Potassium malates): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 355 (Adipic acid): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 380 (Triammonium citrate): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 400 (Alginic acid): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 401 (Sodium alginate): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 402 (Potassium alginate): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 403 (Ammonium alginate): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 404 (Calcium alginate): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 405 (Propylene glycol alginate): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 406 (Agar): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 407 (Carrageenan): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 410 (Locust bean gum): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 412 (Guar gum): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 413 (Tragacanth gum): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 414 (Gum arabic (Acacia gum)): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 415 (Xanthan gum): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 416 (Karaya gum): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 418 (Gellan gum): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 420 (Sorbitol): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 421 (Mannitol): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 422 (Glycerol): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 440 (Pectins): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 450i (Disodium diphosphate): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 450iii (Tetrasodium diphosphate): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 451i (Pentasodium triphosphate): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 452i (Sodium polyphosphates): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 460 (Microcrystalline cellulose): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 461 (Methyl cellulose): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 464 (Hydroxypropyl methyl cellulose): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 466 (Sodium carboxymethyl cellulose): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 470a (Salts of myristic, palmitic and stearic acids): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 471 (Mono- and diglycerides of fatty acids): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 472a (Acetic and fatty acid esters of glycerol): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 472e (Diacetyl tartaric and fatty acid esters of glycerol (DATEM)): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 473 (Sucrose esters of fatty acids): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 475 (Polyglycerol esters of fatty acids): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 476 (Polyglycerol polyricinoleate (PGPR)): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 481 (Sodium stearoyl-2-lactylate): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 482 (Calcium stearoyl-2-lactylate): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 491 (Sorbitan monostearate): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 500 (Sodium carbonates): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 501 (Potassium carbonates): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 503 (Ammonium carbonates): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 508 (Potassium chloride): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 509 (Calcium chloride): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 511 (Magnesium chloride): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 514 (Sodium sulfates): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 516 (Calcium sulfate): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 524 (Sodium hydroxide): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 525 (Potassium hydroxide): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 526 (Calcium hydroxide): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 529 (Calcium oxide): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 551 (Silicon dioxide (silica)): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 552 (Calcium silicate): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 553 (Magnesium silicates): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 554 (Sodium aluminosilicate): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 575 (Glucono delta-lactone): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 576 (Sodium gluconate): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 578 (Calcium gluconate): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 620 (Glutamic acid): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 621 (Monosodium glutamate): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 627 (Disodium guanylate): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 631 (Disodium inosinate): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 635 (Disodium 5'-ribonucleotides): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 950 (Acesulfame potassium): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 951 (Aspartame): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 955 (Sucralose): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 960 (Steviol glycosides): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 965 (Maltitol): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `additives.json` record 968 (Erythritol): Codex Alimentarius CXG 36-1989 (INS identity only); Project assumption - needs verification (risk label).
+- `allergens.json` record 1 (milk): FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion).
+- `allergens.json` record 2 (milk powder): FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion).
+- `allergens.json` record 3 (whey): FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion).
+- `allergens.json` record 4 (casein): FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion).
+- `allergens.json` record 5 (caseinate): FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion).
+- `allergens.json` record 6 (lactose): FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion).
+- `allergens.json` record 7 (milk solids): FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion).
+- `allergens.json` record 8 (whey powder): FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion).
+- `allergens.json` record 9 (wheat): FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion).
+- `allergens.json` record 10 (wheat flour): FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion).
+- `allergens.json` record 11 (atta): FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion).
+- `allergens.json` record 12 (maida): FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion).
+- `allergens.json` record 13 (semolina): FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion).
+- `allergens.json` record 14 (durum wheat): FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion).
+- `allergens.json` record 15 (barley): FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion).
+- `allergens.json` record 16 (rye): FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion).
+- `allergens.json` record 17 (oats): FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion).
+- `allergens.json` record 18 (gluten): FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion).
+- `allergens.json` record 19 (soy): FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion).
+- `allergens.json` record 20 (soybean): FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion).
+- `allergens.json` record 21 (soya): FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion).
+- `allergens.json` record 22 (soy protein): FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion).
+- `allergens.json` record 23 (soy lecithin): FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion).
+- `allergens.json` record 24 (peanut): FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion).
+- `allergens.json` record 25 (groundnut): FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion).
+- `allergens.json` record 26 (almond): FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion).
+- `allergens.json` record 27 (cashew): FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion).
+- `allergens.json` record 28 (pistachio): FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion).
+- `allergens.json` record 29 (walnut): FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion).
+- `allergens.json` record 30 (hazelnut): FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion).
+- `allergens.json` record 31 (pecan): FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion).
+- `allergens.json` record 32 (brazil nut): FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion).
+- `allergens.json` record 33 (macadamia): FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion).
+- `allergens.json` record 34 (egg): FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion).
+- `allergens.json` record 35 (egg white): FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion).
+- `allergens.json` record 36 (egg yolk): FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion).
+- `allergens.json` record 37 (fish): FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion).
+- `allergens.json` record 38 (fish sauce): FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion).
+- `allergens.json` record 39 (shrimp): FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion).
+- `allergens.json` record 40 (prawn): FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion).
+- `allergens.json` record 41 (crab): FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion).
+- `allergens.json` record 42 (crustacean): FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion).
+- `allergens.json` record 43 (sesame): FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion).
+- `allergens.json` record 44 (mustard): FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion).
+- `allergens.json` record 45 (sulphite): FSSAI Labelling and Display Regulations, 2020, regulation 5(14) for listed groups; Project assumption - needs verification (keyword expansion).
+- `ingredient_flags.json` record 1 (partially hydrogenated vegetable oil): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 2 (added sugar): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 3 (sugar): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 4 (glucose syrup): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 5 (glucose-fructose syrup): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 6 (maltodextrin): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 7 (invert syrup): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 8 (liquid glucose): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 9 (dextrose): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 10 (fructose syrup): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 11 (jaggery): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 12 (honey): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 13 (refined wheat flour): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 14 (maida): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 15 (rice flour): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 16 (starch): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 17 (modified starch): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 18 (potato starch): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 19 (palm oil): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 20 (palmolein): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 21 (coconut oil): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 22 (hydrogenated vegetable fat): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 23 (vanaspati): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 24 (edible vegetable oil): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 25 (refined palm oil): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 26 (refined soybean oil): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 27 (salt): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 28 (sodium chloride): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 29 (baking soda): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 30 (caramel syrup): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 31 (shortening): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 32 (butter): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 33 (cream): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 34 (cheese powder): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 35 (cheese seasoning): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 36 (flavour enhancer): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 37 (artificial flavour): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 38 (added colour): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 39 (preservatives): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 40 (monosodium glutamate): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 41 (phosphates): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 42 (whole wheat flour): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 43 (whole grain oats): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 44 (oats): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 45 (ragi): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 46 (finger millet): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 47 (whole millet): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 48 (jowar): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 49 (bajra): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 50 (brown rice): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 51 (brown rice flour): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 52 (chickpeas): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 53 (bengal gram): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 54 (lentils): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 55 (red lentils): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 56 (green gram): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 57 (peas): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 58 (roasted chana): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 59 (peanuts): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 60 (almonds): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 61 (cashew): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 62 (sesame seeds): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 63 (flaxseed): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 64 (chia seeds): Project assumption - needs verification (screening keyword and flag).
+- `ingredient_flags.json` record 65 (pumpkin seeds): Project assumption - needs verification (screening keyword and flag).
+- `nutrition_limits.json` record None (energy): Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py).
+- `nutrition_limits.json` record None (total_fat): Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py).
+- `nutrition_limits.json` record None (saturated_fat): Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py).
+- `nutrition_limits.json` record None (trans_fat): Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py).
+- `nutrition_limits.json` record None (sugar): Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py).
+- `nutrition_limits.json` record None (sodium): Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py).
+- `nutrition_limits.json` record None (protein): Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py).
+- `nutrition_limits.json` record None (fibre): Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py).
+- `nutrition_limits.json` record None (added_sugar): Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py).
+- `nutrition_limits.json` record None (salt): Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py).

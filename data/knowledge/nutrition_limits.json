@@ -1,0 +1,72 @@
+[
+  {
+    "nutrient": "energy",
+    "unit": "kcal",
+    "per_basis": "100g",
+    "config_key": "energy",
+    "source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py)."
+  },
+  {
+    "nutrient": "total_fat",
+    "unit": "g",
+    "per_basis": "100g",
+    "config_key": "total_fat",
+    "source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py)."
+  },
+  {
+    "nutrient": "saturated_fat",
+    "unit": "g",
+    "per_basis": "100g",
+    "config_key": "saturated_fat",
+    "source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py)."
+  },
+  {
+    "nutrient": "trans_fat",
+    "unit": "g",
+    "per_basis": "100g",
+    "config_key": "trans_fat",
+    "source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py)."
+  },
+  {
+    "nutrient": "sugar",
+    "unit": "g",
+    "per_basis": "100g",
+    "config_key": "sugar",
+    "source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py)."
+  },
+  {
+    "nutrient": "sodium",
+    "unit": "mg",
+    "per_basis": "100g",
+    "config_key": "sodium",
+    "source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py)."
+  },
+  {
+    "nutrient": "protein",
+    "unit": "g",
+    "per_basis": "100g",
+    "config_key": "protein",
+    "source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py)."
+  },
+  {
+    "nutrient": "fibre",
+    "unit": "g",
+    "per_basis": "100g",
+    "config_key": "fibre",
+    "source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py)."
+  },
+  {
+    "nutrient": "added_sugar",
+    "unit": "g",
+    "per_basis": "100g",
+    "config_key": "added_sugar",
+    "source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py)."
+  },
+  {
+    "nutrient": "salt",
+    "unit": "g",
+    "per_basis": "100g",
+    "config_key": "salt",
+    "source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py)."
+  }
+]
