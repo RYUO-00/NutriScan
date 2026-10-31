@@ -1,3 +1,25 @@
 {% extends "base.html" %}
-{% block title %}Scan history · NutriScan{% endblock %}
-{% block content %}<section class="intro"><h1>History</h1><p>Saved results stay on this computer and can be reopened without running OCR again.</p></section><section class="panel"><div id="history-list">{% for scan in scans %}<a class="history-row" href="/history?scan_id={{ scan.scan_id|urlencode }}"><span>{{ scan.scanned_at|human_datetime }}</span><strong>{{ scan.health_score }} · {{ scan.score_band }}</strong><span>{{ scan.image_name }}</span></a>{% else %}<p>No saved scans yet.</p>{% endfor %}</div></section>{% endblock %}
+{% block title %}Label history | NutriScan{% endblock %}
+{% block meta_description %}Open a saved food-label scan to review its recognized text, screening notes, and image comparison.{% endblock %}
+{% block content %}
+<section class="history-page" aria-labelledby="history-heading">
+  <header class="page-intro">
+    <h1 id="history-heading">Label history</h1>
+    <p>Saved scans stay on this device and can be reopened without running OCR again.</p>
+  </header>
+  <section class="history-sheet" aria-label="Saved label scans">
+    <div class="history-head" aria-hidden="true"><span>Scan date</span><span>Image</span><span>Score</span></div>
+    <div id="history-list" class="history-list">
+      {% for scan in scans %}
+      <a class="history-row" href="/history?scan_id={{ scan.scan_id|urlencode }}">
+        <span class="history-date">{{ scan.scanned_at|human_datetime }}</span>
+        <span class="history-image">{{ scan.image_name }}</span>
+        <strong class="history-score"><span class="num">{{ scan.health_score }}</span><span>{{ scan.score_band }}</span></strong>
+      </a>
+      {% else %}
+      <p class="empty-history">No saved scans yet.</p>
+      {% endfor %}
+    </div>
+  </section>
+</section>
+{% endblock %}

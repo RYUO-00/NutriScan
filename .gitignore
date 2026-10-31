@@ -27,3 +27,4 @@ data/scan_history.json
 # Local design tooling output
 design-review/
 .impeccable/
+.hallmark/

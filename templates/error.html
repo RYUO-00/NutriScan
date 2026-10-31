@@ -1,3 +1,9 @@
 {% extends "base.html" %}
-{% block title %}Page not found · NutriScan{% endblock %}
-{% block content %}<section class="intro"><h1>{{ message }}</h1><p><a href="/">Return to the scan page</a></p></section>{% endblock %}
+{% block title %}Request issue | NutriScan{% endblock %}
+{% block meta_description %}NutriScan could not open this page or finish the requested scan.{% endblock %}
+{% block content %}
+<section class="error-sheet" aria-labelledby="error-heading">
+  <h1 id="error-heading">{{ message }}</h1>
+  <p><a class="text-link" href="/">Return to the scan page</a></p>
+</section>
+{% endblock %}

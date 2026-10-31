@@ -3,16 +3,28 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f4f1e8">
-  <title>{% block title %}NutriScan{% endblock %}</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css', v='20261031-2') }}">
-  <script defer src="{{ url_for('static', filename='js/app.js') }}"></script>
+  <meta name="theme-color" content="#f7f5ef">
+  <title>{% block title %}NutriScan label reader{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}Read packaged-food labels with a local scan and a clear summary of what the text says.{% endblock %}">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="NutriScan">
+  <meta property="og:title" content="{% block og_title %}{{ self.title()|striptags }}{% endblock %}">
+  <meta property="og:description" content="{% block og_description %}{{ self.meta_description()|striptags }}{% endblock %}">
+  <meta property="og:image" content="{{ url_for('static', filename='images/nutriscan-social.png', _external=True) }}">
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
+  <link rel="alternate icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='images/favicon.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css', v='20261031-hallmark-final') }}">
+  <script defer src="{{ url_for('static', filename='js/app.js', v='20261031-hallmark-final') }}"></script>
 </head>
 <body>
-  <header class="site-header"><a class="brand" href="/">NutriScan <span>Label reader</span></a>
-    <nav aria-label="Main navigation"><a href="/">Scan</a><a href="/history">History</a></nav>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="masthead container">
+      <a class="brand" href="/" aria-label="NutriScan label reader. Go to scan page."><img src="{{ url_for('static', filename='images/logo.svg') }}" alt="NutriScan label reader" width="220" height="54"></a>
+      <nav aria-label="Main navigation"><a href="/">Scan</a><a href="/history">History</a></nav>
+    </div>
   </header>
-  <main id="main">{% block content %}{% endblock %}</main>
-  <footer><p>Informational screening only. Not medical advice or a guarantee of food safety.</p></footer>
+  <main id="main" class="container">{% block content %}{% endblock %}</main>
+  <footer class="site-footer container"><p><strong>Informational screening only.</strong> Not medical advice or a guarantee of food safety.</p></footer>
 </body>
 </html>

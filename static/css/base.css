@@ -1,0 +1,27 @@
+/* Hallmark · shape: app screen · genre: editorial · theme: Newsprint · redesign: full · v2.0.0 */
+/* Hallmark · pre-emit critique: P5 H4 E4 S5 R5 V4 · weakest: H, the verdict and selected alerts lead before label detail */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { overflow-x: clip; }
+html { color-scheme: light; scroll-behavior: smooth; scroll-padding-top: var(--space-3xl); }
+body { min-width: 320px; margin: 0; background: var(--color-paper); color: var(--color-ink); font-family: var(--font-body); font-size: var(--text-md); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+::selection { background: var(--color-paper-3); color: var(--color-ink); }
+:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }
+a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+button, input, select, textarea { font: inherit; }
+button { color: inherit; }
+h1, h2, h3 { min-width: 0; margin: 0; color: var(--color-ink); font-family: var(--font-display); font-synthesis: none; font-weight: var(--display-weight); letter-spacing: var(--tracking-display); line-height: 1.08; overflow-wrap: break-word; text-wrap: balance; }
+h1 { font-size: var(--text-display); }
+h2 { font-size: var(--text-section); }
+h3 { font-size: var(--text-title); line-height: 1.2; }
+p { max-width: 65ch; margin: 0; text-wrap: pretty; }
+img, video { display: block; max-width: 100%; height: auto; }
+svg { display: block; }
+[hidden] { display: none !important; }
+.container { width: 100%; max-width: var(--container); margin-inline: auto; padding-inline: var(--gutter); }
+.num, .code-data { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: clip; clip-path: inset(50%); white-space: nowrap; }
+.skip-link { position: fixed; z-index: 600; inset-block-start: var(--space-xs); inset-inline-start: var(--gutter); padding: var(--space-xs) var(--space-md); transform: translateY(-180%); background: var(--color-ink); color: var(--color-paper); font-family: var(--font-display); font-weight: 700; }
+.skip-link:focus-visible { transform: translateY(0); }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
+}

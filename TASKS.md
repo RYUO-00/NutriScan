@@ -27,3 +27,12 @@ Work one phase at a time. Mark a phase done only after its tests pass; update th
 - [x] Fresh scan confirmed INS 211 as Preservative and INS 322 as Emulsifier. All 12 unresolved or multi-function additive classes remain listed in `DATA_REVIEW.md`; caution flag reasons are specific.
 - [x] Fresh local sample scan returned HTTP 200. Full verification: `pytest` — 57 passed; data validation — 300 records.
 - [ ] 1440 px and 360 px screenshots could not be captured because Work settings disable local in-app browser access. Result HTML and responsive CSS assertions passed; visual screenshot inspection remains unavailable in this session.
+
+## Design branches — 31 Oct 2026
+
+- [x] `design-impeccable` adds the Impeccable visual variant for scan, result, and history; its sample flow, responsive states, routes, and script IDs were checked and pushed to its branch.
+- [x] `design-hallmark` adds the Newsprint visual variant while keeping the Flask route and element-ID wiring. It keeps the bundled label as the scan-page specimen and makes the result read as a printed screening report.
+- [x] At 1440 px and 360 px, the scan page, fresh sample result, and history page were opened and visually inspected in the built-in app browser. Result comparison images loaded in the shared frame on desktop and stacked on mobile; measured document width did not exceed the viewport.
+- [x] The sample scan retained the 100-to-68 score explanation, the selected Soy alert, amber other-allergen matches, informational energy/protein/fibre rows, INS 211 Preservative, and INS 322 Emulsifier.
+- [x] Added rendered-page coverage for unselected allergen matches and the empty allergen-match state. Hallmark's live-route after-audit reports 0 FAIL and 0 REFLEX, with 15/15 links, 2/2 fields, and 20/20 figures kept. Two kept-inventory WARNs note that the original Jinja source files were not read in this route-focused render; the live scan, history, and saved-result routes were rendered.
+- [x] Final verification: `.venv\Scripts\python.exe -m pytest` — 61 passed; JavaScript syntax and whitespace checks pass.

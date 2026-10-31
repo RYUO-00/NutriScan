@@ -1,0 +1,35 @@
+/* Hallmark · shape: app screen · genre: editorial · theme: Newsprint (deal 3/3; user-directed grotesque and mono type) · redesign: full · v2.0.0 */
+/* Hallmark · pre-emit critique: P5 H4 E4 S5 R5 V4 · weakest: H, the verdict and selected alerts lead before label detail */
+@font-face {
+  font-family: "Archivo";
+  src: url("../fonts/Archivo-Variable.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 100 900;
+  font-stretch: 75% 125%;
+  font-display: swap;
+}
+
+:root {
+  color-scheme: light;
+  --space-2xs: 4px; --space-xs: 8px; --space-sm: 12px; --space-md: 16px; --space-lg: 24px; --space-xl: 32px; --space-2xl: 48px; --space-3xl: 72px;
+  --text-xs: 0.75rem; --text-sm: 0.875rem; --text-md: 1rem; --text-lg: 1.2rem; --text-xl: 1.44rem; --text-2xl: 1.728rem; --text-3xl: 2.074rem;
+  --text-display: clamp(2.75rem, 6vw, 5rem); --text-section: clamp(1.55rem, 3vw, 2.3rem); --text-title: 1.12rem; --text-lead: 1.2rem;
+  --dur-micro: 120ms; --dur-short: 180ms;
+  --color-paper: oklch(97.5% 0.012 90); --color-paper-2: oklch(94.5% 0.012 90); --color-paper-3: oklch(90.5% 0.012 90);
+  --color-ink: oklch(18% 0.012 255); --color-ink-2: oklch(29% 0.014 255); --color-muted: oklch(45% 0.012 255);
+  --color-rule: oklch(77% 0.012 85); --color-rule-2: oklch(29% 0.014 255);
+  --color-action: oklch(40% 0.09 222); --color-action-ink: oklch(97.5% 0.012 90); --color-focus: oklch(40% 0.12 222);
+  --color-critical: oklch(43% 0.15 26); --color-critical-paper: oklch(96% 0.022 25);
+  --color-caution: oklch(43% 0.105 72); --color-caution-paper: oklch(96% 0.025 85);
+  --color-beneficial: oklch(40% 0.11 150); --color-beneficial-paper: oklch(96% 0.025 148);
+  --color-error: var(--color-critical); --color-success: var(--color-beneficial);
+  --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Source Serif 4", Georgia, serif;
+  --font-mono: ui-monospace, "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  --container: 1320px; --gutter: 56px;
+  --rule-hair: 1px; --rule-heavy: 3px;
+  --tracking-display: -0.035em; --display-weight: 760;
+}
+
+@media (max-width: 60rem) { :root { --gutter: 32px; --space-2xl: 40px; --space-3xl: 56px; } }
+@media (max-width: 40rem) { :root { --gutter: 16px; --space-xl: 24px; --space-2xl: 32px; --space-3xl: 40px; } }

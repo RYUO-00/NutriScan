@@ -12,6 +12,12 @@ Created the required project notes before code, then built all seven phases. The
 
 The image comparison uses an explicit shared frame and viewport, separate caption badges, and a responsive stacked layout on narrow screens; the existing slider remains active. Score breakdowns show the point changes in plain language, and energy, protein, and fibre stay informational even when legacy saved data labels them High. The fresh local sample scan and HTML checks passed. Screenshots at 1440 px and 360 px were not available because Work settings disabled local in-app browser access; no visual screenshot inspection was performed.
 
+## Design variant work — 31 Oct 2026
+
+Two isolated design branches were created from the unchanged `main`. `design-impeccable` uses its own Impeccable visual direction. `design-hallmark` uses a Newsprint paper-and-ink system, bundled Archivo Variable for headings, serif reading text, and monospace figures. The latter branch was visually checked in the built-in app browser at 1440 px and 360 px for scan, fresh sample result, and history pages. The scan page pairs its form with the sample label; the result keeps alert separation, the 100-to-68 score, the nutrient table, additive/ingredient findings, OCR/source disclosures, and image comparison. The result's document width measured 1425 px at a 1440 px viewport and 345 px at a 360 px viewport, so neither case overflowed horizontally. Both comparison files loaded in the shared frame, with the mobile panels stacked. The allergen empty state and the no-selection amber-only state have route test coverage. `.venv\Scripts\python.exe -m pytest` passed 61 tests on this branch. Archivo's SIL Open Font License is bundled beside the font at `static/fonts/Archivo-OFL.txt`.
+
+The final Hallmark audit against the live Flask routes (`/`, `/history`, and a saved sample result) reports zero FAIL and zero REFLEX, with 15/15 links, 2/2 fields, and 20/20 figures retained. It leaves two kept-inventory warnings because the route-focused run intentionally reads rendered Jinja output instead of raw template source; the screenshot comparison is in the ignored `.hallmark/compare.html` artifact.
+
 ## Open issues
 
 - The 300-record dataset includes project assumptions. Review `DATA_REVIEW.md` against current FSSAI and other applicable sources before submission.

@@ -104,8 +104,9 @@ def test_scan_history_api_saved_result_and_result_page(client):
     assert b"Health Score" in page.data
     assert b"Sodium benzoate" in page.data
     assert b"Informational screening only" in page.data
-    assert b"Before screening:" in page.data
-    assert b"After screening deductions and credits:" in page.data
+    assert b'aria-label="Score before and after screening"' in page.data
+    assert b"<dt>Before</dt>" in page.data
+    assert b"<dt>After</dt>" in page.data
     assert b"How this was calculated and sources" in page.data
     assert page.data.count(b"Codex Alimentarius CXG 36-1989, functional class column.") == 1
     assert page.data.count(b"numeric values are defined only in config.py") == 1
@@ -125,6 +126,93 @@ def test_scan_history_api_saved_result_and_result_page(client):
     also_contains = page_html.split('<section class="also-contains-section"', 1)[1].split("</section>", 1)[0]
     assert "Milk" in also_contains
     assert "Wheat or Gluten" in also_contains
+
+
+def test_unselected_detected_allergens_do_not_create_red_alert_section(client):
+    response = client.post(
+        "/scan",
+        data={"image": (BytesIO(_sample_bytes()), "label.png", "image/png")},
+        content_type="multipart/form-data",
+    )
+
+    assert response.status_code == 200
+    page = response.get_data(as_text=True)
+    assert 'class="alert-section"' not in page
+    assert "Selected allergen alerts" not in page
+    assert 'class="also-contains-section"' in page
+    assert 'class="allergen-alert critical"' not in page
+    assert "No allergen keywords detected" not in page
+
+
+def test_no_allergen_matches_state_keeps_alerts_separate_from_score(client, monkeypatch):
+    response = client.post(
+        "/scan",
+        data={"image": (BytesIO(_sample_bytes()), "label.png", "image/png")},
+        content_type="multipart/form-data",
+        headers={"Accept": "application/json"},
+    )
+    result = response.get_json()
+    result["allergen_alerts"] = []
+    monkeypatch.setattr(app_module, "get_scan_by_id", lambda _scan_id: result)
+
+    page = client.get(f"/history?scan_id={result['scan_id']}").get_data(as_text=True)
+
+    assert 'class="no-allergen-matches"' in page
+    assert 'id="allergen-heading"' in page
+    assert "No allergen keywords detected" in page
+    assert 'class="alert-section"' not in page
+    assert 'class="also-contains-section"' not in page
+
+
+def test_current_pages_have_brand_metadata_and_keep_script_ids(client):
+    scan_page = client.get("/").get_data(as_text=True)
+    assert "<title>Read a food label | NutriScan</title>" in scan_page
+    assert 'name="description" content="Upload a food-label photo' in scan_page
+    assert 'property="og:title" content="Read a food label | NutriScan"' in scan_page
+    assert 'property="og:description"' in scan_page
+    assert 'alt="NutriScan label reader"' in scan_page
+    assert "images/favicon.svg" in scan_page
+    for element_id in ("main", "scan-form", "label-image", "preview-wrap", "preview", "preview-name", "allergen-chips", "sample-button", "scan-status", "scan-progress"):
+        assert f'id="{element_id}"' in scan_page
+
+    history_page = client.get("/history").get_data(as_text=True)
+    assert "<title>Label history | NutriScan</title>" in history_page
+    assert 'id="history-list"' in history_page
+
+    result = client.post(
+        "/scan", data={"image": (BytesIO(_sample_bytes()), "label.png", "image/png"), "user_allergens": ["Peanut"]},
+        content_type="multipart/form-data",
+    ).get_data(as_text=True)
+    for element_id in ("allergen-heading", "also-contains-heading", "score-heading", "nutrient-heading", "additive-heading", "flags-heading", "raw-ocr", "comparison-heading", "comparison-slider", "comparison-help", "detected-findings"):
+        assert f'id="{element_id}"' in result
+    assert "<title>Scan result | NutriScan</title>" in result
+    assert 'property="og:description"' in result
+
+
+def test_scan_progress_reports_real_pipeline_stages(client, monkeypatch):
+    progress_id = "12345678123456781234567812345678"
+    stages = []
+    original_record = app_module._record_scan_progress
+
+    def record(progress_key, stage):
+        if progress_key == progress_id:
+            stages.append(stage)
+        original_record(progress_key, stage)
+
+    monkeypatch.setattr(app_module, "_record_scan_progress", record)
+    response = client.post(
+        "/scan",
+        data={"image": (BytesIO(_sample_bytes()), "label.png", "image/png"), "progress_id": progress_id},
+        content_type="multipart/form-data",
+        headers={"Accept": "application/json", "X-Requested-With": "XMLHttpRequest"},
+    )
+    assert response.status_code == 200
+    assert stages == ["uploading", "preprocessing", "reading_text", "decoding", "nutrition", "scoring", "saving", "complete"]
+    assert client.get(f"/api/scan-progress/{progress_id}").get_json() == {"stage": "complete"}
+    assert client.get("/api/scan-progress/not-a-uuid").status_code == 404
+    javascript = client.get("/static/js/app.js").get_data(as_text=True)
+    assert "/api/scan-progress/" in javascript
+    assert "setInterval" not in javascript
 
 
 def test_fresh_result_html_keeps_developer_sources_in_collapsible_section(client):
@@ -156,12 +244,12 @@ def test_comparison_layout_has_a_sized_shared_frame_and_mobile_stack(client):
     assert response.status_code == 200
     css = response.get_data(as_text=True)
     assert ".comparison { --split: 50%; position: relative;" in css
-    assert "height: clamp(320px, 56vw, 520px);" in css
+    assert "aspect-ratio: 1.58; max-height: 620px; min-height: 340px; overflow: clip;" in css
     assert ".comparison-viewport { position: relative; width: 100%; height: 100%;" in css
-    assert ".comparison { height: 520px; min-height: 0; grid-template-rows: 54px minmax(0, 1fr); }" in css
+    assert ".comparison { height: 480px; min-height: 0; aspect-ratio: auto;" in css
     assert "grid-template-rows: var(--split) calc(100% - var(--split));" in css
     assert ".original-image { grid-row: 1; }" in css
-    assert ".processed-image { grid-row: 2; clip-path: none;" in css
+    assert ".processed-image { grid-row: 2; clip-path: none; }" in css
 
 
 @pytest.mark.parametrize(
@@ -204,7 +292,7 @@ def test_failed_history_write_cleans_saved_images(client, monkeypatch, tmp_path)
 
 
 def test_unexpected_scan_failure_is_friendly_and_cleans_images(client, monkeypatch, tmp_path):
-    monkeypatch.setattr(app_module, "_run_pipeline", lambda *_args: (_ for _ in ()).throw(RuntimeError("internal detail")))
+    monkeypatch.setattr(app_module, "_run_pipeline", lambda *_args, **_kwargs: (_ for _ in ()).throw(RuntimeError("internal detail")))
     response = client.post(
         "/scan", data={"image": (BytesIO(_sample_bytes()), "label.png", "image/png")},
         content_type="multipart/form-data", headers={"Accept": "application/json"},

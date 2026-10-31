@@ -3,6 +3,7 @@
 from datetime import datetime
 from io import BytesIO
 from pathlib import Path
+from threading import Lock
 import time
 import uuid
 import warnings
@@ -25,6 +26,41 @@ class UploadValidationError(ValueError):
     def __init__(self, message, status=400):
         super().__init__(message)
         self.status = status
+
+
+_SCAN_PROGRESS = {}
+_SCAN_PROGRESS_LOCK = Lock()
+_SCAN_PROGRESS_TTL_SECONDS = 900
+
+
+def _normalize_progress_id(value):
+    try:
+        return uuid.UUID(str(value)).hex
+    except (AttributeError, TypeError, ValueError):
+        return None
+
+
+def _record_scan_progress(progress_id, stage):
+    if not progress_id:
+        return
+    now = time.monotonic()
+    with _SCAN_PROGRESS_LOCK:
+        expired = [key for key, entry in _SCAN_PROGRESS.items() if now - entry["updated"] > _SCAN_PROGRESS_TTL_SECONDS]
+        for key in expired:
+            _SCAN_PROGRESS.pop(key, None)
+        _SCAN_PROGRESS[progress_id] = {"stage": stage, "updated": now}
+
+
+def _get_scan_progress(progress_id):
+    now = time.monotonic()
+    with _SCAN_PROGRESS_LOCK:
+        entry = _SCAN_PROGRESS.get(progress_id)
+        if entry is None:
+            return None
+        if now - entry["updated"] > _SCAN_PROGRESS_TTL_SECONDS:
+            _SCAN_PROGRESS.pop(progress_id, None)
+            return None
+        return {"stage": entry["stage"]}
 
 
 def _human_datetime(value):
@@ -129,10 +165,14 @@ def _highlight_findings(additives, ingredient_flags, allergen_alerts, unknown_co
     }
 
 
-def _run_pipeline(upload_path, processed_path, image_name, scan_id, selected_allergens, knowledge):
+def _run_pipeline(upload_path, processed_path, image_name, scan_id, selected_allergens, knowledge, progress=None):
     started = time.perf_counter()
+    report_stage = progress or (lambda _stage: None)
+    report_stage("preprocessing")
     prepared = preprocess_image(upload_path, processed_path=processed_path)
+    report_stage("reading_text")
     ocr_result = recognize_text(prepared["processed"], prepared["original_gray"])
+    report_stage("decoding")
     parsed = parse_label_text(ocr_result["text"])
     named_additives, ingredient_flags, unrecognised_tokens = match_ingredient_tokens(
         parsed["ingredient_tokens"], knowledge["additives"], knowledge["ingredient_flags"]
@@ -142,7 +182,9 @@ def _run_pipeline(upload_path, processed_path, image_name, scan_id, selected_all
     allergens = match_allergens(
         parsed["ingredient_text"], parsed["contains_text"], knowledge["allergens"], selected_allergens
     )
+    report_stage("nutrition")
     nutrients = parse_nutrition(parsed["nutrition_text"], knowledge["nutrition_limits"])
+    report_stage("scoring")
     score = calculate_health_score(additives, ingredient_flags, nutrients)
     diagnostics = {
         **prepared["diagnostics"],
@@ -210,6 +252,8 @@ def create_app(test_config=None):
     def scan():
         upload_path = processed_path = None
         scan_id = None
+        progress_id = _normalize_progress_id(request.form.get("progress_id"))
+        _record_scan_progress(progress_id, "uploading")
         try:
             content, image_name, extension = _validate_upload(request.files.get("image"))
             scan_id = f"scan_{datetime.now().strftime('%Y%m%d_%H%M%S')}_{uuid.uuid4().hex[:8]}"
@@ -222,29 +266,39 @@ def create_app(test_config=None):
             result = _run_pipeline(
                 upload_path, processed_path, image_name, scan_id,
                 selected_allergens, app.config["KNOWLEDGE"],
+                progress=lambda stage: _record_scan_progress(progress_id, stage),
             )
+            _record_scan_progress(progress_id, "saving")
             add_scan(result)
+            _record_scan_progress(progress_id, "complete")
             if _wants_json():
                 return jsonify(result), 200
             return render_template("result.html", result=result), 200
         except UploadValidationError as exc:
+            _record_scan_progress(progress_id, "failed")
             return _error_response(str(exc), exc.status)
         except OCRSetupError as exc:
+            _record_scan_progress(progress_id, "failed")
             _remove_files(upload_path, processed_path)
             return _error_response(str(exc), 503)
         except OCRNoTextError as exc:
+            _record_scan_progress(progress_id, "failed")
             _remove_files(upload_path, processed_path)
             return _error_response(str(exc), 422)
         except PreprocessError as exc:
+            _record_scan_progress(progress_id, "failed")
             _remove_files(upload_path, processed_path)
             return _error_response(str(exc), 422)
         except StorageError as exc:
+            _record_scan_progress(progress_id, "failed")
             _remove_files(upload_path, processed_path)
             return _error_response(str(exc), 500)
         except OSError:
+            _record_scan_progress(progress_id, "failed")
             _remove_files(upload_path, processed_path)
             return _error_response("The image could not be stored locally. Check the NutriScan uploads folder permissions.", 500)
         except Exception:
+            _record_scan_progress(progress_id, "failed")
             _remove_files(upload_path, processed_path)
             app.logger.exception("Unexpected failure while processing scan %s", scan_id or "before-id")
             return _error_response("NutriScan could not complete this scan. Try another clear JPG or PNG label.", 500)
@@ -277,6 +331,14 @@ def create_app(test_config=None):
             {key: item.get(key) for key in ("scan_id", "scanned_at", "image_name", "health_score", "score_band")}
             for item in scans
         ])
+
+    @app.get("/api/scan-progress/<progress_id>")
+    def scan_progress_api(progress_id):
+        normalized_id = _normalize_progress_id(progress_id)
+        progress = _get_scan_progress(normalized_id) if normalized_id else None
+        if progress is None:
+            return jsonify({"error": "Scan progress was not found."}), 404
+        return jsonify(progress)
 
     @app.get("/api/history/<scan_id>")
     def scan_api(scan_id):
