@@ -177,7 +177,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, summary:focus-visibl
 }
 .result-heading h1 { margin: 3px 0 8px; font-size: clamp(1.9rem, 6vw, 3.2rem); line-height: 1.03; overflow-wrap: anywhere; }
 .scan-date { margin: 0; color: var(--muted); font-size: .86rem; }
-.subtle, .section-heading > p, .table-reason, .source-note { color: var(--muted); }
+.subtle, .section-heading > p, .table-reason { color: var(--muted); }
 .subtle { margin: 0; }
 .score-dial {
   --tone: var(--green);
@@ -233,7 +233,7 @@ tbody th { min-width: 120px; font-weight: 700; }
 .status-medium, .status-moderate, .status-caution { color: var(--amber); background: #fbf1dc; }
 .status-high, .status-harmful { color: var(--red); background: #f8e8e5; }
 .status-not-comparable { color: var(--blue); background: #e7eff3; }
-.status-informational { color: var(--blue); background: #e7eff3; }
+.informational-text { color: var(--blue); font-weight: 700; }
 .score-summary { margin: 0 0 22px; color: var(--muted); font-size: .96rem; }
 .table-reason { min-width: 180px; margin: 5px 0 0; font-size: .8rem; }
 .small-label { display: block; margin-top: 3px; color: var(--muted); font-size: .78rem; }
@@ -242,8 +242,6 @@ tbody th { min-width: 120px; font-weight: 700; }
 .finding-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .finding-top h3 { margin: 0; font-size: 1.04rem; }
 .finding-list p { margin: 7px 0 0; }
-.source-note { font-size: .78rem; }
-.compact-list { max-width: 740px; }
 .unknown-box { margin-top: 16px; padding: 14px 16px; border: 1px solid #9db2bf; border-radius: 7px; background: #edf3f5; }
 .unknown-box h3 { margin: 0; }
 .unknown-box ul { margin: 8px 0 0; }
@@ -256,9 +254,10 @@ tbody th { min-width: 120px; font-weight: 700; }
 .points.negative { color: var(--red); }
 .points.positive { color: var(--green); }
 
-.comparison { --split: 50%; display: grid; grid-template-rows: auto minmax(0, 1fr); aspect-ratio: 3 / 2; max-height: 520px; overflow: hidden; border: 1px solid var(--line); border-radius: 7px; background: #e3e2dc; }
-.comparison-labels { display: flex; justify-content: space-between; padding: 8px 12px; border-bottom: 1px solid var(--line); background: var(--card); color: var(--ink); font-size: .82rem; font-weight: 700; }
-.comparison-viewport { position: relative; min-height: 0; overflow: hidden; background: #e3e2dc; }
+.comparison { --split: 50%; position: relative; display: grid; grid-template-rows: 40px minmax(0, 1fr); width: 100%; height: clamp(320px, 56vw, 520px); min-height: 320px; overflow: hidden; border: 1px solid var(--line); border-radius: 7px; background: #e3e2dc; }
+.comparison-labels { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 4px 10px; border-bottom: 1px solid var(--line); background: var(--card); }
+.compare-caption { display: inline-flex; align-items: center; min-height: 22px; padding: 2px 9px; border-radius: 999px; background: #26302d; color: #fff; font-size: .72rem; font-weight: 700; line-height: 1.25; }
+.comparison-viewport { position: relative; width: 100%; height: 100%; min-width: 0; min-height: 0; overflow: hidden; background: #e3e2dc; }
 .comparison-image { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: center; }
 .processed-image { clip-path: inset(0 calc(100% - var(--split)) 0 0); }
 .range-label { display: block; margin-top: 12px; font-weight: 650; }
@@ -290,7 +289,13 @@ tbody th { min-width: 120px; font-weight: 700; }
   .section-heading { display: block; }
   .section-heading > p { margin-top: 8px; }
   .history-row { grid-template-columns: minmax(0, 1fr) auto; }
-  .comparison { aspect-ratio: 1 / 1.18; }
+  .comparison { height: 520px; min-height: 0; grid-template-rows: 54px minmax(0, 1fr); }
+  .comparison-labels { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: 1fr 1fr; align-content: center; gap: 1px; padding: 3px 10px; }
+  .original-caption, .processed-caption { justify-self: start; }
+  .comparison-viewport { display: grid; grid-template-rows: var(--split) calc(100% - var(--split)); }
+  .comparison-image { position: relative; inset: auto; width: 100%; height: 100%; min-width: 0; min-height: 0; }
+  .original-image { grid-row: 1; }
+  .processed-image { grid-row: 2; clip-path: none; border-top: 1px solid var(--line); }
   .finding-top { align-items: flex-start; flex-direction: column; }
 }
 

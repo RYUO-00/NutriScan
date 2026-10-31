@@ -34,7 +34,9 @@ Dietary Fibre 3 g"""
     assert values["sodium"]["status"] == "High"
     assert values["protein"]["status"] == "Informational"
     assert values["fibre"]["status"] == "Informational"
-    assert "thresholds" not in values["energy"]
+    for nutrient in ("energy", "protein", "fibre"):
+        assert values[nutrient]["status"] == "Informational"
+        assert "thresholds" not in values[nutrient]
     assert values["sugar"]["source_span"] == "Total sugars 8 g"
     assert values["sodium"]["threshold_source"]
     assert "Source:" not in values["sugar"]["reason"]

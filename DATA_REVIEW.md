@@ -2,6 +2,10 @@
 
 Additive identity and functional-class sources are recorded in the JSON data. The provisional screening labels, keyword expansions, and nutrition cutoffs remain project assumptions and require review before academic submission.
 
+## Additive-class audit — 31 Oct 2026
+
+All 180 additive records were checked for a code-specific class source. The result page shows the listed functional class where the record has one selected; INS 211 Sodium benzoate is Preservative and INS 322 Lecithins is Emulsifier. Twelve entries have multiple listed functions or no confidently selected primary class, so they remain marked “Class under review” and are itemized below rather than assigned a guessed class.
+
 ## Additive functional classes needing review
 
 - INS 170i Calcium carbonate: Codex lists several functional classes for calcium carbonate, so this dataset does not select a single one.

@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from scripts.validate_data import EXPECTED_COUNTS, read_records, validate_data
 
 
@@ -16,6 +18,12 @@ def test_additive_functional_classes_are_specific_or_queued_for_review():
             assert item["category"] == "Class under review"
         else:
             assert " or " not in item["category"].casefold()
+
+    review_text = Path("DATA_REVIEW.md").read_text(encoding="utf-8")
+    unresolved = [item for item in records if item["category_review_reason"]]
+    assert len(unresolved) == 12
+    for item in unresolved:
+        assert f"INS {item['ins_code']} {item['name']}" in review_text
 
 
 def test_caution_flags_have_distinct_label_specific_reasons():

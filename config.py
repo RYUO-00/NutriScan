@@ -69,5 +69,6 @@ NUTRITION_THRESHOLDS = {
     "salt": {"unit": "g", "basis": "100g", "medium_above": 0.3, "high_above": 1.5},
 }
 
-# These label values are displayed for context and do not change the score.
-INFORMATIONAL_NUTRIENTS = {"protein", "fibre"}
+# These label values are informational and never change the score. The energy
+# cutoff remains a project assumption, so energy is shown only for context too.
+INFORMATIONAL_NUTRIENTS = {"energy", "protein", "fibre"}

@@ -28,7 +28,7 @@ def calculate_health_score(additives=None, ingredient_flags=None, nutrients=None
     additives = _unique(additives or [], ("ins_code", "id"))
     ingredient_flags = _unique(ingredient_flags or [], ("id", "keyword"))
     nutrients = nutrients or []
-    breakdown = [{"category": "starting score", "item": "Starting value", "points": config.STARTING_SCORE, "reason": "The score begins at the configured project value."}]
+    breakdown = [{"category": "starting score", "item": "Starting value", "points": config.STARTING_SCORE, "reason": f"The score starts at {config.STARTING_SCORE} points."}]
     additive_used = 0
     harmful_used = 0
     benefit_used = 0
@@ -43,11 +43,11 @@ def calculate_health_score(additives=None, ingredient_flags=None, nutrients=None
             "category": "additive",
             "item": additive.get("name", additive.get("ins_code", "Recognized additive")),
             "points": -applied,
-            "reason": additive.get("reason", "Screening deduction from the configured additive category."),
+            "reason": additive.get("reason", "Screening deduction for this additive."),
             "risk_level": risk,
         })
         if applied < raw:
-            breakdown[-1]["cap_note"] = "The configured total additive deduction cap was reached."
+            breakdown[-1]["cap_note"] = "The total additive deduction limit was reached."
 
     for flag in ingredient_flags:
         if flag.get("flag_type") != "harmful":
@@ -59,10 +59,10 @@ def calculate_health_score(additives=None, ingredient_flags=None, nutrients=None
             "category": "ingredient flag",
             "item": flag.get("keyword", "Flagged ingredient"),
             "points": -applied,
-            "reason": flag.get("reason", "Configured harmful-flag deduction."),
+            "reason": flag.get("reason", "Screening deduction for this ingredient flag."),
         })
         if applied < raw:
-            breakdown[-1]["cap_note"] = "The configured harmful-flag deduction cap was reached."
+            breakdown[-1]["cap_note"] = "The total ingredient deduction limit was reached."
 
     for nutrient in nutrients:
         key = nutrient.get("name")
@@ -93,10 +93,10 @@ def calculate_health_score(additives=None, ingredient_flags=None, nutrients=None
             "category": "ingredient flag",
             "item": flag.get("keyword", "Beneficial ingredient"),
             "points": applied,
-            "reason": flag.get("reason", "Configured beneficial-ingredient credit."),
+            "reason": flag.get("reason", "Screening credit for this ingredient."),
         })
         if applied < raw:
-            breakdown[-1]["cap_note"] = "The configured beneficial credit cap was reached."
+            breakdown[-1]["cap_note"] = "The total ingredient credit limit was reached."
 
     raw_score = sum(item["points"] for item in breakdown)
     score = max(0, min(100, raw_score))
@@ -105,7 +105,7 @@ def calculate_health_score(additives=None, ingredient_flags=None, nutrients=None
             "category": "clamp",
             "item": "Score range",
             "points": score - raw_score,
-            "reason": "The score is clamped to the configured 0 to 100 range.",
+            "reason": "The score is limited to the 0 to 100 range.",
         })
     return {
         "health_score": score,

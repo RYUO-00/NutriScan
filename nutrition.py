@@ -92,12 +92,14 @@ def _convert_unit(value, source_unit, target_unit):
 
 def _threshold_status(key, value, basis, unit, metadata):
     if key in config.INFORMATIONAL_NUTRIENTS:
+        if key == "energy":
+            return "Informational", "Shown for context only because no verified energy screening threshold is available.", None
         return "Informational", "Shown for context only; this nutrient does not reduce the screening score.", None
     threshold = config.NUTRITION_THRESHOLDS.get(key)
     if threshold is None:
-        return "not comparable", "No screening threshold is configured for this nutrient.", None
+        return "not comparable", "No screening value is available for this nutrient.", None
     if unit != threshold["unit"]:
-        return "not comparable", f"The extracted unit {unit} does not match the configured {threshold['unit']} unit.", threshold
+        return "not comparable", f"This value uses {unit}; the screening value is shown in {threshold['unit']}.", threshold
     if basis != threshold["basis"]:
         return "not comparable", f"The extracted basis is {basis}; this screening threshold uses {threshold['basis']}.", threshold
     if value > threshold["high_above"]:
@@ -106,9 +108,6 @@ def _threshold_status(key, value, basis, unit, metadata):
         status = "Medium"
     else:
         status = "Low"
-    source = metadata.get("source", "Project assumption - needs verification")
-    if key == "energy" and "project assumption" in source.casefold():
-        return "Informational", "Shown for context only because no verified energy screening threshold is available.", None
     return status, f"Compared with the screening values for {threshold['basis']}.", threshold
 
 

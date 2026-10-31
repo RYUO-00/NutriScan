@@ -8,7 +8,7 @@
   </div>
 </section>
 <p class="band-label">Score band: <strong>{{ result.score_band }}</strong></p>
-<p class="score-summary">Before screening: <strong>{{ result.starting_score }}</strong> → After configured deductions and credits: <strong>{{ result.health_score }}</strong></p>
+<p class="score-summary">Before screening: <strong>{{ result.starting_score }}</strong> → After screening deductions and credits: <strong>{{ result.health_score }}</strong></p>
 
 {% set selected_allergens = result.allergen_alerts|selectattr("selected")|list %}
 {% set other_allergens = result.allergen_alerts|rejectattr("selected")|list %}
@@ -49,7 +49,7 @@
   {% for nutrient in result.nutrients %}<tr>
     <th scope="row">{{ nutrient.name|replace("_", " ")|title }}{% if nutrient.estimated %}<span class="small-label">Estimate</span>{% endif %}</th>
     <td>{{ nutrient.value }} {{ nutrient.unit }}</td><td>{{ nutrient.basis }}</td>
-    <td>{% if nutrient.status == "Informational" %}<span class="status status-informational">Informational</span>{% else %}<span class="status status-{{ nutrient.status|lower|replace(" ", "-") }}">{{ nutrient.status }}</span>{% endif %}<p class="table-reason">{{ nutrient.reason }}</p></td>
+    <td>{% if nutrient.status == "Informational" %}<span class="informational-text">Informational</span>{% else %}<span class="status status-{{ nutrient.status|lower|replace(" ", "-") }}">{{ nutrient.status }}</span>{% endif %}<p class="table-reason">{{ nutrient.reason }}</p></td>
   </tr>{% endfor %}</tbody></table></div>
   {% else %}<p>No supported nutrient values could be read from this photo.</p>{% endif %}
 </section>
@@ -66,12 +66,12 @@
 </section>
 
 <section class="report-section" aria-labelledby="flags-heading">
-  <div class="section-heading"><div><h2 id="flags-heading">Ingredient flags</h2></div><p>Flags are simplified project rules; quantity and full product context matter.</p></div>
-  {% if result.ingredient_flags %}<ul class="finding-list compact-list">{% for item in result.ingredient_flags %}<li><div class="finding-top"><h3>{{ item.keyword }}</h3><span class="status status-{{ item.flag_type }}">{{ item.flag_type|title }}</span></div><p>{{ item.reason }}</p></li>{% endfor %}</ul>{% else %}<p>No configured ingredient flags were matched.</p>{% endif %}
+  <div class="section-heading"><div><h2 id="flags-heading">Ingredient flags</h2></div><p>These ingredient matches are prompts for review; the label does not show the full product context.</p></div>
+  {% if result.ingredient_flags %}<ul class="finding-list">{% for item in result.ingredient_flags %}<li><div class="finding-top"><h3>{{ item.keyword }}</h3><span class="status status-{{ item.flag_type }}">{{ item.flag_type|title }}</span></div><p>{{ item.reason }}</p></li>{% endfor %}</ul>{% else %}<p>No ingredient flags were matched.</p>{% endif %}
 </section>
 
 <section class="report-section" aria-labelledby="score-heading">
-  <div class="section-heading"><div><h2 id="score-heading">Score breakdown</h2></div><p>Project-defined weights; not an official nutrition or safety rating.</p></div>
+  <div class="section-heading"><div><h2 id="score-heading">Score breakdown</h2></div><p>This is a simplified screening summary, not an official nutrition or safety rating.</p></div>
   <ul class="breakdown-list">{% for item in result.score_breakdown %}<li><span class="points {% if item.points < 0 %}negative{% elif item.points > 0 %}positive{% endif %}">{{ "%+d"|format(item.points) }}</span><div><strong>{{ item.item }}</strong><span>{{ item.reason }}</span>{% if item.cap_note %}<span class="small-label">{{ item.cap_note }}</span>{% endif %}</div></li>{% endfor %}</ul>
 </section>
 
@@ -80,17 +80,17 @@
 <section class="report-section" aria-labelledby="comparison-heading">
   <div class="section-heading"><div><h2 id="comparison-heading">Original and processed image</h2></div><p>Move the slider to compare. Preprocessing can change the text OCR reads.</p></div>
   <div class="comparison" style="--split:50%">
-    <div class="comparison-labels" aria-hidden="true"><span>Original</span><span>Processed</span></div>
+    <div class="comparison-labels" aria-hidden="true"><span class="compare-caption original-caption">Original</span><span class="compare-caption processed-caption">Processed</span></div>
     <div class="comparison-viewport">
       <img class="comparison-image original-image" src="{{ url_for('uploaded_media', filename=result.image_path[8:]) }}" alt="Original uploaded food label photo">
       <img class="comparison-image processed-image" src="{{ url_for('uploaded_media', filename=result.processed_image_path[8:]) }}" alt="Preprocessed food label image used for text recognition">
     </div>
   </div>
-  <label class="range-label" for="comparison-slider">Image comparison position</label><input id="comparison-slider" type="range" min="5" max="95" value="50" aria-describedby="comparison-help"><span id="comparison-help" class="visually-hidden">Move left or right to reveal more of each image.</span>
+  <label class="range-label" for="comparison-slider">Image comparison position</label><input id="comparison-slider" type="range" min="5" max="95" value="50" aria-describedby="comparison-help"><span id="comparison-help" class="visually-hidden">On wide screens, move the slider to reveal more of the processed image. On narrow screens, it adjusts the space for the stacked images.</span>
 </section>
 
 <details class="raw-text"><summary>Read the OCR text and highlighted matches</summary><pre id="raw-ocr">{{ result.raw_text }}</pre></details>
-<details class="source-details"><summary>How this was calculated and sources</summary><p>The score starts at {{ result.starting_score }}. Configured ingredient, additive, and comparable nutrient rules apply the deductions and credits shown above. Informational nutrients are shown for context and do not change the score.</p><ul>{% for source in result.sources %}<li>{{ source }}</li>{% endfor %}</ul></details>
+<details class="source-details"><summary>How this was calculated and sources</summary><p>The score starts at {{ result.starting_score }}. Screening rules apply the ingredient, additive, and comparable nutrition deductions and credits shown above. Energy, protein, and fibre are shown for context and do not change the score.</p><ul>{% for source in result.sources %}<li>{{ source }}</li>{% endfor %}</ul></details>
 <script id="detected-findings" type="application/json">{{ result.highlight_findings|tojson }}</script>
 <section class="disclaimer"><strong>Informational screening only.</strong> NutriScan is not medical advice and does not guarantee that a product is safe for any person. OCR and keyword matching can miss or misread label text.</section>
 <p class="result-actions"><a class="button" href="/">Scan another label</a><a class="button button-quiet" href="/history">View history</a></p>

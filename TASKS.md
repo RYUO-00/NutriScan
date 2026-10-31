@@ -18,3 +18,12 @@ Work one phase at a time. Mark a phase done only after its tests pass; update th
 - [x] The comparison slider uses one shared image viewport with captions outside the image area. Selected allergen matches use the red alert section; other matches use the amber “Also contains” section.
 - [x] Caution flags have distinct ingredient-specific reasons. Git ignores local history and uploads, and startup creates an empty history array when missing.
 - [x] Verification after these changes: `pytest` — 55 passed.
+
+## Fresh-scan regression follow-up — 31 Oct 2026
+
+- [x] The comparison now has a positioned, explicitly sized shared frame; its caption badges occupy a separate row, both images share the same viewport on wide screens, and the existing slider adjusts the stacked panels on narrow screens. Ingredient and additive lists use the same card width.
+- [x] Energy, protein, and fibre render as informational text without status chips or score deductions. The sample scan shows 100 before scoring and 68 after: −6 additive points, −28 from total fat/saturated fat/sugar/sodium, and +2 for whole wheat flour.
+- [x] The rendered source strings remain intact in data and appear only inside the collapsed source disclosure. User-facing calculation copy no longer exposes configuration wording.
+- [x] Fresh scan confirmed INS 211 as Preservative and INS 322 as Emulsifier. All 12 unresolved or multi-function additive classes remain listed in `DATA_REVIEW.md`; caution flag reasons are specific.
+- [x] Fresh local sample scan returned HTTP 200. Full verification: `pytest` — 57 passed; data validation — 300 records.
+- [ ] 1440 px and 360 px screenshots could not be captured because Work settings disable local in-app browser access. Result HTML and responsive CSS assertions passed; visual screenshot inspection remains unavailable in this session.

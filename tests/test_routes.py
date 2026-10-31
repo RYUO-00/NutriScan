@@ -67,17 +67,28 @@ def test_scan_history_api_saved_result_and_result_page(client):
     assert result["processed_image_path"].startswith("uploads/processed/scan_")
     assert result["health_score"] < 100
     assert result["score_band"] in {"Good", "Moderate", "Poor"}
-    assert any(item["ins_code"] == "211" for item in result["additives"])
-    assert any(item["ins_code"] == "322" for item in result["additives"])
+    additive_categories = {item["ins_code"]: item["category"] for item in result["additives"]}
+    assert additive_categories["211"] == "Preservative"
+    assert additive_categories["322"] == "Emulsifier"
     assert "sodium benzoate (E 211)" not in result["unrecognised_tokens"]
     assert any(item["allergen_group"] == "Peanut" and item["severity"] == "critical" for item in result["allergen_alerts"])
     assert any(item["name"] == "sodium" for item in result["nutrients"])
     assert result["starting_score"] == 100
     assert result["health_score"] == 68
+    assert result["score_totals"] == {
+        "additive_deduction": 6,
+        "harmful_flag_deduction": 0,
+        "nutrient_deduction": 28,
+        "beneficial_credit": 2,
+    }
     nutrient_status = {item["name"]: item["status"] for item in result["nutrients"]}
     assert nutrient_status["energy"] == "Informational"
     assert nutrient_status["protein"] == "Informational"
     assert nutrient_status["fibre"] == "Informational"
+    assert not [
+        item for item in result["score_breakdown"]
+        if item["category"] == "nutrient" and item["item"] in {"energy", "protein", "fibre"}
+    ]
     assert "not medical advice" in result["disclaimer"].lower()
 
     history = client.get("/api/history").get_json()
@@ -94,14 +105,18 @@ def test_scan_history_api_saved_result_and_result_page(client):
     assert b"Sodium benzoate" in page.data
     assert b"Informational screening only" in page.data
     assert b"Before screening:" in page.data
-    assert b"After configured deductions and credits:" in page.data
+    assert b"After screening deductions and credits:" in page.data
     assert b"How this was calculated and sources" in page.data
     assert page.data.count(b"Codex Alimentarius CXG 36-1989, functional class column.") == 1
     assert page.data.count(b"numeric values are defined only in config.py") == 1
     assert b"class=\"source-note\"" not in page.data
     page_html = page.get_data(as_text=True)
     comparison = page_html[page_html.index('<div class="comparison"'):page_html.index('Image comparison position')]
-    assert comparison.index("comparison-labels") < comparison.index("comparison-viewport")
+    labels_start = comparison.index('<div class="comparison-labels"')
+    labels_end = comparison.index("</div>", labels_start) + len("</div>")
+    viewport_start = comparison.index('<div class="comparison-viewport">')
+    assert labels_end < viewport_start
+    assert comparison.count('class="compare-caption ') == 2
     assert comparison.count('class="comparison-image') == 2
     assert 'id="comparison-slider"' in page_html
     critical_section = page_html.split('<section class="alert-section"', 1)[1].split("</section>", 1)[0]
@@ -110,6 +125,43 @@ def test_scan_history_api_saved_result_and_result_page(client):
     also_contains = page_html.split('<section class="also-contains-section"', 1)[1].split("</section>", 1)[0]
     assert "Milk" in also_contains
     assert "Wheat or Gluten" in also_contains
+
+
+def test_fresh_result_html_keeps_developer_sources_in_collapsible_section(client):
+    response = client.post(
+        "/scan", data={"image": (BytesIO(_sample_bytes()), "label.png", "image/png")},
+        content_type="multipart/form-data",
+    )
+    assert response.status_code == 200
+    page = response.get_data(as_text=True)
+    source_start = page.index('<details class="source-details">')
+    source_end = page.index("</details>", source_start) + len("</details>")
+    sources = page[source_start:source_end]
+    outside_sources = page[:source_start] + page[source_end:]
+
+    assert "How this was calculated and sources" in sources
+    assert "Project assumption" in sources
+    assert "numeric values are defined only in config.py" in sources
+    assert "Project assumption" not in outside_sources
+    assert "config.py" not in outside_sources
+    assert "configured" not in outside_sources.casefold()
+    assert page.count('<span class="informational-text">Informational</span>') == 3
+    assert 'class="status status-informational"' not in page
+    assert '<ul class="finding-list compact-list">' not in page
+    assert page.count('<ul class="finding-list">') >= 2
+
+
+def test_comparison_layout_has_a_sized_shared_frame_and_mobile_stack(client):
+    response = client.get("/static/css/style.css?v=20261031-2")
+    assert response.status_code == 200
+    css = response.get_data(as_text=True)
+    assert ".comparison { --split: 50%; position: relative;" in css
+    assert "height: clamp(320px, 56vw, 520px);" in css
+    assert ".comparison-viewport { position: relative; width: 100%; height: 100%;" in css
+    assert ".comparison { height: 520px; min-height: 0; grid-template-rows: 54px minmax(0, 1fr); }" in css
+    assert "grid-template-rows: var(--split) calc(100% - var(--split));" in css
+    assert ".original-image { grid-row: 1; }" in css
+    assert ".processed-image { grid-row: 2; clip-path: none;" in css
 
 
 @pytest.mark.parametrize(
