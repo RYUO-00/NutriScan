@@ -1,97 +1,104 @@
 {% extends "base.html" %}
-{% block title %}Scan result · NutriScan{% endblock %}
+{% block title %}Your scan result · NutriScan{% endblock %}
+{% block meta_description %}Review this label’s score, selected allergen alerts, nutrient readings, detected additives, and recognized text.{% endblock %}
+{% block og_title %}Your scan result · NutriScan{% endblock %}
 {% block content %}
-<section class="result-heading">
-  <div><p class="scan-date">Scanned {{ result.scanned_at|human_datetime }}</p><h1>{{ result.image_name }}</h1><p class="subtle">A screening summary of the text NutriScan could read.</p></div>
-  <div class="score-dial score-{{ result.score_band|lower }}" style="--score-value:{{ result.health_score }}%" role="img" aria-label="Health Score {{ result.health_score }} out of 100, {{ result.score_band }}">
-    <div><span class="score-value">{{ result.health_score }}</span><span class="score-label">Health Score</span></div>
-  </div>
-</section>
-<p class="band-label">Score band: <strong>{{ result.score_band }}</strong></p>
-<p class="score-summary">Before screening: <strong>{{ result.starting_score }}</strong> → After screening deductions and credits: <strong>{{ result.health_score }}</strong></p>
-
-{% set selected_allergens = result.allergen_alerts|selectattr("selected")|list %}
-{% set other_allergens = result.allergen_alerts|rejectattr("selected")|list %}
-{% if selected_allergens %}
-<section class="alert-section" aria-labelledby="allergen-heading">
-  <h2 id="allergen-heading">Selected allergen alerts</h2>
-  <p>These selected allergen matches are separate from the score. A high score never clears an alert.</p>
-  <ul class="alert-list">
-    {% for alert in selected_allergens %}
-    <li class="allergen-alert critical">
-      <strong>{{ alert.allergen_group }} · Selected allergen</strong>
-      <span>Matched: {{ alert.matched_keywords|join(", ") }} · In: {{ alert.source_sections|join(", ") }}</span>
-    </li>
-    {% endfor %}
-  </ul>
-</section>
-{% endif %}
-{% if other_allergens %}
-<section class="also-contains-section" aria-labelledby="also-contains-heading">
-  <h2 id="also-contains-heading">Also contains</h2>
-  <p>These detected allergen keywords were not selected before scanning. Review the label carefully.</p>
-  <ul class="alert-list">
-    {% for alert in other_allergens %}
-    <li class="allergen-alert warning">
-      <strong>{{ alert.allergen_group }}</strong>
-      <span>Matched: {{ alert.matched_keywords|join(", ") }} · In: {{ alert.source_sections|join(", ") }}</span>
-    </li>
-    {% endfor %}
-  </ul>
-</section>
-{% endif %}
-{% if not result.allergen_alerts %}<section class="quiet-note"><h2>No allergen keywords detected</h2><p>Keyword screening can miss synonyms, context, and small or unreadable print. This is not an allergen-safety guarantee.</p></section>{% endif %}
-
-<section class="report-section" aria-labelledby="nutrient-heading">
-  <div class="section-heading"><div><h2 id="nutrient-heading">Nutrient screening</h2></div><p>Status appears only when units and basis can be compared.</p></div>
-  {% if result.nutrients %}
-  <div class="table-wrap" role="region" aria-label="Nutrient screening table" tabindex="0"><table><thead><tr><th scope="col">Nutrient</th><th scope="col">Label value</th><th scope="col">Basis</th><th scope="col">Status</th></tr></thead><tbody>
-  {% for nutrient in result.nutrients %}<tr>
-    <th scope="row">{{ nutrient.name|replace("_", " ")|title }}{% if nutrient.estimated %}<span class="small-label">Estimate</span>{% endif %}</th>
-    <td>{{ nutrient.value }} {{ nutrient.unit }}</td><td>{{ nutrient.basis }}</td>
-    <td>{% if nutrient.status == "Informational" %}<span class="informational-text">Informational</span>{% else %}<span class="status status-{{ nutrient.status|lower|replace(" ", "-") }}">{{ nutrient.status }}</span>{% endif %}<p class="table-reason">{{ nutrient.reason }}</p></td>
-  </tr>{% endfor %}</tbody></table></div>
-  {% else %}<p>No supported nutrient values could be read from this photo.</p>{% endif %}
-</section>
-
-<section class="report-section" aria-labelledby="additive-heading">
-  <div class="section-heading"><div><h2 id="additive-heading">Decoded additives</h2></div><p>Presence on a label does not reveal amount or permitted use.</p></div>
-  {% if result.additives %}<ul class="finding-list">
-    {% for item in result.additives %}<li><div class="finding-top"><h3>{{ item.name }}</h3><span class="status status-{{ item.risk_level }}">{{ item.risk_level|title }} screening label</span></div>
-      <p class="small-label">INS {{ item.ins_code }}{% if item.category %} · {{ item.category }}{% endif %}{% if item.matched_code is none %} · matched by ingredient name{% endif %}</p>
-      <p>{{ item.reason }}</p>
-    </li>{% endfor %}</ul>
-  {% else %}<p>No known additive codes or names were matched.</p>{% endif %}
-  {% if result.unknown_additive_codes %}<div class="unknown-box"><h3>Unrecognised additive codes</h3><ul>{% for item in result.unknown_additive_codes %}<li><strong>{{ item.code }}</strong> · {{ item.label }}</li>{% endfor %}</ul></div>{% endif %}
-</section>
-
-<section class="report-section" aria-labelledby="flags-heading">
-  <div class="section-heading"><div><h2 id="flags-heading">Ingredient flags</h2></div><p>These ingredient matches are prompts for review; the label does not show the full product context.</p></div>
-  {% if result.ingredient_flags %}<ul class="finding-list">{% for item in result.ingredient_flags %}<li><div class="finding-top"><h3>{{ item.keyword }}</h3><span class="status status-{{ item.flag_type }}">{{ item.flag_type|title }}</span></div><p>{{ item.reason }}</p></li>{% endfor %}</ul>{% else %}<p>No ingredient flags were matched.</p>{% endif %}
-</section>
-
-<section class="report-section" aria-labelledby="score-heading">
-  <div class="section-heading"><div><h2 id="score-heading">Score breakdown</h2></div><p>This is a simplified screening summary, not an official nutrition or safety rating.</p></div>
-  <ul class="breakdown-list">{% for item in result.score_breakdown %}<li><span class="points {% if item.points < 0 %}negative{% elif item.points > 0 %}positive{% endif %}">{{ "%+d"|format(item.points) }}</span><div><strong>{{ item.item }}</strong><span>{{ item.reason }}</span>{% if item.cap_note %}<span class="small-label">{{ item.cap_note }}</span>{% endif %}</div></li>{% endfor %}</ul>
-</section>
-
-{% if result.unrecognised_tokens %}<section class="report-section"><h2>Unrecognised ingredient text</h2><ul class="token-list">{% for token in result.unrecognised_tokens %}<li>{{ token }}</li>{% endfor %}</ul></section>{% endif %}
-
-<section class="report-section" aria-labelledby="comparison-heading">
-  <div class="section-heading"><div><h2 id="comparison-heading">Original and processed image</h2></div><p>Move the slider to compare. Preprocessing can change the text OCR reads.</p></div>
-  <div class="comparison" style="--split:50%">
-    <div class="comparison-labels" aria-hidden="true"><span class="compare-caption original-caption">Original</span><span class="compare-caption processed-caption">Processed</span></div>
-    <div class="comparison-viewport">
-      <img class="comparison-image original-image" src="{{ url_for('uploaded_media', filename=result.image_path[8:]) }}" alt="Original uploaded food label photo">
-      <img class="comparison-image processed-image" src="{{ url_for('uploaded_media', filename=result.processed_image_path[8:]) }}" alt="Preprocessed food label image used for text recognition">
+<article class="result-report">
+  <header class="verdict-block" aria-labelledby="result-title">
+    <div class="verdict-copy">
+      <p class="eyebrow"><span>Scan result</span><time class="scan-date" datetime="{{ result.scanned_at }}">{{ result.scanned_at|human_datetime }}</time></p>
+      <h1 id="result-title">{% if result.score_band == "Good" %}A stronger screening profile.{% elif result.score_band == "Moderate" %}Some points to review.{% else %}Several points to review.{% endif %}</h1>
+      <p class="verdict-note">This summary reflects the label text NutriScan could identify. It is a screening guide, not a safety rating.</p>
+      <p class="filename">Image: <span>{{ result.image_name }}</span></p>
     </div>
-  </div>
-  <label class="range-label" for="comparison-slider">Image comparison position</label><input id="comparison-slider" type="range" min="5" max="95" value="50" aria-describedby="comparison-help"><span id="comparison-help" class="visually-hidden">On wide screens, move the slider to reveal more of the processed image. On narrow screens, it adjusts the space for the stacked images.</span>
-</section>
+    <div class="score-stamp score-{{ result.score_band|lower }}" role="img" aria-label="Health Score {{ result.health_score }} out of 100, {{ result.score_band }}">
+      <span class="stamp-label">Health score</span>
+      <span id="health-score-value" class="score-value" data-score="{{ result.health_score }}">{{ result.health_score }}</span>
+      <span class="stamp-denominator">out of 100</span>
+    </div>
+    <p class="band-label"><span>Score band</span><strong>{{ result.score_band }}</strong></p>
+    <p class="score-summary">Before screening: <strong>{{ result.starting_score }}</strong> <span aria-hidden="true">→</span> After screening: <strong>{{ result.health_score }}</strong></p>
+  </header>
 
-<details class="raw-text"><summary>Read the OCR text and highlighted matches</summary><pre id="raw-ocr">{{ result.raw_text }}</pre></details>
-<details class="source-details"><summary>How this was calculated and sources</summary><p>The score starts at {{ result.starting_score }}. Screening rules apply the ingredient, additive, and comparable nutrition deductions and credits shown above. Energy, protein, and fibre are shown for context and do not change the score.</p><ul>{% for source in result.sources %}<li>{{ source }}</li>{% endfor %}</ul></details>
-<script id="detected-findings" type="application/json">{{ result.highlight_findings|tojson }}</script>
-<section class="disclaimer"><strong>Informational screening only.</strong> NutriScan is not medical advice and does not guarantee that a product is safe for any person. OCR and keyword matching can miss or misread label text.</section>
-<p class="result-actions"><a class="button" href="/">Scan another label</a><a class="button button-quiet" href="/history">View history</a></p>
+  {% set selected_allergens = result.allergen_alerts|selectattr("selected")|list %}
+  {% set other_allergens = result.allergen_alerts|rejectattr("selected")|list %}
+  {% if selected_allergens %}
+  <section class="alert-section" aria-labelledby="allergen-heading">
+    <div class="section-kicker"><span>01</span><p>Selected before scan</p></div>
+    <div class="section-main"><h2 id="allergen-heading">Allergen alerts</h2><p class="section-intro">A selected allergen match is separate from the score. A high score never clears an alert.</p>
+      <ul class="alert-list">{% for alert in selected_allergens %}<li class="allergen-alert critical" data-finding-key="allergen-{{ loop.index0 }}" tabindex="0"><strong>{{ alert.allergen_group }} <span>Selected allergen</span></strong><span>Matched: {{ alert.matched_keywords|join(", ") }} · In: {{ alert.source_sections|join(", ") }}</span></li>{% endfor %}</ul>
+    </div>
+  </section>
+  {% endif %}
+  {% if other_allergens %}
+  <section class="also-contains-section" aria-labelledby="also-contains-heading">
+    <div class="section-kicker"><span>{% if selected_allergens %}02{% else %}01{% endif %}</span><p>Detected on label</p></div>
+    <div class="section-main"><h2 id="also-contains-heading">Also contains</h2><p class="section-intro">Detected allergen keywords you did not select before this scan.</p>
+      <ul class="alert-list">{% for alert in other_allergens %}<li class="allergen-alert warning" data-finding-key="allergen-{{ loop.index0 + (selected_allergens|length) }}" tabindex="0"><strong>{{ alert.allergen_group }}</strong><span>Matched: {{ alert.matched_keywords|join(", ") }} · In: {{ alert.source_sections|join(", ") }}</span></li>{% endfor %}</ul>
+    </div>
+  </section>
+  {% endif %}
+  {% if not result.allergen_alerts %}<section class="quiet-note"><div class="section-kicker"><span>01</span><p>Allergens</p></div><div class="section-main"><h2>No allergen keywords detected</h2><p>Keyword screening can miss synonyms, context, and small or unreadable print. This is not an allergen-safety guarantee.</p></div></section>{% endif %}
+
+  <section class="report-section score-breakdown" aria-labelledby="score-heading">
+    <div class="section-kicker"><span>03</span><p>Score arithmetic</p></div>
+    <div class="section-main"><div class="section-heading"><div><h2 id="score-heading">What drove your score</h2><p class="section-intro">Starts at {{ result.starting_score }} points. Additions and deductions are listed below.</p></div><p class="bar-legend"><span class="legend-mark negative" aria-hidden="true"></span> deduction <span class="legend-mark positive" aria-hidden="true"></span> credit</p></div>
+      <ul class="breakdown-list">{% for item in result.score_breakdown if item.category != "starting score" %}<li>
+        <span class="points {% if item.points < 0 %}negative{% elif item.points > 0 %}positive{% endif %}">{{ "%+d"|format(item.points) }}</span>
+        <div class="breakdown-detail"><strong>{{ item.item|replace("_", " ")|title }}</strong><span>{{ item.reason }}</span>{% if item.cap_note %}<span class="small-label">{{ item.cap_note }}</span>{% endif %}</div>
+        <span class="impact-track" aria-hidden="true"><span class="zero-line"></span><span class="impact-bar {% if item.points < 0 %}negative{% else %}positive{% endif %}" style="--bar-size:{{ [50, (item.points|abs * 5)]|min }}%"></span></span>
+      </li>{% else %}<li class="breakdown-empty">No deductions or credits were applied to this result.</li>{% endfor %}</ul>
+    </div>
+  </section>
+
+  <section class="report-section nutrients-section" aria-labelledby="nutrient-heading">
+    <div class="section-kicker"><span>04</span><p>Nutrition panel</p></div>
+    <div class="section-main"><div class="section-heading"><div><h2 id="nutrient-heading">Nutrient readings</h2><p class="section-intro">Status appears only when units and basis can be compared.</p></div></div>
+      {% if result.nutrients %}<div class="table-wrap" role="region" aria-label="Nutrient screening table" tabindex="0"><table><thead><tr><th scope="col">Nutrient</th><th scope="col">Label value</th><th scope="col">Basis</th><th scope="col">Status</th></tr></thead><tbody>
+        {% for nutrient in result.nutrients %}<tr><th scope="row">{{ nutrient.name|replace("_", " ")|title }}{% if nutrient.estimated %}<span class="small-label">Estimate</span>{% endif %}</th>
+          <td><span class="mobile-label">Label value</span><span class="nutrient-value">{{ nutrient.value }} {{ nutrient.unit }}</span></td><td><span class="mobile-label">Basis</span>{{ nutrient.basis }}</td>
+          <td><span class="mobile-label">Status</span>{% if nutrient.status == "Informational" %}<span class="informational-text">Informational</span>{% else %}<span class="status status-{{ nutrient.status|lower|replace(" ", "-") }}">{{ nutrient.status }}</span>{% endif %}<p class="table-reason">{{ nutrient.reason }}</p></td>
+        </tr>{% endfor %}
+      </tbody></table></div>{% else %}<p>No supported nutrient values could be read from this photo.</p>{% endif %}
+      <p class="info-note"><span aria-hidden="true">i</span> Energy, protein, and fibre are shown for information and do not affect the score.</p>
+    </div>
+  </section>
+
+  <section class="report-section" aria-labelledby="additive-heading">
+    <div class="section-kicker"><span>05</span><p>Ingredients</p></div>
+    <div class="section-main"><div class="section-heading"><div><h2 id="additive-heading">Decoded additives</h2><p class="section-intro">A label match does not show amount or permitted use.</p></div></div>
+      {% if result.additives %}<ul class="finding-list">{% for item in result.additives %}<li class="finding-card" data-finding-key="additive-{{ loop.index0 }}" tabindex="0"><div class="finding-top"><h3>{{ item.name }}</h3><span class="status status-{{ item.risk_level }}">{{ item.risk_level|title }} screening label</span></div><p class="finding-code">INS {{ item.ins_code }}{% if item.category %}<span> · {{ item.category }}</span>{% endif %}{% if item.matched_code is none %}<span> · matched by ingredient name</span>{% endif %}</p><p>{{ item.reason }}</p></li>{% endfor %}</ul>
+      {% else %}<p>No known additive codes or names were matched.</p>{% endif %}
+      {% if result.unknown_additive_codes %}<div class="unknown-box"><h3>Unrecognised additive codes</h3><ul>{% for item in result.unknown_additive_codes %}<li data-finding-key="unknown-{{ loop.index0 }}" tabindex="0"><strong>{{ item.code }}</strong> · {{ item.label }}</li>{% endfor %}</ul></div>{% endif %}
+    </div>
+  </section>
+
+  <section class="report-section" aria-labelledby="flags-heading">
+    <div class="section-kicker"><span>06</span><p>Ingredient notes</p></div>
+    <div class="section-main"><div class="section-heading"><div><h2 id="flags-heading">Ingredient flags</h2><p class="section-intro">Ingredient matches to consider in the context of the full label.</p></div></div>
+      {% if result.ingredient_flags %}<ul class="finding-list">{% for item in result.ingredient_flags %}<li class="finding-card" data-finding-key="flag-{{ loop.index0 }}" tabindex="0"><div class="finding-top"><h3>{{ item.keyword }}</h3><span class="status status-{{ item.flag_type }}">{{ item.flag_type|title }}</span></div><p>{{ item.reason }}</p></li>{% endfor %}</ul>{% else %}<p>No ingredient flags were matched.</p>{% endif %}
+    </div>
+  </section>
+
+  <details class="raw-text"><summary><span class="section-kicker"><span>07</span><span>OCR</span></span><span class="raw-summary-title">Read recognized text and highlighted matches</span><span class="disclosure-mark" aria-hidden="true">+</span></summary><div class="section-main"><p class="section-intro">Select a highlighted term to find the related screening note.</p><pre id="raw-ocr">{{ result.raw_text }}</pre>{% if result.unrecognised_tokens %}<div class="unknown-box"><h3>Unrecognised ingredient text</h3><ul class="token-list">{% for token in result.unrecognised_tokens %}<li>{{ token }}</li>{% endfor %}</ul></div>{% endif %}</div></details>
+
+  <section class="report-section comparison-section" aria-labelledby="comparison-heading">
+    <div class="section-kicker"><span>08</span><p>Image processing</p></div>
+    <div class="section-main"><div class="section-heading"><div><h2 id="comparison-heading">Original and processed image</h2><p class="section-intro">The processed image is prepared for text recognition.</p></div><p>Move the slider to compare both images.</p></div>
+      <div class="comparison" style="--split:50%">
+        <div class="comparison-labels" aria-hidden="true"><span class="compare-caption original-caption">Original</span><span class="compare-caption processed-caption">Processed</span></div>
+        <div class="comparison-viewport">
+          <img class="comparison-image original-image" src="{{ url_for('uploaded_media', filename=result.image_path[8:]) }}" alt="Original uploaded food label photo" loading="lazy">
+          <img class="comparison-image processed-image" src="{{ url_for('uploaded_media', filename=result.processed_image_path[8:]) }}" alt="Preprocessed food label image used for text recognition" loading="lazy">
+        </div>
+      </div>
+      <label class="range-label" for="comparison-slider">Image comparison position</label><input id="comparison-slider" type="range" min="5" max="95" value="50" aria-describedby="comparison-help"><span id="comparison-help" class="visually-hidden">On wide screens, move the slider to reveal more of the processed image. On narrow screens, it adjusts the space for the stacked images.</span>
+    </div>
+  </section>
+
+  <section class="disclaimer" aria-label="Important information"><p class="eyebrow">Please keep in mind</p><p><strong>Informational screening only.</strong> NutriScan is not medical advice and does not guarantee that a product is safe for any person. OCR and keyword matching can miss or misread label text.</p></section>
+  <details class="source-details"><summary>How this was calculated and sources <span class="disclosure-mark" aria-hidden="true">+</span></summary><div class="source-content"><p>The score starts at {{ result.starting_score }}. Screening rules apply the ingredient, additive, and comparable nutrition deductions and credits shown above. Energy, protein, and fibre are shown for context and do not change the score.</p><ul>{% for source in result.sources %}<li>{{ source }}</li>{% endfor %}</ul></div></details>
+  <script id="detected-findings" type="application/json">{{ result.highlight_findings|tojson }}</script>
+  <p class="result-actions"><a class="button" href="/">Scan another label <span aria-hidden="true">↗</span></a><a class="button button-quiet" href="/history">View history</a></p>
+</article>
 {% endblock %}

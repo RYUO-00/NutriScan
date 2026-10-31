@@ -1,14 +1,33 @@
 {% extends "base.html" %}
-{% block title %}Scan a label · NutriScan{% endblock %}
+{% block title %}Scan a food label · NutriScan{% endblock %}
+{% block meta_description %}Photograph a packaged food label to review detected ingredients, nutrition values, additive codes, and selected allergen matches.{% endblock %}
+{% block og_title %}Scan a food label · NutriScan{% endblock %}
 {% block content %}
-<section class="intro"><h1>Understand the label in your hands.</h1><p>Upload a clear photo of an ingredient list, nutrition panel, or both. NutriScan explains what it can identify and shows what it cannot.</p></section>
-<section class="panel"><h2>Choose a label photo</h2><p>JPG or PNG, up to 5 MB. Keep the text close, flat, and well lit.</p><form id="scan-form" action="/scan" method="post" enctype="multipart/form-data">
-  <label class="dropzone" for="label-image"><span class="drop-title">Drop a photo here or browse</span><span>JPG / PNG · up to 5 MB</span><input id="label-image" name="image" type="file" accept="image/jpeg,image/png" capture="environment" required></label>
-  <figure id="preview-wrap" hidden><img id="preview" src="{{ url_for('static', filename='images/sample_label.png') }}" alt="Preview of selected label"><figcaption id="preview-name"></figcaption></figure>
-  <div class="allergen-picker"><h3>Allergens to watch for</h3><p>Saved on this device for your next scan. Alerts are shown separately from the score.</p><div id="allergen-chips" class="chips"></div></div>
-  <button class="button" type="submit">Scan this label</button><button class="button button-quiet" id="sample-button" type="button">Try a sample label</button>
-  <p id="scan-status" role="status" aria-live="polite"></p>
-  <ol id="scan-progress" class="scan-progress" aria-label="Scan stages" hidden><li>Validate</li><li>Prepare</li><li>Read text</li><li>Match</li><li>Nutrition</li><li>Score</li><li>Save</li></ol>
-</form></section>
-<aside class="tip"><strong>Photo tip</strong><span>Fill the frame with the label and avoid glare across small print.</span></aside>
+<section class="scan-intro" aria-labelledby="scan-title">
+  <p class="eyebrow"><span>01</span> Read the pack</p>
+  <h1 id="scan-title">A closer read of what’s on the label.</h1>
+  <p>Photograph an ingredient list, nutrition panel, or both. Get a clear screening summary of what NutriScan could read.</p>
+</section>
+
+<section class="scan-sheet" aria-labelledby="upload-title">
+  <div class="sheet-heading"><div><p class="eyebrow">Start here</p><h2 id="upload-title">Choose a label photo</h2></div><p>JPG or PNG <span aria-hidden="true">/</span> up to 5 MB</p></div>
+  <form id="scan-form" action="/scan" method="post" enctype="multipart/form-data">
+    <label class="dropzone" for="label-image">
+      <span class="drop-symbol" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M24 32V8m0 0-9 9m9-9 9 9M9 28v11h30V28"/></svg></span>
+      <span class="drop-title">Drop a photo here <span>or browse files</span></span>
+      <span class="drop-meta">Keep the text flat, close, and in focus.</span>
+      <input id="label-image" name="image" type="file" accept="image/jpeg,image/png" capture="environment" required>
+    </label>
+    <figure id="preview-wrap" class="selected-preview" hidden><img id="preview" src="{{ url_for('static', filename='images/sample_label.png') }}" alt="Preview of selected label"><figcaption><span class="preview-kicker">Selected image</span><span id="preview-name"></span></figcaption></figure>
+    <div class="allergen-picker">
+      <div class="picker-copy"><h3>Allergens to watch for</h3><p>Choose any concerns before scanning. Matches stay separate from the score.</p></div>
+      <div id="allergen-chips" class="chips" aria-label="Select allergens to watch for"></div>
+    </div>
+    <div class="scan-actions"><button class="button" type="submit">Scan this label <span aria-hidden="true">↗</span></button><button class="button button-quiet" id="sample-button" type="button">Try a sample label</button></div>
+    <p id="scan-status" role="status" aria-live="polite"></p>
+    <ol id="scan-progress" class="scan-progress" aria-label="Scan stages" hidden><li>Upload</li><li>Prepare image</li><li>Read text</li><li>Match ingredients</li><li>Check nutrients</li><li>Score</li><li>Save</li></ol>
+  </form>
+</section>
+
+<aside class="photo-note"><strong>For a clearer read</strong><span>Fill the frame with the label and avoid glare over small print. You can review the recognized text before relying on a match.</span></aside>
 {% endblock %}

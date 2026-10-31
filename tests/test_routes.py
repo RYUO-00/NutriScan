@@ -105,12 +105,16 @@ def test_scan_history_api_saved_result_and_result_page(client):
     assert b"Sodium benzoate" in page.data
     assert b"Informational screening only" in page.data
     assert b"Before screening:" in page.data
-    assert b"After screening deductions and credits:" in page.data
+    assert b"After screening:" in page.data
     assert b"How this was calculated and sources" in page.data
     assert page.data.count(b"Codex Alimentarius CXG 36-1989, functional class column.") == 1
     assert page.data.count(b"numeric values are defined only in config.py") == 1
     assert b"class=\"source-note\"" not in page.data
     page_html = page.get_data(as_text=True)
+    assert "<title>Your scan result · NutriScan</title>" in page_html
+    assert 'property="og:title" content="Your scan result · NutriScan"' in page_html
+    for hook in ("allergen-heading", "also-contains-heading", "nutrient-heading", "additive-heading", "flags-heading", "score-heading", "comparison-heading", "comparison-slider", "comparison-help", "raw-ocr", "detected-findings"):
+        assert f'id="{hook}"' in page_html
     comparison = page_html[page_html.index('<div class="comparison"'):page_html.index('Image comparison position')]
     labels_start = comparison.index('<div class="comparison-labels"')
     labels_end = comparison.index("</div>", labels_start) + len("</div>")
@@ -125,6 +129,22 @@ def test_scan_history_api_saved_result_and_result_page(client):
     also_contains = page_html.split('<section class="also-contains-section"', 1)[1].split("</section>", 1)[0]
     assert "Milk" in also_contains
     assert "Wheat or Gluten" in also_contains
+
+
+def test_scan_progress_endpoint_tracks_actual_processing_stages(client):
+    progress_id = "sample-progress-run"
+    response = client.post(
+        "/scan",
+        data={"image": (BytesIO(_sample_bytes()), "label.png", "image/png"), "progress_id": progress_id},
+        content_type="multipart/form-data",
+        headers={"Accept": "application/json"},
+    )
+    assert response.status_code == 200
+    progress = client.get(f"/api/scan-progress/{progress_id}")
+    assert progress.status_code == 200
+    assert progress.get_json()["stages"] == [
+        "uploading", "preprocessing", "reading_text", "decoding", "nutrition", "scoring", "saving", "complete"
+    ]
 
 
 def test_fresh_result_html_keeps_developer_sources_in_collapsible_section(client):
@@ -155,13 +175,43 @@ def test_comparison_layout_has_a_sized_shared_frame_and_mobile_stack(client):
     response = client.get("/static/css/style.css?v=20261031-2")
     assert response.status_code == 200
     css = response.get_data(as_text=True)
+    assert "*[hidden] { display: none !important; }" in css
+    assert ".raw-text .section-main { margin: 13px 0 3px 168px; }" in css
     assert ".comparison { --split: 50%; position: relative;" in css
-    assert "height: clamp(320px, 56vw, 520px);" in css
-    assert ".comparison-viewport { position: relative; width: 100%; height: 100%;" in css
-    assert ".comparison { height: 520px; min-height: 0; grid-template-rows: 54px minmax(0, 1fr); }" in css
+    assert "aspect-ratio: 1.58; max-height: 600px; min-height: 300px;" in css
+    assert ".comparison-viewport { position: relative; width: 100%; min-width: 0; min-height: 0;" in css
+    assert ".comparison { height: 465px; min-height: 0; aspect-ratio: auto; grid-template-rows: 34px minmax(0,1fr); }" in css
     assert "grid-template-rows: var(--split) calc(100% - var(--split));" in css
     assert ".original-image { grid-row: 1; }" in css
-    assert ".processed-image { grid-row: 2; clip-path: none;" in css
+    assert ".processed-image { grid-row: 2; clip-path: none; border-top: 1px solid var(--rule-heavy); }" in css
+
+
+def test_page_metadata_logo_and_existing_ui_hooks(client):
+    scan_page = client.get("/").get_data(as_text=True)
+    history_page = client.get("/history").get_data(as_text=True)
+    error_page = client.get("/missing").get_data(as_text=True)
+    assert "<title>Scan a food label · NutriScan</title>" in scan_page
+    assert "<title>Scan history · NutriScan</title>" in history_page
+    assert "<title>Scan unavailable · NutriScan</title>" in error_page
+    assert 'property="og:title" content="Scan a food label · NutriScan"' in scan_page
+    assert 'property="og:title" content="Scan history · NutriScan"' in history_page
+    assert 'property="og:title" content="Scan unavailable · NutriScan"' in error_page
+    assert 'property="og:description"' in scan_page
+    assert 'property="og:image"' in scan_page
+    assert 'src="/static/images/logo.svg"' in scan_page
+    assert 'href="/static/images/favicon.svg"' in scan_page
+    assert 'href="/static/images/favicon.png"' in scan_page
+    assert client.get("/static/images/logo.svg").status_code == 200
+    assert client.get("/static/images/favicon.svg").status_code == 200
+    assert client.get("/static/images/favicon.png").mimetype == "image/png"
+    assert client.get("/static/images/nutriscan-social.png").mimetype == "image/png"
+    for hook in ("scan-form", "label-image", "preview-wrap", "preview", "preview-name", "allergen-chips", "sample-button", "scan-status", "scan-progress"):
+        assert f'id="{hook}"' in scan_page
+    assert 'id="history-list"' in history_page
+    script = client.get("/static/js/app.js?v=20261031-impeccable").get_data(as_text=True)
+    assert "/api/scan-progress/" in script
+    assert "setInterval(updateStage" not in script
+    assert "mark.tabIndex = 0" in script
 
 
 @pytest.mark.parametrize(

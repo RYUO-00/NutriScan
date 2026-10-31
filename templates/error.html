@@ -1,3 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Page not found · NutriScan{% endblock %}
-{% block content %}<section class="intro"><h1>{{ message }}</h1><p><a href="/">Return to the scan page</a></p></section>{% endblock %}
+{% block title %}Scan unavailable · NutriScan{% endblock %}
+{% block meta_description %}NutriScan could not open this page or saved scan. Return to the label scanner to try again.{% endblock %}
+{% block og_title %}Scan unavailable · NutriScan{% endblock %}
+{% block content %}<section class="error-sheet"><p class="eyebrow">A page could not be opened</p><h1>{{ message }}</h1><a class="button" href="/">Return to scan <span aria-hidden="true">↗</span></a></section>{% endblock %}

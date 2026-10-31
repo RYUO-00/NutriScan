@@ -1,3 +1,8 @@
 {% extends "base.html" %}
 {% block title %}Scan history · NutriScan{% endblock %}
-{% block content %}<section class="intro"><h1>History</h1><p>Saved results stay on this computer and can be reopened without running OCR again.</p></section><section class="panel"><div id="history-list">{% for scan in scans %}<a class="history-row" href="/history?scan_id={{ scan.scan_id|urlencode }}"><span>{{ scan.scanned_at|human_datetime }}</span><strong>{{ scan.health_score }} · {{ scan.score_band }}</strong><span>{{ scan.image_name }}</span></a>{% else %}<p>No saved scans yet.</p>{% endfor %}</div></section>{% endblock %}
+{% block meta_description %}Reopen label scans saved on this computer and review their score bands and image names.{% endblock %}
+{% block og_title %}Scan history · NutriScan{% endblock %}
+{% block content %}
+<section class="history-intro"><p class="eyebrow"><span>Saved locally</span> / Your scans</p><h1>Label history</h1><p>Open a saved result to review its recognized text, screening notes, and image comparison.</p></section>
+<section class="history-sheet" aria-label="Saved scans"><div class="history-head"><span>Scan date</span><span>Score</span><span>Image</span></div><div id="history-list">{% for scan in scans %}<a class="history-row" href="/history?scan_id={{ scan.scan_id|urlencode }}"><span class="history-date">{{ scan.scanned_at|human_datetime }}</span><strong class="history-score"><span>{{ scan.health_score }}</span> <span class="history-band">{{ scan.score_band }}</span></strong><span class="history-name">{{ scan.image_name }} <span aria-hidden="true">↗</span></span></a>{% else %}<div class="history-empty"><strong>No saved scans yet.</strong><p>Your scans will appear here on this device.</p><a class="button" href="/">Scan a label <span aria-hidden="true">↗</span></a></div>{% endfor %}</div></section>
+{% endblock %}

@@ -3,16 +3,28 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f4f1e8">
-  <title>{% block title %}NutriScan{% endblock %}</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css', v='20261031-2') }}">
-  <script defer src="{{ url_for('static', filename='js/app.js') }}"></script>
+  <meta name="theme-color" content="#f3f0e7">
+  <meta name="description" content="{% block meta_description %}Read packaged food labels with clear ingredient, nutrient, and allergen screening.{% endblock %}">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="NutriScan">
+  <meta property="og:title" content="{% block og_title %}NutriScan · Food label screening{% endblock %}">
+  <meta property="og:description" content="{{ self.meta_description() }}">
+  <meta property="og:image" content="{{ url_for('static', filename='images/nutriscan-social.png', _external=True) }}">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>{% block title %}NutriScan · Food label screening{% endblock %}</title>
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='images/favicon.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css', v='20261031-impeccable') }}">
+  <script defer src="{{ url_for('static', filename='js/app.js', v='20261031-impeccable') }}"></script>
 </head>
 <body>
-  <header class="site-header"><a class="brand" href="/">NutriScan <span>Label reader</span></a>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="NutriScan home, scan a food label">
+      <img src="{{ url_for('static', filename='images/logo.svg') }}" width="174" height="42" alt="NutriScan">
+    </a>
     <nav aria-label="Main navigation"><a href="/">Scan</a><a href="/history">History</a></nav>
   </header>
   <main id="main">{% block content %}{% endblock %}</main>
-  <footer><p>Informational screening only. Not medical advice or a guarantee of food safety.</p></footer>
+  <footer><p><span class="footer-rule" aria-hidden="true"></span>Informational screening only. Not medical advice or a guarantee of food safety.</p></footer>
 </body>
 </html>

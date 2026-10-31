@@ -23,3 +23,7 @@ The image comparison uses an explicit shared frame and viewport, separate captio
 ## Next step
 
 Manual next step: review the 300-row assumption queue and test with real package photos/ground truth. Keep any source corrections in the data review workflow, regenerate evaluation artifacts, and rerun the suite before submission.
+
+## Prompt B — `design-impeccable` branch — 31 Oct 2026
+
+The scan, result, history, and error pages now follow the “page is the label” direction: warm paper, heavy rules, compact monospace labels, a strong score stamp, semantic alert colors, an original local logo, and page-specific metadata. Existing routes, element IDs, and core interactions remain covered. Scan progress comes from the real server-side pipeline stages; OCR marks and related report cards link by keyboard and pointer. Actual sample-label scans were inspected in the in-app browser. Captures for scan, result, and history at 1440 px and 360 px were visually reviewed; no horizontal overflow remained, mobile comparison images stack, and the screenshot review caught and fixed hidden-state and OCR disclosure layout issues. Branch test suite: 59 passed. Screenshot evidence is local and ignored under `design-review/design-impeccable/`.

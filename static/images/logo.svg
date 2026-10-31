@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 206 48" role="img" aria-labelledby="title desc">
+  <title id="title">NutriScan</title>
+  <desc id="desc">NutriScan food label reader mark</desc>
+  <g fill="none" stroke="#191a17" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter">
+    <path d="M3 5h33v38H3z"/>
+    <path d="M9 13h19M9 20h12M9 27h18M9 34h10"/>
+    <path d="M25 30v9m-5-5h10"/>
+  </g>
+  <text x="45" y="27" fill="#191a17" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="800" letter-spacing="-1.1">NutriScan</text>
+  <text x="47" y="39" fill="#626159" font-family="Arial, Helvetica, sans-serif" font-size="7" font-weight="700" letter-spacing="1.25">FOOD LABEL READER</text>
+</svg>

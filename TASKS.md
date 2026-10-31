@@ -27,3 +27,10 @@ Work one phase at a time. Mark a phase done only after its tests pass; update th
 - [x] Fresh scan confirmed INS 211 as Preservative and INS 322 as Emulsifier. All 12 unresolved or multi-function additive classes remain listed in `DATA_REVIEW.md`; caution flag reasons are specific.
 - [x] Fresh local sample scan returned HTTP 200. Full verification: `pytest` — 57 passed; data validation — 300 records.
 - [ ] 1440 px and 360 px screenshots could not be captured because Work settings disable local in-app browser access. Result HTML and responsive CSS assertions passed; visual screenshot inspection remains unavailable in this session.
+
+## Prompt B — `design-impeccable` branch — 31 Oct 2026
+
+- [x] Applied the “page is the label” direction to scan, result, history, and error pages, including the original logo, local favicon assets, page metadata, and the existing information hierarchy.
+- [x] Preserved existing routes, element IDs, and scan/result/history interactions. Scan progress now reports server-side pipeline stages instead of cycling through simulated progress; OCR findings can be followed between the report and recognized text.
+- [x] Captured and visually reviewed scan, result, and history pages at 1440 px and 360 px in `design-review/design-impeccable/`. The review caught and fixed idle-state preview visibility and a narrow OCR disclosure layout issue. Layout metrics show no horizontal overflow at either width; the image comparison stacks on mobile.
+- [x] Verification on this branch: `.venv\Scripts\python.exe -m pytest` — 59 passed.
