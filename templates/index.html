@@ -1,14 +1,76 @@
 {% extends "base.html" %}
 {% block title %}Scan a label · NutriScan{% endblock %}
 {% block content %}
-<section class="intro"><h1>Understand the label in your hands.</h1><p>Upload a clear photo of an ingredient list, nutrition panel, or both. NutriScan explains what it can identify and shows what it cannot.</p></section>
-<section class="panel"><h2>Choose a label photo</h2><p>JPG or PNG, up to 5 MB. Keep the text close, flat, and well lit.</p><form id="scan-form" action="/scan" method="post" enctype="multipart/form-data">
-  <label class="dropzone" for="label-image"><span class="drop-title">Drop a photo here or browse</span><span>JPG / PNG · up to 5 MB</span><input id="label-image" name="image" type="file" accept="image/jpeg,image/png" capture="environment" required></label>
-  <figure id="preview-wrap" hidden><img id="preview" src="{{ url_for('static', filename='images/sample_label.png') }}" alt="Preview of selected label"><figcaption id="preview-name"></figcaption></figure>
-  <div class="allergen-picker"><h3>Allergens to watch for</h3><p>Saved on this device for your next scan. Alerts are shown separately from the score.</p><div id="allergen-chips" class="chips"></div></div>
-  <button class="button" type="submit">Scan this label</button><button class="button button-quiet" id="sample-button" type="button">Try a sample label</button>
-  <p id="scan-status" role="status" aria-live="polite"></p>
-  <ol id="scan-progress" class="scan-progress" aria-label="Scan stages" hidden><li>Validate</li><li>Prepare</li><li>Read text</li><li>Match</li><li>Nutrition</li><li>Score</li><li>Save</li></ol>
-</form></section>
-<aside class="tip"><strong>Photo tip</strong><span>Fill the frame with the label and avoid glare across small print.</span></aside>
+<div class="scan-page">
+  <section class="scan-hero" aria-labelledby="scan-title">
+    <div>
+      <h1 id="scan-title">Find the detail that matters.</h1>
+      <p>Read an ingredient list, nutrition panel, or both. The report guides you to matched text, comparable values, and the evidence behind them.</p>
+    </div>
+    <figure class="hero-specimen">
+      <img src="{{ url_for('static', filename='images/sample_label.png') }}" alt="Synthetic food label with an ingredient list, allergen statement, and nutrition panel">
+      <figcaption><strong>Sample label · Masala Grain Crunch</strong><span>Ingredients · Contains · Nutrition panel</span><small>Synthetic OCR example · not a real product</small></figcaption>
+    </figure>
+  </section>
+
+  <nav class="route-bands" aria-label="Scan steps">
+    <a href="#upload-heading"><span>01</span>Upload photo</a>
+    <a href="#allergen-heading"><span>02</span>Choose alerts</a>
+    <a href="#review-heading"><span>03</span>Review evidence</a>
+  </nav>
+
+  <section class="upload-section" aria-labelledby="upload-heading">
+    <div class="upload-heading">
+      <h2 id="upload-heading">Choose a label photo</h2>
+      <p>JPG or PNG · up to 5 MB · keep the print flat and well lit</p>
+    </div>
+    <form id="scan-form" action="{{ url_for('scan') }}" data-progress-url="{{ url_for('scan_progress_api', progress_id='__progress_id__') }}" data-result-url="{{ url_for('history_page', scan_id='__scan_id__') }}" method="post" enctype="multipart/form-data">
+      <label class="dropzone" for="label-image">
+        <svg class="upload-mark" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 33V8m0 0L14 18M24 8l10 10M9 29v10h30V29"/></svg>
+        <span class="drop-title">Drop a photo here</span>
+        <span class="drop-or">or choose one from this device</span>
+        <span class="file-action">Choose photo</span>
+        <input id="label-image" name="image" type="file" accept="image/jpeg,image/png" capture="environment" required aria-describedby="upload-guidance">
+      </label>
+      <p id="upload-guidance" class="upload-guidance">Fill the frame with the label. Avoid glare, shadows, and curled edges so the small print stays readable.</p>
+
+      <figure id="preview-wrap" class="selected-preview" hidden>
+        <img id="preview" src="{{ url_for('static', filename='images/sample_label.png') }}" alt="Preview of selected label">
+        <figcaption><span id="preview-name"></span><button id="remove-preview" class="text-action" type="button">Remove photo</button></figcaption>
+      </figure>
+
+      <div id="allergen-heading" class="allergen-picker">
+        <div class="picker-heading"><h3>Allergens to watch for</h3><p>Choose the groups you want highlighted in red. Preferences stay on this device.</p></div>
+        <div id="allergen-chips" class="chips" aria-label="Allergen groups"></div>
+        <p class="preference-note">Other detected allergen keywords appear separately in amber. Alerts do not change the score.</p>
+      </div>
+
+      <div class="scan-actions">
+        <button class="button" type="submit">Scan label</button>
+        <button class="button button-quiet" id="sample-button" data-sample-url="{{ url_for('static', filename='images/sample_label.png') }}" type="button">Try a sample label</button>
+      </div>
+      <p id="scan-status" role="status" aria-live="polite"></p>
+      <ol id="scan-progress" class="scan-progress" aria-label="Scan stages" aria-live="polite" hidden>
+        <li data-stage="image_validation">Image validation</li>
+        <li data-stage="image_preprocessing">Image preprocessing</li>
+        <li data-stage="text_extraction">Text extraction</li>
+        <li data-stage="ingredient_additive_analysis">Ingredient and additive analysis</li>
+        <li data-stage="nutrition_screening">Nutrition screening</li>
+        <li data-stage="result_generation">Result generation</li>
+      </ol>
+    </form>
+  </section>
+
+  <section id="review-heading" class="scan-lower" aria-labelledby="review-title">
+    <h2 id="review-title">What the scan checks</h2>
+    <ol class="method-list">
+      <li><span>01</span>Image validation</li>
+      <li><span>02</span>Image preprocessing</li>
+      <li><span>03</span>Text extraction</li>
+      <li><span>04</span>Ingredient and additive analysis</li>
+      <li><span>05</span>Nutrition screening</li>
+      <li><span>06</span>Result generation</li>
+    </ol>
+  </section>
+</div>
 {% endblock %}

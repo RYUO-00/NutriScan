@@ -1,3 +1,3 @@
 {% extends "base.html" %}
 {% block title %}Page not found · NutriScan{% endblock %}
-{% block content %}<section class="intro"><h1>{{ message }}</h1><p><a href="/">Return to the scan page</a></p></section>{% endblock %}
+{% block content %}<section class="intro"><h1>{{ message }}</h1><p><a href="{{ url_for('index') }}">Return to the scan page</a></p></section>{% endblock %}
