@@ -1,3 +1,29 @@
 {% extends "base.html" %}
 {% block title %}Scan history · NutriScan{% endblock %}
-{% block content %}<section class="intro"><h1>History</h1><p>Saved results stay on this computer and can be reopened without running OCR again.</p></section><section class="panel"><div id="history-list">{% for scan in scans %}<a class="history-row" href="/history?scan_id={{ scan.scan_id|urlencode }}"><span>{{ scan.scanned_at|human_datetime }}</span><strong>{{ scan.health_score }} · {{ scan.score_band }}</strong><span>{{ scan.image_name }}</span></a>{% else %}<p>No saved scans yet.</p>{% endfor %}</div></section>{% endblock %}
+{% block content %}
+<section class="archive-title">
+  <div><h1>Scan history</h1><p>Saved reports stay on this computer. Open one to review its findings without running OCR again.</p></div>
+  {% if scans %}<span class="archive-count">{{ scans|length }} saved scan{% if scans|length != 1 %}s{% endif %}</span>{% endif %}
+</section>
+<section aria-label="Saved scan reports">
+  <div id="history-list">
+    {% for scan in scans %}
+      {% set selected_alerts = scan.allergen_alerts|selectattr("selected")|list %}
+      {% set other_alerts = scan.allergen_alerts|rejectattr("selected")|list %}
+    <a class="history-row" href="{{ url_for('history_page', scan_id=scan.scan_id) }}">
+      <time class="archive-date" datetime="{{ scan.scanned_at }}">{{ scan.scanned_at|human_datetime }}</time>
+      <span class="archive-product">
+        {% if scan.image_path %}<span class="archive-thumb"><img src="{{ url_for('uploaded_media', filename=scan.image_path[8:]) }}" alt="" class="archive-thumb-image"><span data-thumb-fallback hidden>Photo unavailable</span></span>{% endif %}
+        <span><strong>{{ scan.image_name }}</strong><small>Open saved result</small></span>
+      </span>
+      <span class="archive-score"><strong>{{ scan.health_score }}</strong><span>{{ scan.score_band }} band</span></span>
+      {% if selected_alerts %}<span class="archive-alert selected">{{ selected_alerts|length }} selected allergen alert{% if selected_alerts|length != 1 %}s{% endif %}</span>
+      {% elif other_alerts %}<span class="archive-alert other">{{ other_alerts|length }} allergen group{% if other_alerts|length != 1 %}s{% endif %} detected</span>
+      {% else %}<span class="archive-alert">No keywords matched</span>{% endif %}
+    </a>
+    {% else %}
+    <div class="archive-empty"><h2>Your scan archive starts here.</h2><p>Run a label scan and its report will be saved on this computer so you can return to it later.</p><a class="button" href="{{ url_for('index') }}">Scan a label</a></div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

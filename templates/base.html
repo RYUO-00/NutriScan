@@ -3,16 +3,23 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f4f1e8">
+  <meta name="theme-color" content="#f4f0e5">
   <title>{% block title %}NutriScan{% endblock %}</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css', v='20261031-2') }}">
-  <script defer src="{{ url_for('static', filename='js/app.js') }}"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css', v='20261101-11') }}">
+  <script defer src="{{ url_for('static', filename='js/app.js', v='20261101-9') }}"></script>
 </head>
 <body>
-  <header class="site-header"><a class="brand" href="/">NutriScan <span>Label reader</span></a>
-    <nav aria-label="Main navigation"><a href="/">Scan</a><a href="/history">History</a></nav>
+  <header class="site-header">
+    <a class="brand" href="{{ url_for('index') }}" aria-label="NutriScan — Food Label Laboratory, go to scan">
+      <svg class="brand-mark" viewBox="0 0 36 36" aria-hidden="true"><path d="M5 7.5h26v21H5z"/><path d="M10 12v12m4-12v12m4-12v12m4-12v12m4-12v12"/></svg>
+      <span class="brand-copy"><strong>NutriScan</strong><span>Food Label Laboratory</span></span>
+    </a>
+    <nav aria-label="Main navigation">
+      <a href="{{ url_for('index') }}"{% if request.path == url_for('index') %} aria-current="page"{% endif %}>Scan label</a>
+      <a href="{{ url_for('history_page') }}"{% if request.path == url_for('history_page') %} aria-current="page"{% endif %}>History</a>
+    </nav>
   </header>
   <main id="main">{% block content %}{% endblock %}</main>
-  <footer><p>Informational screening only. Not medical advice or a guarantee of food safety.</p></footer>
+  <footer><p>NutriScan is an informational screening prototype, not medical advice or a guarantee of food safety.</p></footer>
 </body>
 </html>

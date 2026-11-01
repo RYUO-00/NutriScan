@@ -6,6 +6,13 @@
 2. **Flask backend:** thin routes validate requests and orchestrate the nine processing stages through focused modules.
 3. **Local data and files:** four UTF-8 JSON knowledge arrays, JSON scan history, and controlled local uploads. The first release is single-process and single-user.
 
+## Local and optional LAN startup
+
+- `python app.py` is the default and binds Flask to `127.0.0.1:5000`, keeping access on the laptop.
+- `python app.py --lan` is an explicit opt-in that binds to `0.0.0.0:5000` so another device on the same private Wi-Fi can connect using the laptop's IPv4 address. Startup prints a network-access warning.
+- Both modes keep Flask debug mode and the reloader disabled. The application does not edit firewall rules. LAN mode is intended only for a trusted private network; see the README and `docs/SECURITY.md` before using it.
+- Templates generate application paths with Flask `url_for()`. Frontend requests and navigation therefore use the host from which the page was opened, including a laptop's LAN address.
+
 ## Nine-stage pipeline and module contracts
 
 | Stage / module | Input → output | Failure behaviour |

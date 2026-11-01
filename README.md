@@ -75,6 +75,50 @@ python app.py
 
 Open [http://127.0.0.1:5000](http://127.0.0.1:5000). The server binds only to the local computer. Use **Try a sample label** to run the bundled image through upload, OCR, parsing, matching, scoring, and local history. You can also upload a label photo (JPG or PNG, up to 5 MB). The mobile file picker can use the device camera when the browser supports it.
 
+## Access NutriScan from a Mobile Device
+
+LAN access is optional. Use it only on a trusted private Wi-Fi network. NutriScan has no login because it is a local, single-user academic prototype; while LAN mode is running, other devices on that network may be able to use it and view locally stored scan results.
+
+On Windows:
+
+1. Connect the laptop and phone to the same Wi-Fi network.
+2. Open **Command Prompt** on the laptop.
+3. Execute:
+
+   ```text
+   ipconfig
+   ```
+
+4. Under **Wireless LAN adapter Wi-Fi**, locate the **IPv4 Address**. Use the laptop's actual address from that section.
+5. In the NutriScan project folder, start the app in LAN mode:
+
+   ```text
+   python app.py --lan
+   ```
+
+   The terminal prints a warning that LAN mode allows other devices on the network to access NutriScan. Flask debug mode remains disabled.
+6. Open Chrome on the phone and navigate to `http://LAPTOP_IPV4_ADDRESS:5000`, replacing the placeholder with the laptop's actual IPv4 address.
+
+For example only, if `ipconfig` reports `192.168.1.105` for the laptop, open `http://192.168.1.105:5000` on the phone. This is an example address, not your actual IP. The phone must use the laptop's actual IPv4 address; do not use `127.0.0.1` or `0.0.0.0` on the phone.
+
+Both devices must remain on the same Wi-Fi network. Guest Wi-Fi networks may isolate connected devices, and VPNs can interfere with local network access. The laptop must remain powered on and the Flask terminal must remain running while you use the app.
+
+### Optional Windows Firewall rule
+
+If Windows Firewall blocks the phone's connection, an administrator can open PowerShell and add this narrowly scoped inbound rule:
+
+```powershell
+New-NetFirewallRule -DisplayName "NutriScan LAN" -Direction Inbound -Protocol TCP -LocalPort 5000 -Action Allow -Profile Private
+```
+
+PowerShell may need administrator privileges. The rule applies only to the **Private** network profile. Remove it when LAN access is no longer required:
+
+```powershell
+Remove-NetFirewallRule -DisplayName "NutriScan LAN"
+```
+
+Do not disable Windows Firewall. NutriScan never changes firewall settings automatically. Do not configure router port forwarding, public internet exposure, tunnels, or cloud hosting for this prototype.
+
 History and both image versions are kept locally so saved results can be reopened without running OCR again. NutriScan does not automatically delete scans. To clear all local scan data, stop the server, replace `data/scan_history.json` with an empty JSON array (`[]`), and remove the scan image files from `uploads/` and `uploads/processed/`. Keep the `.gitkeep` files if you use Git.
 
 ## Validate, test, and evaluate
