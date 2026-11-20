@@ -270,6 +270,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, summary:focus-visibl
 .score-total { color: #e5e8e0; font: 600 1.15rem/1 var(--mono); white-space: nowrap; }
 .score-label { display: block; margin: -4px 0 2px; color: #e5e8e0; font-size: .78rem; font-weight: 680; }
 .score-band { flex: 0 0 auto; padding: 7px 11px; background: var(--yellow); color: var(--ink); font-size: .92rem; font-weight: 760; }
+.score-unavailable { font: 600 1.65rem/1.15 var(--serif); }
+.score-plate > p:not(.score-summary) { margin: 0; font-size: .9rem; }
+.archive-score[data-status] { display: grid; justify-items: end; gap: 3px; max-width: 150px; white-space: normal; text-align: right; }
+.archive-score[data-status="insufficient"] strong { font-size: 1rem; line-height: 1.2; }
 .score-scale-wrap { min-width: 0; }
 .score-scale { height: 10px; position: relative; display: flex; overflow: visible; background: #707971; }
 .score-range { display: block; flex: 0 0 var(--range-width); height: 100%; }

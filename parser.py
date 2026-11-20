@@ -4,9 +4,9 @@ import re
 
 
 HEADING_RE = re.compile(
-    r"(?P<heading>ingredients?|nutrition(?:al)?(?:\s+(?:facts|information))?|"
+    r"(?<![a-z])(?P<heading>ingredients?|nutri\s*tion(?:al)?(?:\s+(?:facts|information))?|"
     r"may\s+contain|contains?|allergens?|allergen\s+information|"
-    r"best\s+before|manufactured(?:\s+by)?)\s*[:\-]?",
+    r"best\s+before|manufactured(?:\s+by)?)(?![a-z])\s*[:\-]?",
     re.IGNORECASE,
 )
 STOP_HEADINGS = {"best before", "manufactured", "manufactured by"}
@@ -45,7 +45,7 @@ def _section_key(heading):
     normalized = re.sub(r"\s+", " ", heading.casefold()).strip()
     if normalized.startswith("ingredient"):
         return "ingredients"
-    if normalized.startswith("nutrition"):
+    if normalized.replace(" ", "").startswith("nutrition"):
         return "nutrition"
     if normalized.startswith("may contain") or normalized.startswith("contain") or normalized.startswith("allergen"):
         return "contains"
@@ -64,8 +64,30 @@ def _extract_sections(text):
     sections = {"ingredients": [], "contains": [], "nutrition": []}
     preamble = []
     current = None
+    bracket_depth = 0
     for line in (text or "").splitlines():
-        matches = list(HEADING_RE.finditer(line))
+        matches = []
+        cursor = 0
+        for match in HEADING_RE.finditer(line):
+            for char in line[cursor:match.start()]:
+                if char in "([{":
+                    bracket_depth += 1
+                elif char in ")]}":
+                    bracket_depth = max(0, bracket_depth - 1)
+            cursor = match.end()
+            # An ingredient such as gum base (contains soybean lecithin) is
+            # still ingredient text, not the start of an allergen declaration.
+            explicit_declaration = not line[:match.start()].strip() and match.group(0).rstrip().endswith(":")
+            if _section_key(match.group("heading")) == "contains" and bracket_depth and not explicit_declaration:
+                continue
+            matches.append(match)
+            if _section_key(match.group("heading")) in {"ingredients", "nutrition", "stop"} or explicit_declaration:
+                bracket_depth = 0
+        for char in line[cursor:]:
+            if char in "([{":
+                bracket_depth += 1
+            elif char in ")]}":
+                bracket_depth = max(0, bracket_depth - 1)
         if not matches:
             _append_section(sections, current, line)
             if current is None and line.strip():
@@ -121,10 +143,17 @@ def parse_label_text(raw_text):
     nutrition_text = sections["nutrition"]
     contains_text = sections["contains"]
 
+    # Tesseract can emit the body of a panel before its heading when it detects
+    # separate columns. Only recover a preamble explicitly marked as a serving
+    # panel; unrelated ingredient/product text must not become nutrient rows.
+    serving_panel = re.search(r"\bamount\s+(?:per|/)\s*serving\b", preamble, re.IGNORECASE)
+    if nutrition_text and serving_panel:
+        nutrition_text = preamble[serving_panel.start():] + "\n" + nutrition_text
+
     # If OCR misses the Nutrition heading, retain the full text for numeric parsing;
     # the nutrient parser still requires a numeric value and matching basis.
-    if not nutrition_text and re.search(r"\b(?:energy|calories|total\s+fat|sodium|protein|fibre|fiber)\b", raw_text, re.IGNORECASE):
-        nutrition_text = raw_text
+    if not nutrition_text and re.search(r"\b(?:energy|calories|(?:total|saturated|trans)\s*fat|(?:total\s*)?sugars?|sodium|salt|protein|fibre|fiber)\b", corrected_for_sections, re.IGNORECASE):
+        nutrition_text = corrected_for_sections
 
     return {
         "raw_text": raw_text,

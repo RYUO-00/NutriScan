@@ -3,6 +3,8 @@ import app as app_module
 import config
 import pytest
 from scoring import calculate_health_score
+from nutrition import parse_nutrition
+from storage import load_knowledge
 
 
 def test_scan_page_and_history_page_render():
@@ -46,10 +48,7 @@ def test_score_summary_reconciles_engine_range_clamp():
     engine_result = calculate_health_score(
         additives=[{"ins_code": str(index), "risk_level": "high"} for index in range(10)],
         ingredient_flags=[{"keyword": f"harmful-{index}", "flag_type": "harmful"} for index in range(8)],
-        nutrients=[
-            {"name": name, "status": "High"}
-            for name in ("total_fat", "saturated_fat", "trans_fat", "sugar", "sodium")
-        ],
+        nutrients=parse_nutrition("Per 100 g\nTotal Fat 25 g\nSaturated Fat 8 g\nTrans Fat 3 g\nSugar 30 g\nSodium 900 mg"),
     )
     summary = app_module._score_summary({
         "starting_score": config.STARTING_SCORE,
@@ -74,3 +73,17 @@ def test_score_ranges_follow_configured_score_bands():
         {"label": "Moderate", "lower": 50, "upper": 79, "width": 30},
         {"label": "Good", "lower": 80, "upper": 100, "width": 20},
     ]
+
+
+def test_panel_retry_preserves_whole_page_allergens_and_score_ledger():
+    raw = "Ingredients: wheat flour, peanut\nContains: peanut\nNutrition Facts\nSugar unreadable"
+    panel = "Nutrition per 100g\nTotal Fat 1g\nSaturated Fat 0.2g\nSugar 35g\nSodium 10mg"
+    result = app_module._analyze_label(raw, ["Peanut"], load_knowledge(), {
+        "mean_confidence": 90,
+        "nutrition_ocr": {"text": panel, "mean_confidence": 95, "lines": []},
+    })
+    assert result["health_score"] == 87  # Sugar deduction and existing wheat-flour credit.
+    assert sum(item["points"] for item in result["score_breakdown"]) == result["health_score"]
+    assert any(alert["allergen_group"] == "Peanut" and alert["selected"] for alert in result["allergen_alerts"])
+    assert result["raw_text"] == raw and "Sugar 35g" in result["nutrition_text"]
+    assert result["data_completeness"]["ocr_mean_confidence"] == 95
