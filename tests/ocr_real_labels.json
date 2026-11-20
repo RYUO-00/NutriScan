@@ -1,0 +1,64 @@
+{
+  "note": "Manually transcribed visible fields from user-supplied photos, 20 Nov 2026. These are a small development set, not held-out accuracy evidence. Images are not redistributed; pass --real-dir. No full-image transcript exists for these photos, so CER/WER are not measured on them. Ambiguous or unreadable fields are excluded explicitly.",
+  "labels": [
+    {
+      "image": "photo_1_2026-11-20_16-10-58.jpg", "category": "curved bottle, uneven light, small white text",
+      "ingredient_terms": ["carbonated water", "sugar", "preservative", "sweetener"], "additive_codes": ["211", "960"], "additive_exhaustive": false,
+      "allergen_groups": [], "allergen_exhaustive": false,
+      "serving_size": {"amount": 200, "unit": "ml"},
+      "nutrients": {"energy": {"value": 40, "unit": "kcal", "basis": "100ml"}, "sugar": {"value": 9.8, "unit": "g", "basis": "100ml"}, "added_sugar": {"value": 9.8, "unit": "g", "basis": "100ml"}, "total_fat": {"value": 0, "unit": "g", "basis": "100ml"}, "protein": {"value": 0, "unit": "g", "basis": "100ml"}, "sodium": {"value": 14, "unit": "mg", "basis": "100ml"}}
+    },
+    {
+      "image": "photo_2_2026-11-20_16-10-58.jpg", "category": "tilted curved ingredient paragraph",
+      "ingredient_terms": ["sorbitol", "maltitol", "mannitol", "soybean lecithin", "vanilla"],
+      "additive_codes": ["414", "1401", "422", "950", "903", "320"], "additive_exhaustive": false,
+      "allergen_groups": ["Soy"], "allergen_exhaustive": true,
+      "nutrients": {}, "serving_size": null
+    },
+    {
+      "image": "photo_3_2026-11-20_16-10-58.jpg", "category": "flexible pouch, folds, mild blur",
+      "ingredient_terms": ["green peas", "cotton seed", "cumin powder", "black pepper", "bay leaves"],
+      "additive_codes": ["330", "100", "133"], "additive_exhaustive": true,
+      "allergen_groups": ["Milk", "Soy", "Wheat or Gluten"], "allergen_exhaustive": false,
+      "serving_size": {"amount": 25, "unit": "g"},
+      "excluded_fields": ["trans_fat is printed as a bound <0.1g, not an exact zero", "generic Nut does not identify peanut versus tree nut"],
+      "nutrients": {"energy": {"value": 443, "unit": "kcal", "basis": "100g"}, "protein": {"value": 19.87, "unit": "g", "basis": "100g"}, "sugar": {"value": 0.52, "unit": "g", "basis": "100g"}, "added_sugar": {"value": 0, "unit": "g", "basis": "100g"}, "fibre": {"value": 6.56, "unit": "g", "basis": "100g"}, "total_fat": {"value": 13.22, "unit": "g", "basis": "100g"}, "saturated_fat": {"value": 4.83, "unit": "g", "basis": "100g"}, "sodium": {"value": 520, "unit": "mg", "basis": "100g"}}
+    },
+    {
+      "image": "photo_4_2026-11-20_16-10-58.jpg", "category": "flexible pouch, rotated two-column table",
+      "ingredient_terms": ["refined wheat flour", "maltodextrin", "tomato powder", "black salt"],
+      "additive_codes": ["627", "631", "330", "296", "150d", "140", "551"], "additive_exhaustive": true,
+      "allergen_groups": ["Wheat or Gluten"], "allergen_exhaustive": true,
+      "serving_size": {"amount": 14, "unit": "g"},
+      "nutrients": {"energy": {"value": 548.13, "unit": "kcal", "basis": "100g"}, "protein": {"value": 7.98, "unit": "g", "basis": "100g"}, "total_fat": {"value": 23.5, "unit": "g", "basis": "100g"}, "saturated_fat": {"value": 14.79, "unit": "g", "basis": "100g"}, "trans_fat": {"value": 0, "unit": "g", "basis": "100g"}, "sodium": {"value": 1412.65, "unit": "mg", "basis": "100g"}, "added_sugar": {"value": 1.73, "unit": "g", "basis": "100g"}}
+    },
+    {
+      "image": "prod_img-5076444_p_2_en_au_19310055102849_2509161400_p_2.png", "category": "flat cereal pouch, multi-column table",
+      "ingredient_terms": ["whole grains", "brown rice", "sultanas", "almonds"], "additive_codes": ["223"], "additive_exhaustive": true,
+      "allergen_groups": ["Wheat or Gluten", "Tree nut", "Sulphite", "Peanut"], "allergen_exhaustive": true,
+      "serving_size": {"amount": 45, "unit": "g"},
+      "nutrients": {"protein": {"value": 7.9, "unit": "g", "basis": "100g"}, "total_fat": {"value": 3.6, "unit": "g", "basis": "100g"}, "saturated_fat": {"value": 1.0, "unit": "g", "basis": "100g"}, "sugar": {"value": 21.4, "unit": "g", "basis": "100g"}, "fibre": {"value": 6.6, "unit": "g", "basis": "100g"}, "sodium": {"value": 80, "unit": "mg", "basis": "100g"}, "potassium": {"value": 370, "unit": "mg", "basis": "100g"}}
+    },
+    {
+      "image": "prod_img-7296121_p_2_en_au_19310055102726_2509161400_p_2.png", "category": "flat cereal pouch, small decimals and multiple columns",
+      "ingredient_terms": ["wheat flour", "oatmeal", "maltodextrin", "molasses"], "additive_codes": [], "additive_exhaustive": false,
+      "allergen_groups": ["Wheat or Gluten", "Tree nut", "Peanut"], "allergen_exhaustive": true,
+      "serving_size": {"amount": 25, "unit": "g"},
+      "nutrients": {"protein": {"value": 21.8, "unit": "g", "basis": "100g"}, "total_fat": {"value": 3.0, "unit": "g", "basis": "100g"}, "saturated_fat": {"value": 0.5, "unit": "g", "basis": "100g"}, "sugar": {"value": 24.0, "unit": "g", "basis": "100g"}, "fibre": {"value": 5.3, "unit": "g", "basis": "100g"}, "sodium": {"value": 350, "unit": "mg", "basis": "100g"}}
+    },
+    {
+      "image": "images (3).jpg", "category": "cream carton with other products in frame",
+      "ingredient_terms": ["cream", "gellan gum"], "additive_codes": ["418"], "additive_exhaustive": true,
+      "allergen_groups": ["Milk"], "allergen_exhaustive": true,
+      "serving_size": {"amount": 15, "unit": "ml"},
+      "nutrients": {"total_fat": {"value": 40, "unit": "g", "basis": "100ml"}, "saturated_fat": {"value": 23.3333333333, "unit": "g", "basis": "100ml"}, "sugar": {"value": 0, "unit": "g", "basis": "100ml"}, "sodium": {"value": 33.3333333333, "unit": "mg", "basis": "100ml"}}
+    },
+    {
+      "image": "v2_1ea663e6-4f82-49e1-9180-959a13fb410d.jpg", "category": "small low-resolution curved jar",
+      "ingredient_terms": [], "additive_codes": [], "additive_exhaustive": false,
+      "allergen_groups": ["Milk", "Soy", "Tree nut"], "allergen_exhaustive": false,
+      "serving_size": null, "nutrients": {},
+      "excluded_fields": ["Nutrition panel too small for confident full numeric ground truth; do not treat absent references as zero"]
+    }
+  ]
+}

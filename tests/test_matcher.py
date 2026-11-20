@@ -3,6 +3,12 @@ from matcher import decode_additives, match_allergens, match_ingredient_tokens, 
 from storage import load_knowledge
 
 
+def test_nutrition_measurements_are_not_unprefixed_additive_codes():
+    known, unknown = decode_additives("Potassium 170mg Energy 425kcal Per 100g Sodium 580 mg", load_knowledge()["additives"])
+    assert known == []
+    assert unknown == []
+
+
 def test_additive_code_formats_subcodes_unknowns_and_contextual_bare_number():
     knowledge = load_knowledge()
     text = "E211, E 211, E-211, INS211, INS 211, E160a(i), 150d, Preservative (211), E999, and package 211 g"

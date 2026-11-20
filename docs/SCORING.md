@@ -1,0 +1,65 @@
+# Scoring audit and data sufficiency
+
+**Current implementation: revision 4**, documented at the end of this file. The initial audit and earlier coverage policy below are retained as history; revisions 3 and 4 supersede earlier extraction and partial-score rules.
+
+## Audit — 20 Nov 2026
+
+The complete path is upload validation → OpenCV preprocessing → Tesseract text and confidence → text/section parser → nutrient/ingredient/allergen/additive extraction → configured nutrient comparisons → score contributions → JSON history and report. The frontend reads the saved backend score; it contains no fallback score of 100.
+
+The failing local history contains five reports with a score of 100. Their OCR text was non-empty, so it passed the OCR error boundary, but their nutrient arrays were empty or contained only values with an unknown comparison basis. The scorer unconditionally initialized at 100, applied no deductions to absent/non-comparable nutrients, and classified the unchanged total as Good. Neither the report nor history recorded an insufficiency state. Additional extraction gaps included a missing sugar-only fallback, dropped values on the next line, ambiguous multiple quantities in a row, and section-dependent allergen detection with singular-only nut keywords. OCR confidence was recorded but never used when admitting a nutrient to scoring. The retry selector prioritized character count, so longer low-confidence noise could beat a clearer retry. It now prefers usable comparable readings and confidence; the existing retry count and confidence threshold are unchanged.
+
+## Existing methodology (unchanged weights)
+
+All numeric weights and cutoffs remain in `config.py`. Start at 100; deduct 15/8/3 per high/moderate/low additive (cap 60), 10 per harmful ingredient flag (cap 30), and 15/7 per High/Medium comparable nutrient. Beneficial ingredient flags add 2 (cap 10). Clamp the result to 0–100. Bands remain Good ≥80, Moderate ≥50, Poor <50. Energy, protein, and fibre are informational. Caution flags have no score deduction. Allergen matches never affect the score.
+
+The configured per-100-g medium/high cutoffs remain: total fat 3/17.5 g, saturated fat 1.5/5 g, trans fat 0.5/2 g, sugar and added sugar 5/22.5 g, sodium 120/600 mg, and salt 0.3/1.5 g. These exact values are **Project assumption - needs verification**, as already recorded in the knowledge data and `DATA_REVIEW.md`. No additional penalty is introduced for missing information.
+
+FSSAI's [Labelling and Display compendium (9 Sep 2025)](https://www.fssai.gov.in/docs/food-law/regulations/Comp_Labelling%20Display_Version%20VIII_09_09_2025.pdf) describes label bases and serving declarations. WHO's [sodium guidance](https://www.who.int/tools/elena/interventions/sodium-cvd-adults) is a daily intake recommendation. Neither is evidence for attributing this project's exact medium/high per-100-g bins to FSSAI or WHO. The original source strings remain in the knowledge data and the result disclosure.
+
+## Data admission and result status
+
+A nutrient must have a finite, non-negative numeric value, compatible unit and basis, and no unresolved OCR, column, or value conflict before scoring. Status strings alone are insufficient. Recompute status from the configured cutoffs at the scoring boundary. Missing values remain absent or null, never zero. Explicit zero values with a known unit and basis remain valid. Salt-derived sodium is labelled as an estimate; it is not used as a second deduction alongside salt. When both direct sodium and salt are present, use direct sodium for the sodium/salt contribution.
+
+Completeness checks the five existing core screening fields: total fat, saturated fat, trans fat, total sugar, and sodium (or directly declared salt). This is a project coverage policy, not a medical standard or a new scoring weight. It is configured centrally and queued in `DATA_REVIEW.md`.
+
+- **Sufficient:** all core fields can be compared; calculate the existing heuristic.
+- **Provisional:** at least one configured nutrient can be compared, but core information is missing or unverified. Apply only supported contributions and explain the gaps. If the partial calculation would be 100, withhold the numeric score: absence of observed deductions in a partial label does not establish a perfect result.
+- **Insufficient:** no configured nutrient can be compared. Publish `health_score: null`, no band, and no applied score contributions. Findings and allergen alerts remain visible independently.
+
+The initial value is a calculation baseline, not a result for an unreadable label. Numeric published scores reconcile exactly with the contribution ledger, including credits and clamp adjustments. Ingredient and allergen section availability is also disclosed; an absent ingredient section does not establish the absence of additives or allergens.
+
+## History compatibility
+
+New reports store a versioned analysis and data status. Older reports are reviewed from their stored OCR text when read, without re-running OCR or modifying history files. Their original score/band remain available as historical metadata, with an explanatory note. Reports without recoverable evidence show insufficient data. Image references, timestamps, scan IDs, and selected-allergen preferences remain intact.
+
+## Revision 3 — Nutella reference, basis normalization, and meaningful partial scores
+
+The decisive extraction failure was the section heading pattern matching `contain` inside “servings per container.” This moved the rest of a readable nutrition panel into the allergen section. Heading boundaries now prevent that match. Parsing supports unitless US “Calories 200” (kcal), the value-before-name “Includes 19g Added Sugars,” informational potassium, and serving-size declarations split across rows or preceding the nutrition heading. It retains original amounts, units, serving size, source text, and normalized values. An unknown qualifier before “Fat” cannot fabricate a conflicting total-fat reading.
+
+### Supported classification sources
+
+- Food and drink concentration categories come from the UK Department of Health's [front-of-pack guidance](https://assets.publishing.service.gov.uk/media/5a80cd03ed915d74e33fc7c5/FoP_Nutrition_labelling_UK_guidance.pdf), tables 2/3. Drinks use their separate per-100-ml categories. Sodium categories are expressed from salt using salt = 2.5 × sodium. This implementation uses concentration categories; it does not implement the guidance's additional large-portion overrides or claim UK label compliance.
+- Added sugar uses the FDA's [50 g Daily Value and per-serving low/high interpretation](https://www.fda.gov/food/nutrition-facts-label/added-sugars-nutrition-facts-label). A stated serving is required: ≤2.5 g is low, ≥10 g is high. Equivalent boundaries are scaled to the normalized basis only when the serving amount/unit is available. Total and added sugar share the strongest applicable deduction because added sugar is included in total sugar. Both findings remain in the ledger; the included finding has zero extra points.
+- Legacy trans-fat concentration bins (0.5/2 g per 100 g) remain **Project assumption - needs verification**. WHO's daily energy recommendation is not a source for those bins. No trans-fat rule is invented for liquids. Energy, protein, fibre, and potassium remain informational.
+
+All existing numeric point weights, caps, and bands remain unchanged. Their mapping from categories to points is an academic project heuristic, not a clinically validated or official composite rating. Ingredient and additive knowledge-record limitations remain visible in the source disclosure and `DATA_REVIEW.md`.
+
+### Normalization and completeness
+
+Multiply a per-serving amount by 100 / stated serving mass or volume. Preserve g versus ml; never assume a density. Per-100-ml readings use liquid rules directly. Calculations retain full numeric precision; display rounding cannot move a boundary reading into another category. Identical duplicates count once, while conflicting duplicates exclude only the affected nutrient.
+
+The current configured minimum is either a majority of the five core fields (3/5) or an actual validated Medium/High nutritional concern. This coverage policy is **Project assumption - needs verification**, not a deduction. Empty, unreadable, or unknown-basis data cannot pass it, and a lone low nutrient cannot earn 100. Missing information never contributes zero values or penalties. A supported partial result is provisional; four verified low fields can yield a provisional 100 with 80% coverage, while one missing field does not suppress an otherwise meaningful assessment. Coverage, missing/unverified fields, qualitative confidence, and any OCR confidence diagnostic are displayed together. Confidence is not a calibrated probability.
+
+### Nutella reference result
+
+The user-supplied reference declares a 37 g serving. The nine extracted readings retain their declared values (200 kcal; 11/4/0 g total/saturated/trans fat; 15 mg sodium; 170 mg potassium; 21/19 g total/added sugar; 2 g protein). Saturated fat normalizes to 4 × 100 / 37 = 10.810810… g/100 g. Total fat is 29.729729… g/100 g and total sugar 56.756756… g/100 g. These three high categories each deduct 15; the high added-sugar finding shares the sugar deduction. The final reference score is 100 − 15 − 15 − 15 = **55**. It is computed from the readings, with no product-name or image-specific scoring rule.
+
+The original 678×452 photo remains blurry in the right column. A bounded third OCR attempt enlarges small panels by at most 3× (capped at 2400 px) and uses automatic layout detection when earlier attempts have no usable nutrient readings. It recovers the serving declaration and reliable fat readings; this original image yields **70, provisional, 40% core coverage**. The unclear right-column values are not copied from the reference into OCR output. A clean image generated from the provided reference text passes real Tesseract extraction and scoring at 55.
+
+## Revision 4 — real multi-column label follow-up
+
+The browser follow-up exposed three failures: a nutrition-panel body emitted before its heading was dropped; Australian `Fat, total` and `saturated` row names were not recognized; and a low-confidence `1.3g` fibre token became `13g`. The new section and alias handling preserve explicit panel evidence without inventing missing units. A numeric-token confidence gate of 65 is a **Project assumption - needs verification**; values between 45 and 65 are admitted only if at least two independent OCR attempts agree on the exact reading, unit, basis and serving size. Confidence is not a calibrated probability, and agreement cannot guarantee correctness.
+
+For a detected light panel containing an OCR nutrition heading, a bounded panel-only retry may provide clearer nutrient text. Whole-page text continues to supply ingredient and allergen detection. The separate nutrition OCR and diagnostics are saved and visible in the report; the image comparison still shows the original preprocessing output. A split serving/100-unit header requires column evidence; an isolated right-column quantity can be associated only when OCR word positions support it. Printed per-100 values take precedence over converted serving quantities when their rounding intervals overlap; inconsistent duplicates remain unverified. These policies do not modify the configured nutrient thresholds, score weights, or coverage minimum.
+
+In browser rescans of user-supplied images, the cereal `prod_img-5076444...` changed from insufficient to 90 provisional, 60% coverage (21.4g sugar/100g, 1.0g saturated fat/100g, 80mg sodium/100g; the score includes one existing additive deduction). The cream carton `images (3).jpg` changed from insufficient to 67 provisional, 60% coverage; two high fat readings and an additive account for 33 points. The other cereal scored 78 provisional, 60% coverage; its previously incorrect fibre value is now unreadable/unverified rather than reported as 13g. The bundled sample remains 68, sufficient, with a reconciled ledger. These are observations, not product-specific scoring rules. The small `v2_...jpg` Nutella image still cannot reliably supply nutrition or allergens and remains insufficient; a closer, higher-resolution image is needed. Other unreadable fields remain excluded rather than reconstructed.

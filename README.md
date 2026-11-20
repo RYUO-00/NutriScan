@@ -123,6 +123,8 @@ History and both image versions are kept locally so saved results can be reopene
 
 ## Validate, test, and evaluate
 
+For optional `tessdata_best`/`tessdata_fast` packs, project-local model selection, food vocabulary, OCR retry diagnostics and reproducible model/preprocessing benchmarks, see [Tesseract configuration and evaluation](docs/OCR.md). The default uses the installed English pack with LSTM OEM 1 and falls back to it if an optional pack is unavailable. Model binaries stay outside Git and the system installation is unchanged.
+
 Run these from the project root:
 
 ```sh
@@ -137,7 +139,7 @@ On Windows, use `.\.venv\Scripts\python.exe` in place of `python` if the virtual
 ## Assumptions
 
 - The 180 additive code/name records use Codex INS nomenclature for identity only. A Codex INS entry is not evidence that an additive is approved for a particular food or safe at any particular dose. See [Codex CXG 36-1989](https://www.fao.org/fao-who-codexalimentarius/sh-proxy/en/?lnk=1&url=https%3A%2F%2Fworkspace.fao.org%2Fsites%2Fcodex%2FStandards%2FCXG+36-1989%2FCXG_036e.pdf) and the [FSSAI product standards](https://fssai.gov.in/standards/product-standards) for the source boundary.
-- Provisional additive risk labels, ingredient flags, keyword expansions, and all numeric nutrient screening cutoffs are project assumptions pending review against applicable Indian standards. Unsupported claims use a conservative neutral description. The complete 300-record review queue is in [DATA_REVIEW.md](DATA_REVIEW.md).
+- Provisional additive risk labels, ingredient flags, keyword expansions, and legacy trans-fat bins remain project assumptions. Solid/liquid concentration categories use the cited UK front-of-pack guidance; added sugar uses FDA per-serving Daily Value interpretation. These are screening references, not a claim of Indian regulatory compliance. Original knowledge-record source notes remain in [DATA_REVIEW.md](DATA_REVIEW.md).
 - All numeric nutrient screening cutoffs and score weights live in `config.py`. They are prototype screening rules, not official dietary limits. Salt-to-sodium conversion, when needed, is explicitly labelled as an estimate of about 40%.
 - Allergen groups are informed by the FSSAI labelling compendium's allergen declaration groups; expanded keyword variants and keyword-only matching remain assumptions. See the [FSSAI labelling and display compendium](https://fssai.gov.in/upload/uploadfiles/files/Compendium_Labelling_Display_23_09_2021.pdf). A missing keyword match does not establish that a product is allergen-safe.
 - The synthetic fixture set uses one English label layout. Evaluation tolerance is configured centrally in `config.py` and is not an official measurement standard.
@@ -145,10 +147,12 @@ On Windows, use `.\.venv\Scripts\python.exe` in place of `python` if the virtual
 
 ## Known limitations
 
+Results distinguish **Sufficient**, **Provisional**, and **Insufficient data**. The configured minimum is a majority of core fields or a verified nutritional concern. Empty/unreadable data and a lone low reading cannot generate 100. Reliable partial readings remain usable and are labelled provisional with coverage and confidence. Four verified low fields may produce a provisional 100 at 80% coverage; that score describes the assessed readings only. The report lists missing/unverified information and every applied contribution. Older reports are reviewed from their stored OCR without changing history files. See [the current scoring audit and coverage policy](docs/SCORING.md).
+
 - OCR and keyword matching can miss text due to glare, blur, folds, curvature, small print, unsupported languages, or OCR errors. Review the raw OCR text and original/processed comparison.
 - The knowledge base is intentionally reviewable and is not a comprehensive or legally authoritative list. Some of its identity, risk, ingredient, and allergen interpretations are unverified.
 - The score is a configured heuristic. It does not account for serving frequency, ingredient quantity, a person's health needs, or the overall diet. Allergen alerts do not affect the score and remain visible separately.
-- Nutrition status is produced only when the extracted unit and basis can be compared with the configured per-100-g screen. Values per serving are converted only when a serving size is stated clearly; per-100-ml remains incomparable to per-100-g thresholds.
+- Values per serving are normalized only with a stated serving mass or volume. Per-100-ml readings use separate liquid thresholds; no g/ml density is guessed. FDA added-sugar screening uses its stated serving basis. Total and added sugar share one deduction rather than counting the same sugar twice.
 - History is a single-user local JSON file. It is not designed for concurrent multi-process serving or recovery from external disk failure.
 - Synthetic evaluation fixtures are not a representative real-photo test set.
 

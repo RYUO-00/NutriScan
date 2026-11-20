@@ -17,3 +17,9 @@ def test_nutrition_evaluation_requires_matching_unit_and_basis():
     assert _numeric_match(expected, within_tolerance)
     assert not _numeric_match(expected, outside_tolerance)
     assert not _numeric_match(expected, wrong_basis)
+
+
+def test_nutrition_evaluation_never_counts_missing_or_unverified_as_correct():
+    expected = {"value": 0, "unit": "g", "basis": "100g"}
+    assert not _numeric_match(expected, {"value": None, "unit": "g", "basis": "100g"})
+    assert not _numeric_match(expected, {"value": 0, "unit": "g", "basis": "100g", "verified": False})

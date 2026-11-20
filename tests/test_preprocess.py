@@ -3,6 +3,7 @@ import numpy as np
 import pytest
 
 from preprocess import PreprocessError, preprocess_image
+from preprocess import ocr_variant, deskew_for_ocr
 
 
 def test_preprocess_returns_binary_output_and_diagnostics(tmp_path):
@@ -44,3 +45,25 @@ def test_unreadable_image_has_friendly_error(tmp_path):
     path.write_bytes(b"not an image")
     with pytest.raises(PreprocessError, match="not a readable image"):
         preprocess_image(path)
+
+
+def test_requested_variants_preserve_input_and_geometry():
+    image = np.full((120, 350), 190, dtype=np.uint8)
+    cv2.putText(image, "Sugar 1.3g", (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 1, 30, 1)
+    before = image.copy()
+    for name in ("gray", "contrast", "adaptive", "otsu"):
+        output = ocr_variant(image, name)
+        assert output.shape == image.shape
+        assert np.array_equal(image, before)
+        if name in {"adaptive", "otsu"}:
+            assert set(np.unique(output)).issubset({0, 255})
+
+
+def test_deskew_requires_consistent_lines():
+    image = np.full((250, 400), 255, dtype=np.uint8)
+    for y in [60, 100, 140, 180]:
+        cv2.line(image, (30, y), (370, y + 30), 0, 2)
+    corrected, angle = deskew_for_ocr(image)
+    assert 3 < angle < 7
+    assert corrected.shape == image.shape
+    assert deskew_for_ocr(np.full_like(image, 255))[1] == 0
