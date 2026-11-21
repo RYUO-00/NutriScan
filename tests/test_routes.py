@@ -51,7 +51,9 @@ def test_scan_history_api_saved_result_and_result_page(client):
     assert b"Find the detail that matters." in scan_page.data
     for element_id in ("main", "scan-form", "label-image", "preview-wrap", "preview", "preview-name", "allergen-chips", "sample-button", "scan-status", "scan-progress"):
         assert f'id="{element_id}"'.encode() in scan_page.data
-    assert b"capture=\"environment\"" in scan_page.data
+    assert b'accept="image/jpeg,image/png"' in scan_page.data
+    assert b'capture="environment"' not in scan_page.data
+    assert b"use the photo picker to select a saved JPG or PNG" in scan_page.data
     assert scan_page.data.count(b"data-stage=") == len(app_module.SCAN_PROGRESS_STAGES)
     assert Path(config.HISTORY_PATH).read_text(encoding="utf-8") == "[]\n"
     assert client.get("/history").status_code == 200
@@ -278,16 +280,18 @@ def test_fresh_result_html_keeps_developer_sources_in_collapsible_section(client
 
 
 def test_comparison_layout_has_a_sized_shared_frame_and_mobile_stack(client):
-    response = client.get("/static/css/style.css?v=20261101-8")
+    response = client.get("/static/css/style.css?v=20261121-2")
     assert response.status_code == 200
     css = response.get_data(as_text=True)
     assert ".comparison { --split: 50%; position: relative; display: grid; grid-template-rows: 42px auto;" in css
     assert ".comparison-viewport { width: 100%; height: min(725px, calc((100vw - 48px) * 0.625)); min-width: 0; min-height: 0; position: relative; aspect-ratio: 16 / 10;" in css
     assert ".comparison-labels { display: flex; align-items: center; justify-content: space-between;" in css
     assert ".comparison-panel { position: absolute; inset: 0; display: grid; width: 100%; height: 100%; place-items: center;" in css
+    assert ".original-panel { z-index: 2; clip-path: inset(0 var(--split) 0 0); }" in css
+    assert ".processed-panel { z-index: 1; }" in css
     assert ".comparison .comparison-viewport { height: 510px; aspect-ratio: auto; display: grid;" in css
-    assert "grid-template-rows: var(--split) calc(100% - var(--split));" in css
-    assert ".comparison .original-panel { grid-row: 1; }" in css
+    assert "grid-template-rows: calc(100% - var(--split)) var(--split);" in css
+    assert ".comparison .original-panel { grid-row: 1; clip-path: none; }" in css
     assert ".comparison .processed-panel { grid-row: 2; clip-path: none;" in css
 
 

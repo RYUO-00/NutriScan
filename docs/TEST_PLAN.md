@@ -1,15 +1,5 @@
 # NutriScan Test Plan
 
-## Tesseract enhancement benchmark — 20 Nov 2026
-
-`scripts/benchmark_ocr.py` compares installed/official best/official fast English packs with OEM 1 and identical grayscale PSM 6 controls; a separate matrix evaluates grayscale, CLAHE, legacy preprocessing, Otsu, gentle adaptive, deskew and bounded deskew/enlargement with PSM 6/11/3. Vocabulary is a paired optional comparison, and `--numeric-probe` restricts characters only on an explicitly numeric line using PSM 7. Model files are pinned/checksummed and remain ignored. `tests/ocr_real_labels.json` contains manually checked fields from eight user-supplied real-label images; their images are supplied with `--real-dir` and are not redistributed. Five bundled synthetic categories provide full text for CER/WER. These development data do not support representative accuracy claims.
-
-Recognition CER/WER, raw parsed-field accuracy, verified end-to-end fields, ingredient/additive/allergen recall, false positives, serving extraction, timing and failures are separate measurements. Missing/ambiguous fields remain misses and unverified values cannot earn correctness credit. Baseline verified values are evaluated from the original saved capture rather than recomputed through changed parsing. JSON sidecars include input/model/source hashes, individual outputs and errors. The legacy `evaluate.py` now uses the same confidence-aware analysis and panel evidence as Flask.
-
-New automated cases cover optional-model absence/corruption, strict benchmark model selection, Windows paths, OCR timeout, curated vocabulary, known-value real OCR with each available model, preprocessing input preservation, conservative deskew, coordinate recovery with either column order, explicit row units, ambiguous/multiple panels, bounds, percentages, low-confidence values, and complete accounting of panel retries. Existing route, upload, scoring, history and JSON checks remain in the suite. Browser QA covers fresh clear/weak/ingredient-only scans, invalid/unreadable input, OCR disclosure, scores/alerts, image loading, history reopening, console/server logs, and desktop/360 px layouts.
-
-Completed verification: **168 pytest tests passed**, 300 knowledge records validated, 403 benchmark runs plus six numeric probes, and ten legacy evaluation runs with no scan failures. The actual in-app browser checks and inspected 1440×900/360×844 captures are recorded in [the final report](../results/ocr_summary.md#browser-verification). Both a fresh 68-point sample and an older stored 78-point cereal report reopened successfully. Invalid/unreadable uploads restored controls with 400/422 errors; no Flask 500 or browser console error was observed. Unresolved real-photo and rounding failures are retained in the benchmark, not counted as passes in extraction metrics.
-
 ## Evaluation metrics
 
 - Ingredient/OCR recall against manually checked ingredient ground truth.
@@ -77,3 +67,9 @@ Manual OCR re-reading of the four distinct original failing uploads returned ins
 | Complete Nutella nutrition without ingredients | 55 | Sufficient | Pass |
 
 Additional tests cover four reliable low readings with 80% coverage, a single unverified/conflicting field, stated-serving normalization for liquids, the exact FDA added-sugar high boundary, configurable point weights, split/interleaved serving metadata, and ambiguous “Fat” qualifiers. Every published score equals the contribution sum. Missing/empty data and a lone low reading cannot automatically produce 100. Real OCR of the complete reference returns 55; OCR of the original blurry photo recovers 37 g and reliable fat values, yielding 70 provisional at 40% core coverage. Right-column values are not inserted from the transcript. Full suite: **128 passed**.
+
+## Comparison and mobile photo-picker regression
+
+- Verify the desktop frame shows the uploaded original on the left and the preprocessed image on the right; moving the slider toward 95% reveals more processed image.
+- Verify the narrow layout shows the complete original above the complete processed image and allocates the row heights consistently with the slider.
+- Verify the upload control accepts JPG/PNG without a forced `capture` attribute, allowing mobile users to select saved photos. Browser-provided camera options may vary by device.

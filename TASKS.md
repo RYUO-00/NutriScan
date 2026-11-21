@@ -83,14 +83,9 @@ Work one phase at a time. Mark a phase done only after its tests pass; update th
 - [x] Final verification: `python -m pytest -q` with the existing project virtual environment — 143 passed. The in-app browser was used for fresh sample, cereal, cream, and Nutella scans.
 - [x] Transfer the revision 4 changes into the original project directory and run its own test suite — 143 passed.
 
-## Tesseract accuracy and bounded pipeline enhancement — 20 Nov 2026
+## Image comparison and mobile photo selection — 21 Nov 2026
 
-- [x] Audit the full upload-to-history path, installed Tesseract/data versions, current retries, knowledge data and reference fixtures; preserve a measured pre-enhancement capture.
-- [x] Add pinned, checksum-verified project-local official model installation and configurable OEM 1/model/data paths, with installed-model fallback and no binary model files in Git.
-- [x] Add curated optional words/patterns; compare controlled PSM/preprocessing choices and numeric-region restrictions without changing score weights or thresholds.
-- [x] Add structural OCR selection, accurate whole/panel call counts, timing/failure diagnostics, bounded deskew/small-text retries and a conservative coordinate table adapter.
-- [x] Fix parenthesized `contains` truncation found in the real gum-label check; retain separate allergen detection and add a regression test.
-- [x] Add configuration/model/variant/table/benchmark regressions and preserve existing routes/history behavior. Automated checks pass before final browser verification.
-- [x] Complete 403 controlled/matrix/runtime benchmark runs plus six numeric-region probes; publish source/input/model hashes and measured gains, regressions, latency and resource-measurement limits in `results/ocr_summary.md`.
-- [x] Verify fresh clear/weak/ingredient-only and invalid/unreadable uploads in the built-in browser; inspect 1440 px/360 px screenshots, images/slider, OCR, score ledger, selected alerts, logo and fresh/older history reopening. Restore viewport/preferences and review console/server logs.
-- [x] Final checks: 168 pytest tests passed, 300 data records validated, ten legacy synthetic evaluation runs completed without scan failures. Preserve screenshots and unrelated files outside Git; do not merge or overwrite the original checkout.
+- [x] Correct desktop comparison orientation: the original is revealed on the left and the processed image on the right; the slider still reveals more processed image as its value increases.
+- [x] Keep the same meaning on narrow screens by stacking the complete original above the complete processed image and sizing their rows from the slider.
+- [x] Remove forced `capture="environment"` from the shared photo input so phone users can select saved JPG/PNG photos; retain the browser's optional camera picker where available.
+- [x] Verify in the main project: focused route checks pass; full `.venv` pytest — 143 passed. The in-app browser showed the sample comparison correctly at desktop and 360 px, and the picker input has no `capture` attribute. A physical phone was not tested.
