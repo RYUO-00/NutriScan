@@ -30,9 +30,9 @@
         <span class="drop-title">Drop a photo here</span>
         <span class="drop-or">or choose one from this device</span>
         <span class="file-action">Choose photo</span>
-        <input id="label-image" name="image" type="file" accept="image/jpeg,image/png" capture="environment" required aria-describedby="upload-guidance">
+        <input id="label-image" name="image" type="file" accept="image/jpeg,image/png" required aria-describedby="upload-guidance">
       </label>
-      <p id="upload-guidance" class="upload-guidance">Fill the frame with the label. Avoid glare, shadows, and curled edges so the small print stays readable.</p>
+      <p id="upload-guidance" class="upload-guidance">On phones, use the photo picker to select a saved JPG or PNG; the browser may also offer a camera option. Avoid glare, shadows, and curled edges so the small print stays readable.</p>
 
       <figure id="preview-wrap" class="selected-preview" hidden>
         <img id="preview" src="{{ url_for('static', filename='images/sample_label.png') }}" alt="Preview of selected label">

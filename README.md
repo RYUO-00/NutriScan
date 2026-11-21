@@ -73,7 +73,7 @@ On macOS or Linux, with the virtual environment activated:
 python app.py
 ```
 
-Open [http://127.0.0.1:5000](http://127.0.0.1:5000). The server binds only to the local computer. Use **Try a sample label** to run the bundled image through upload, OCR, parsing, matching, scoring, and local history. You can also upload a label photo (JPG or PNG, up to 5 MB). The mobile file picker can use the device camera when the browser supports it.
+Open [http://127.0.0.1:5000](http://127.0.0.1:5000). The server binds only to the local computer. Use **Try a sample label** to run the bundled image through upload, OCR, parsing, matching, scoring, and local history. You can also upload a label photo (JPG or PNG, up to 5 MB). On phones, the file picker lets you select a saved photo and may also offer a camera option, depending on the browser.
 
 ## Access NutriScan from a Mobile Device
 

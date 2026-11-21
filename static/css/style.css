@@ -392,8 +392,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, summary:focus-visibl
 .compare-caption { display: inline-flex; align-items: center; min-height: 26px; padding: 3px 9px; border: 1px solid var(--line-dark); background: var(--surface); color: var(--ink); font-size: .75rem; font-weight: 740; line-height: 1.2; }
 .comparison-viewport { width: 100%; height: min(725px, calc((100vw - 48px) * 0.625)); min-width: 0; min-height: 0; position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: var(--surface-muted); }
 .comparison-panel { position: absolute; inset: 0; display: grid; width: 100%; height: 100%; place-items: center; margin: 0; background: var(--surface-muted); }
-.original-panel { z-index: 1; }
-.processed-panel { z-index: 2; clip-path: inset(0 calc(100% - var(--split)) 0 0); }
+.original-panel { z-index: 2; clip-path: inset(0 var(--split) 0 0); }
+.processed-panel { z-index: 1; }
 .comparison-image { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: contain; object-position: center; }
 .image-fallback { position: absolute; inset: 0; display: grid; place-content: center; gap: 4px; padding: 20px; color: var(--muted); text-align: center; }
 .image-fallback strong { color: var(--ink); }
@@ -480,9 +480,9 @@ a:focus-visible, button:focus-visible, input:focus-visible, summary:focus-visibl
   .score-waterfall-label { font-size: .78rem; }
   .ledger-main { grid-template-columns: 54px minmax(0, 1fr); gap: 9px; }
   .comparison { grid-template-rows: 48px auto; }
-  .comparison .comparison-viewport { height: 510px; aspect-ratio: auto; display: grid; grid-template-rows: var(--split) calc(100% - var(--split)); }
+  .comparison .comparison-viewport { height: 510px; aspect-ratio: auto; display: grid; grid-template-rows: calc(100% - var(--split)) var(--split); }
   .comparison .comparison-panel { position: relative; inset: auto; width: 100%; height: 100%; min-width: 0; min-height: 0; }
-  .comparison .original-panel { grid-row: 1; }
+  .comparison .original-panel { grid-row: 1; clip-path: none; }
   .comparison .processed-panel { grid-row: 2; clip-path: none; border-top: 1px solid var(--line); }
   #comparison-slider { cursor: ns-resize; }
 }

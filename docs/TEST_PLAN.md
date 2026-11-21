@@ -29,3 +29,9 @@ Clear and flat; slightly tilted; curved pouch or bottle; uneven lighting or glar
 ## Evaluation artifacts
 
 `scripts/make_sample_labels.py` creates deterministic synthetic images and matching JSON under `tests/ground_truth/`. `evaluate.py` processes the sample set with preprocessing off/on and writes `results/evaluation.md` and `results/evaluation.csv` with metrics, timing, and failures.
+
+## Comparison and mobile photo-picker regression
+
+- Verify the desktop frame shows the uploaded original on the left and the preprocessed image on the right; moving the slider toward 95% reveals more processed image.
+- Verify the narrow layout shows the complete original above the complete processed image and allocates the row heights consistently with the slider.
+- Verify the upload control accepts JPG/PNG without a forced capture attribute, allowing mobile users to select saved photos. Browser-provided camera options may vary by device.

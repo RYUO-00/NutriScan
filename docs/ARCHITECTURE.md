@@ -2,7 +2,7 @@
 
 ## Three layers
 
-1. **Browser frontend:** offline HTML, CSS, and JavaScript for upload/camera input, allergen preferences, scan progress, result views, comparison, and history.
+1. **Browser frontend:** offline HTML, CSS, and JavaScript for photo selection (with browser-provided camera capture where available), allergen preferences, scan progress, result views, comparison, and history.
 2. **Flask backend:** thin routes validate requests and orchestrate the nine processing stages through focused modules.
 3. **Local data and files:** four UTF-8 JSON knowledge arrays, JSON scan history, and controlled local uploads. The first release is single-process and single-user.
 

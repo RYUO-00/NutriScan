@@ -57,3 +57,10 @@ Work one phase at a time. Mark a phase done only after its tests pass; update th
 - [x] Preserve threshold bars and show energy, protein, and fibre as informational rows without status chips or score effects.
 - [x] Render and inspect the fresh sample at 1440×900 and 360×844, plus desktop/mobile score and image-comparison sections. Verify alerts, nutrient values, image responses, slider, logo, history reopening, and no horizontal overflow or browser errors.
 - [x] Final verification: `.venv` pytest 67 passed; the browser score summary reconciles to the saved backend result (100 − 34 + 2 = 68).
+
+## Image comparison and mobile photo selection — 21 Nov 2026
+
+- [x] Correct desktop comparison orientation: the original is revealed on the left and the processed image is on the right; the slider still reveals more processed image as its value increases.
+- [x] Keep the same meaning on narrow screens by stacking the complete original above the complete processed image and sizing their rows from the slider.
+- [x] Remove forced capture=environment from the shared photo input so phone users can select saved JPG/PNG photos; retain the browser's optional camera picker where available.
+- [x] Verify in the main project: focused route checks pass; full .venv pytest — 143 passed. The in-app browser showed the sample comparison correctly at desktop and 360 px, and the picker input has no capture attribute. A physical phone was not tested.
