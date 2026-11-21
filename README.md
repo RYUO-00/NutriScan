@@ -109,7 +109,12 @@ If Windows Firewall blocks the phone's connection, an administrator can open Pow
 
 ```powershell
 Get-NetConnectionProfile
+```
+```powershell
 Set-NetConnectionProfile -InterfaceAlias "Wi-Fi" -NetworkCategory Private
+```
+```powershell
+
 New-NetFirewallRule -DisplayName "NutriScan LAN" -Direction Inbound -Protocol TCP -LocalPort 5000 -Action Allow -Profile Private
 ```
 
