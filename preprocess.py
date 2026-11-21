@@ -82,6 +82,46 @@ def _perspective_correct(gray):
     return gray, False
 
 
+def ocr_variant(gray, name):
+    """Build one requested OCR alternative; leave the original array untouched."""
+    if name == "gray":
+        return gray.copy()
+    if name == "otsu":
+        return cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
+    enhanced = cv2.createCLAHE(clipLimit=config.PREPROCESS_CLAHE_LIMIT,
+                              tileGridSize=(config.PREPROCESS_CLAHE_GRID,) * 2).apply(gray)
+    if name == "contrast":
+        return enhanced
+    if name == "adaptive":
+        return cv2.adaptiveThreshold(enhanced, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+                                     cv2.THRESH_BINARY, config.PREPROCESS_ADAPTIVE_BLOCK,
+                                     config.PREPROCESS_ADAPTIVE_C)
+    raise ValueError(f"Unknown OCR preprocessing variant: {name}")
+
+
+def deskew_for_ocr(gray):
+    """Rotate only when several near-horizontal edges agree on a modest tilt."""
+    edges = cv2.Canny(gray, 50, 150)
+    segments = cv2.HoughLinesP(edges, 1, np.pi / 180, threshold=70,
+                               minLineLength=max(50, gray.shape[1] // 5), maxLineGap=15)
+    if segments is None:
+        return gray.copy(), 0.0
+    angles = []
+    for x1, y1, x2, y2 in segments[:, 0]:
+        angle = float(np.degrees(np.arctan2(y2 - y1, x2 - x1)))
+        if -20 <= angle <= 20:
+            angles.append(angle)
+    if len(angles) < 3:
+        return gray.copy(), 0.0
+    angle = float(np.median(angles))
+    if abs(angle) < 0.5 or np.median(np.abs(np.array(angles) - angle)) > 3:
+        return gray.copy(), 0.0
+    height, width = gray.shape
+    matrix = cv2.getRotationMatrix2D((width / 2, height / 2), angle, 1.0)
+    return cv2.warpAffine(gray, matrix, (width, height), flags=cv2.INTER_CUBIC,
+                          borderMode=cv2.BORDER_CONSTANT, borderValue=255), angle
+
+
 def preprocess_image(source, *, enabled=True, processed_path=None):
     """Return original/processed arrays, an optional saved PNG, and diagnostics."""
     image = _read_image(source)

@@ -21,10 +21,30 @@ MAX_IMAGE_PIXELS = 40_000_000
 
 TESSERACT_CMD = os.environ.get("TESSERACT_CMD", r"C:\Program Files\Tesseract-OCR\tesseract.exe")
 TESSERACT_LANG = "eng"
+TESSERACT_OEM = 1
+# Alternative packs are optional; missing packs fall back to installed data.
+OCR_MODEL = os.environ.get("NUTRISCAN_OCR_MODEL", "installed")
+OCR_MODELS_DIR = BASE_DIR / ".local" / "ocr"
+OCR_TESSDATA_DIR = os.environ.get("NUTRISCAN_TESSDATA_DIR", "")
+OCR_USE_VOCABULARY = os.environ.get("NUTRISCAN_OCR_VOCABULARY", "0") == "1"
+OCR_WORDS_PATH = BASE_DIR / "data" / "ocr" / "food_words.txt"
+OCR_PATTERNS_PATH = BASE_DIR / "data" / "ocr" / "food_patterns.txt"
+OCR_TIMEOUT_SECONDS = 20
+OCR_MAX_WHOLE_ATTEMPTS = 4
+OCR_MAX_PANEL_ATTEMPTS = 2
+OCR_SMALL_TEXT_HEIGHT = 20
+OCR_PRIMARY_VARIANT = "gray"
 OCR_PSM = 6
 OCR_RETRY_PSM = 11
 OCR_WEAK_CHARACTERS = 30
 OCR_MIN_CONFIDENCE = 45.0
+# Numeric tokens need a stronger evidence gate than whole-page OCR. Tesseract
+# confidence is only a heuristic, not a guarantee that decimals are correct.
+OCR_MIN_NUMERIC_CONFIDENCE = 65.0
+OCR_LAYOUT_PSM = 3
+OCR_UPSCALE_LONG_SIDE = 2400
+OCR_UPSCALE_MAX_SCALE = 3
+OCR_PANEL_UPSCALE_LONG_SIDE = 3000
 
 PREPROCESS_LONG_SIDE = 1800
 PREPROCESS_DENOISE_KERNEL = 3
@@ -55,7 +75,8 @@ EVALUATION_NUTRIENT_REL_TOLERANCE = 0.10
 
 # JSON nutrition records identify nutrients and their source notes. Numeric
 # screening cutoffs are deliberately defined only here, never duplicated in JSON.
-# Values are draft project assumptions pending source review; they are not limits.
+# Sources for the concentration bins are assigned below. The remaining legacy
+# trans-fat bins and all composite point weights are project assumptions.
 NUTRITION_THRESHOLDS = {
     "energy": {"unit": "kcal", "basis": "100g", "medium_above": 250, "high_above": 400},
     "total_fat": {"unit": "g", "basis": "100g", "medium_above": 3, "high_above": 17.5},
@@ -65,10 +86,38 @@ NUTRITION_THRESHOLDS = {
     "sodium": {"unit": "mg", "basis": "100g", "medium_above": 120, "high_above": 600},
     "protein": {"unit": "g", "basis": "100g", "medium_above": 5, "high_above": 10},
     "fibre": {"unit": "g", "basis": "100g", "medium_above": 3, "high_above": 6},
-    "added_sugar": {"unit": "g", "basis": "100g", "medium_above": 5, "high_above": 22.5},
     "salt": {"unit": "g", "basis": "100g", "medium_above": 0.3, "high_above": 1.5},
 }
 
+# UK front-of-pack guidance tables 2/3: concentration categories only. The
+# composite 15/7 point mapping above remains an academic project heuristic.
+UK_FOP_SOURCE = "UK Department of Health, Guide to creating a front of pack nutrition label (2016), tables 2 and 3: https://assets.publishing.service.gov.uk/media/5a80cd03ed915d74e33fc7c5/FoP_Nutrition_labelling_UK_guidance.pdf"
+FDA_ADDED_SUGAR_SOURCE = "US FDA, Added Sugars on the Nutrition Facts Label: 50 g Daily Value, <=5% DV low and >=20% DV high per serving: https://www.fda.gov/food/nutrition-facts-label/added-sugars-nutrition-facts-label"
+for nutrient_key in ("total_fat", "saturated_fat", "sugar", "salt", "sodium"):
+    NUTRITION_THRESHOLDS[nutrient_key]["source"] = UK_FOP_SOURCE + ("; sodium cutoffs expressed from salt using salt = 2.5 x sodium." if nutrient_key == "sodium" else "")
+NUTRITION_THRESHOLDS["trans_fat"]["source"] = "Project assumption - needs verification (legacy trans-fat concentration bins). WHO's <1% energy intake guidance is not a per-100-g cutoff: https://www.who.int/news-room/fact-sheets/detail/trans-fat"
+LIQUID_NUTRITION_THRESHOLDS = {
+    "total_fat": {"unit": "g", "basis": "100ml", "medium_above": 1.5, "high_above": 8.75, "source": UK_FOP_SOURCE},
+    "saturated_fat": {"unit": "g", "basis": "100ml", "medium_above": 0.75, "high_above": 2.5, "source": UK_FOP_SOURCE},
+    "sugar": {"unit": "g", "basis": "100ml", "medium_above": 2.5, "high_above": 11.25, "source": UK_FOP_SOURCE},
+    "salt": {"unit": "g", "basis": "100ml", "medium_above": 0.3, "high_above": 0.75, "source": UK_FOP_SOURCE},
+    "sodium": {"unit": "mg", "basis": "100ml", "medium_above": 120, "high_above": 300, "source": UK_FOP_SOURCE + "; sodium cutoffs expressed from salt using salt = 2.5 x sodium."},
+}
+ADDED_SUGAR_DAILY_VALUE_G = 50
+ADDED_SUGAR_THRESHOLD = {"unit": "g", "basis": "per_serving", "medium_above": ADDED_SUGAR_DAILY_VALUE_G * 0.05, "high_above": ADDED_SUGAR_DAILY_VALUE_G * 0.20, "high_inclusive": True, "source": FDA_ADDED_SUGAR_SOURCE}
+NUTRITION_THRESHOLDS["added_sugar"] = ADDED_SUGAR_THRESHOLD
+
 # These label values are informational and never change the score. The energy
 # cutoff remains a project assumption, so energy is shown only for context too.
-INFORMATIONAL_NUTRIENTS = {"energy", "protein", "fibre"}
+INFORMATIONAL_NUTRIENTS = {"energy", "protein", "fibre", "potassium"}
+
+# Project coverage policy, not a medical standard or score penalty. A partial
+# label cannot earn a published 100 solely through absent deductions.
+SCORE_CORE_NUTRIENTS = ("total_fat", "saturated_fat", "trans_fat", "sugar", "sodium")
+SCORE_NUTRIENT_ALTERNATIVES = {"sodium": ("sodium", "salt")}
+# Majority of the five core fields supports a neutral partial score. A verified
+# adverse nutrition reading may also support a provisional score below 100.
+# This is a coverage policy, not a new nutrient penalty or medical threshold.
+SCORE_MIN_CORE_FIELDS = 3
+SCORE_NON_ADDITIVE_GROUPS = (("sugar", "added_sugar"),)
+ANALYSIS_VERSION = 4

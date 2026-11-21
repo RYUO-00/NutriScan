@@ -27,3 +27,7 @@ data/scan_history.json
 # Local design tooling output
 design-review/
 .impeccable/
+
+# Optional local Tesseract models and benchmark scratch data
+.local/ocr/
+*.traineddata

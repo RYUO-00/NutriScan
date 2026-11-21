@@ -46,6 +46,8 @@ def _code_occurrences(text):
     for pattern, priority in ((CODE_WITH_PREFIX, 0), (CODE_WITH_SUFFIX, 1), (BARE_CODE_CONTEXT, 2)):
         for match in pattern.finditer(text or ""):
             raw_code = match.group("code")
+            if priority == 1 and re.fullmatch(r"\d+(?:mg|mcg|g|ml|kcal|kj)", raw_code, re.IGNORECASE):
+                continue  # A nutrition quantity is not an unprefixed additive code.
             code = normalize_additive_code(raw_code)
             if not code:
                 continue
@@ -151,6 +153,9 @@ def match_ingredient_tokens(tokens, additive_records, flag_records, fuzzy_thresh
 
 def _keyword_pattern(keyword):
     pieces = [re.escape(piece) for piece in keyword.split()]
+    # Match regular plural food names without matching inside another word.
+    if pieces and keyword.split()[-1].casefold() in {"hazelnut", "almond", "walnut", "cashew", "pistachio", "pecan", "nut", "peanut"}:
+        pieces[-1] += "s?"
     return re.compile(r"(?<![a-z0-9])" + r"\s+".join(pieces) + r"(?![a-z0-9])", re.IGNORECASE)
 
 
@@ -164,11 +169,12 @@ def _find_keyword(text, record):
     return pattern.search(text or "")
 
 
-def match_allergens(ingredient_text, contains_text, allergen_records, selected_allergens=None):
+def match_allergens(ingredient_text, contains_text, allergen_records, selected_allergens=None, *, fallback_text=""):
     """Return one alert per group with matched keyword, section, and preference state."""
     selected = {normalize_term(group) for group in (selected_allergens or [])}
     grouped = {}
-    for section_name, text in (("ingredients", ingredient_text), ("contains", contains_text)):
+    group_records = {record["allergen_group"]: record for record in allergen_records}
+    for section_name, text in (("ingredients", ingredient_text), ("contains", contains_text), ("unsectioned OCR text", fallback_text)):
         for record in allergen_records:
             found = _find_keyword(text or "", record)
             if not found:
@@ -184,6 +190,23 @@ def match_allergens(ingredient_text, contains_text, allergen_records, selected_a
             })
             if record["keyword"] not in item["matched_keywords"]:
                 item["matched_keywords"].append(record["keyword"])
+            if section_name not in item["source_sections"]:
+                item["source_sections"].append(section_name)
+            if record.get("source") and record["source"] not in item["sources"]:
+                item["sources"].append(record["source"])
+        # Explicit group declarations such as "contains tree nuts" are evidence
+        # even when no individual nut name is readable. Group names come from JSON.
+        for group, record in group_records.items():
+            found = _keyword_pattern(group).search(text or "")
+            if not found:
+                continue
+            item = grouped.setdefault(group.casefold(), {
+                "allergen_group": group, "matched_keywords": [], "source_sections": [], "sources": [],
+                "selected": normalize_term(group) in selected,
+            })
+            keyword = found.group(0).casefold()
+            if keyword not in item["matched_keywords"]:
+                item["matched_keywords"].append(keyword)
             if section_name not in item["source_sections"]:
                 item["source_sections"].append(section_name)
             if record.get("source") and record["source"] not in item["sources"]:

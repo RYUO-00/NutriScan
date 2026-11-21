@@ -10,10 +10,9 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import config
-from matcher import decode_additives, match_allergens, match_ingredient_tokens, normalize_term
-from nutrition import parse_nutrition
+from app import _analyze_label
+from matcher import normalize_term
 from ocr import recognize_text
-from parser import parse_label_text
 from preprocess import preprocess_image
 from storage import load_knowledge
 
@@ -42,6 +41,8 @@ def _binary_counts(expected, actual):
 
 
 def _numeric_match(expected, actual):
+    if actual.get("verified") is False or actual.get("value") is None or actual.get("estimated"):
+        return False
     if actual.get("unit") != expected.get("unit") or actual.get("basis") != expected.get("basis"):
         return False
     expected_value = float(expected["value"])
@@ -68,20 +69,12 @@ def _score_sample(image_path, truth, enabled, knowledge):
     try:
         prepared = preprocess_image(image_path, enabled=enabled)
         ocr = recognize_text(prepared["processed"], prepared["original_gray"])
-        parsed = parse_label_text(ocr["text"])
+        parsed = _analyze_label(ocr["text"], [], knowledge, ocr)
         ingredient_actual = {normalize_term(token) for token in parsed["ingredient_tokens"]}
-        named_additives, _flags, _unknown_tokens = match_ingredient_tokens(
-            parsed["ingredient_tokens"], knowledge["additives"], knowledge["ingredient_flags"]
-        )
-        coded_additives, _unknown_codes = decode_additives(parsed["raw_text"], knowledge["additives"])
-        additive_actual = {
-            str(item["ins_code"]) for item in [*named_additives, *coded_additives]
-        }
-        allergens = match_allergens(
-            parsed["ingredient_text"], parsed["contains_text"], knowledge["allergens"]
-        )
+        additive_actual = {str(item["ins_code"]) for item in parsed["additives"]}
+        allergens = parsed["allergen_alerts"]
         allergen_actual = {item["allergen_group"] for item in allergens}
-        nutrition_actual = parse_nutrition(parsed["nutrition_text"], knowledge["nutrition_limits"])
+        nutrition_actual = parsed["nutrients"]
     except Exception as exc:  # Continue through the full set and report each failure.
         error = f"{type(exc).__name__}: {exc}"
 
@@ -154,6 +147,7 @@ def _markdown_report(rows, sample_count):
         f"Generated from {sample_count} bundled synthetic label categories, each run with preprocessing off and on. These fixtures are not real retail packaging and do not establish real-world OCR or food-safety performance.",
         "",
         "The same five ground-truth files are used for both modes. Ingredient recall uses normalized ingredient-token equality. Additive precision/recall count normalized INS identities reported from an explicit code or a known additive name; allergen precision/recall count detected groups. Nutrition accuracy requires the expected nutrient, unit, basis, and a value within the absolute/relative tolerance configured in `config.py`. Processing time covers preprocessing, OCR, parsing, and lookups; startup and disk persistence are excluded.",
+        "The current runtime starts from original grayscale in both off/on modes, and counts only verified nutrition readings. This legacy comparison therefore does not isolate the effect of a single preprocessing image. Use scripts/benchmark_ocr.py --mode matrix for controlled image-variant and PSM comparisons.",
         "",
         "## Aggregate results",
         "",

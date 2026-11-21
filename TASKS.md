@@ -58,9 +58,34 @@ Work one phase at a time. Mark a phase done only after its tests pass; update th
 - [x] Render and inspect the fresh sample at 1440×900 and 360×844, plus desktop/mobile score and image-comparison sections. Verify alerts, nutrient values, image responses, slider, logo, history reopening, and no horizontal overflow or browser errors.
 - [x] Final verification: `.venv` pytest 67 passed; the browser score summary reconciles to the saved backend result (100 − 34 + 2 = 68).
 
+## Scoring data-sufficiency correction — 20 Nov 2026
+
+- [x] Trace OCR through extraction, comparison, scoring, report rendering, and history. Reproduce the five misleading 100/100 saved reports; document unconditional initialization, skipped comparisons, and retry-selection failures in `docs/SCORING.md`.
+- [x] Preserve existing weights and cutoffs; validate evidence before deductions and publish sufficient/provisional/insufficient status. Withhold scores when no nutrients can be compared or partial information would yield 100; list missing/unverified information without penalties.
+- [x] Fix sugar-only heading fallback, split-row values, unsafe value association, numeric/basis confidence checks, plural/group allergens, measurement-versus-additive codes, and salt/sodium double counting. Keep per-serving and per-100-ml safeguards.
+- [x] Keep current and legacy report/history workflows functional; review old OCR in memory without altering saved JSON or images. Preserve routes, IDs, image serving, allergen alerts, and the existing interface identity.
+- [x] Add all ten requested upload-to-report regression cases and further extraction/scoring/history checks. Full `.venv` pytest: 108 passed. Re-read the four distinct failing original photos through real OpenCV/Tesseract; all correctly withheld a score. In-app browser visual QA remains unavailable because Work settings disable local browser use; rendered HTML is tested.
+
+## Nutella extraction and meaningful scoring — revision 3, 20 Nov 2026
+
+- [x] Reproduce the “container”/“contain” section collision and fix complete heading boundaries. Extract all nine supplied Nutella readings, 37 g serving metadata, unitless calories, value-before-name added sugar, and informational potassium.
+- [x] Normalize with explicit serving mass/volume, use separate sourced solid/liquid categories and FDA added-sugar serving rules, preserve precision at boundaries, and avoid total/added sugar double counting. Keep existing point weights configurable.
+- [x] Replace blanket partial-score withholding with an explicit evidence minimum; expose coverage and confidence and preserve unaffected readings when one field is missing or conflicting.
+- [x] Add all eight requested profiles, deterministic/configurable scoring, exact ledger reconciliation, real reference-image OCR, and bounded-layout retry coverage. Full pytest: 128 passed. Clean reference: 55, 100% core coverage; original blurry photo: 70 provisional, 40% core coverage, without invented right-column values.
+- [x] Update scoring/source limitations, architecture, review queue, README, memory, and append-only decisions. Existing routes, history storage, independent allergens, and result layout are retained.
+
+## Real-label OCR and scoring follow-up — 20 Nov 2026
+
+- [x] Recover explicitly marked panel text emitted before a nutrition heading; recognize Australian total-fat and saturated-fat row names.
+- [x] Retry suitable detected nutrition panels with bounded crops while retaining independent whole-page allergen/ingredient OCR; disclose and store the separate OCR evidence.
+- [x] Gate questionable numeric and serving-size OCR, allow exact independent corroboration, require defensible column mapping, and prefer explicitly printed per-100 quantities where rounding explains discrepancies.
+- [x] Test ambiguous decimals, column mapping, rounding, heading order, crop selection, score ledger, allergens, saved reports, and the bundled sample. Browser-rescan cereal and cream labels and review ingredient-only and low-resolution Nutella images; record unresolved OCR limitations.
+- [x] Final verification: `python -m pytest -q` with the existing project virtual environment — 143 passed. The in-app browser was used for fresh sample, cereal, cream, and Nutella scans.
+- [x] Transfer the revision 4 changes into the original project directory and run its own test suite — 143 passed.
+
 ## Image comparison and mobile photo selection — 21 Nov 2026
 
-- [x] Correct desktop comparison orientation: the original is revealed on the left and the processed image is on the right; the slider still reveals more processed image as its value increases.
+- [x] Correct desktop comparison orientation: the original is revealed on the left and the processed image on the right; the slider still reveals more processed image as its value increases.
 - [x] Keep the same meaning on narrow screens by stacking the complete original above the complete processed image and sizing their rows from the slider.
-- [x] Remove forced capture=environment from the shared photo input so phone users can select saved JPG/PNG photos; retain the browser's optional camera picker where available.
-- [x] Verify in the main project: focused route checks pass; full .venv pytest — 143 passed. The in-app browser showed the sample comparison correctly at desktop and 360 px, and the picker input has no capture attribute. A physical phone was not tested.
+- [x] Remove forced `capture="environment"` from the shared photo input so phone users can select saved JPG/PNG photos; retain the browser's optional camera picker where available.
+- [x] Verify in the main project: focused route checks pass; full `.venv` pytest — 143 passed. The in-app browser showed the sample comparison correctly at desktop and 360 px, and the picker input has no `capture` attribute. A physical phone was not tested.
