@@ -108,6 +108,8 @@ Both devices must remain on the same Wi-Fi network. Guest Wi-Fi networks may iso
 If Windows Firewall blocks the phone's connection, an administrator can open PowerShell and add this narrowly scoped inbound rule:
 
 ```powershell
+Get-NetConnectionProfile
+Set-NetConnectionProfile -InterfaceAlias "Wi-Fi" -NetworkCategory Private
 New-NetFirewallRule -DisplayName "NutriScan LAN" -Direction Inbound -Protocol TCP -LocalPort 5000 -Action Allow -Profile Private
 ```
 
