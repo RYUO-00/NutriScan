@@ -1,3 +1,4 @@
+
 from scoring import calculate_health_score
 from nutrition import parse_nutrition
 
@@ -81,7 +82,7 @@ def test_energy_protein_and_fibre_never_reduce_score_even_with_legacy_statuses()
 
 def test_empty_or_status_only_data_cannot_earn_a_score():
     for nutrients in ([], [{"name": "sugar", "status": "High"}], parse_nutrition("Per serving\nSugar 30 g")):
-        result = calculate_health_score(nutrients=nutrients, additives=[{"ins_code": "211", "risk_level": "low"}])
+        result = calculate_health_score(nutrients=nutrients)
         assert result["health_score"] is None
         assert result["score_band"] is None
         assert result["score_status"] == "insufficient"
@@ -116,3 +117,33 @@ def test_explicit_zero_values_are_valid_when_the_full_panel_is_present():
     assert result["score_status"] == "sufficient"
     assert result["health_score"] == 100
     assert result["data_completeness"]["verified_core_count"] == 5
+
+
+def test_ingredient_only_score_has_explicit_scope_and_reconciled_existing_weights():
+    result = calculate_health_score(additives=[{"ins_code": "211", "risk_level": "low"}],
+                                    ingredient_flags=[{"keyword": "hydrogenated oil", "flag_type": "harmful"}])
+    assert result["score_status"] == "ingredient-only"
+    assert result["health_score"] == 87
+    assert result["score_band"] == "Moderate"
+    assert result["data_completeness"]["nutrition_status"] == "insufficient"
+    assert result["data_completeness"]["verified_core_count"] == 0
+    assert sum(row["points"] for row in result["score_breakdown"]) == 87
+    assert not any(row["category"] == "nutrient" for row in result["score_breakdown"])
+    assert any("Ingredient-only score" in message for message in result["data_completeness"]["messages"])
+
+
+def test_caution_only_ingredient_score_is_labelled_and_cannot_earn_good_band():
+    result = calculate_health_score(ingredient_flags=[{"keyword": "test caution", "flag_type": "caution"}])
+    assert result["health_score"] == 100 and result["score_status"] == "ingredient-only"
+    assert result["score_band"] == "Moderate"
+    assert sum(row["points"] for row in result["score_breakdown"]) == 100
+
+
+def test_low_coverage_caps_band_without_changing_numeric_score_or_ledger():
+    result = calculate_health_score(nutrients=parse_nutrition("Per 100g\nSugar 35g"))
+    assert result["health_score"] == 85 and result["score_band"] == "Moderate"
+    assert result["score_status"] == "provisional"
+    assert any("Based on 1 of 5 nutrients" in message for message in result["data_completeness"]["messages"])
+    assert sum(row["points"] for row in result["score_breakdown"]) == 85
+    result = calculate_health_score(nutrients=parse_nutrition("Per 100g\nSugar 35g\nSodium 10mg\nTotal Fat 1g"))
+    assert result["score_band"] == "Good"  # Exactly 60%, so the requested cap does not apply.

@@ -19,6 +19,14 @@ import tempfile
 import tracemalloc
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+# Manifest replay is a separate adapter; legacy model/matrix modes stay intact.
+from scripts.benchmark_replay import comparison_rows
+if __name__ == "__main__" and "--manifest" in sys.argv:
+    from scripts.benchmark_replay import main as replay_main
+    replay_main()
+    raise SystemExit(0)
+
 import config
 import ocr
 from app import _analyze_label

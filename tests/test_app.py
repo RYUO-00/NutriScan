@@ -1,3 +1,4 @@
+
 from app import create_app
 import app as app_module
 import config
@@ -87,3 +88,18 @@ def test_panel_retry_preserves_whole_page_allergens_and_score_ledger():
     assert any(alert["allergen_group"] == "Peanut" and alert["selected"] for alert in result["allergen_alerts"])
     assert result["raw_text"] == raw and "Sugar 35g" in result["nutrition_text"]
     assert result["data_completeness"]["ocr_mean_confidence"] == 95
+
+
+@pytest.mark.parametrize("raw, warning", [
+    ("Nutrition per 100g\n30g serving with\n200 ml COW'S MILK\nSugar unreadable", False),
+    ("Nutrition per 100g\nSugar unreadable", True),
+])
+def test_panel_cannot_erase_whole_page_preparation_warning(raw, warning):
+    result = app_module._analyze_label(raw, [], load_knowledge(), {
+        "mean_confidence": 95, "prepared_columns": warning,
+        "nutrition_ocr": {"text": "Nutrition per 100g\nTotal Fat 93g", "mean_confidence": 95},
+    })
+    assert result["health_score"] is None
+    assert result["score_status"] == "insufficient"
+    assert all(not row["verified"] for row in result["nutrients"])
+    assert "prepared-food column" in result["nutrients"][0]["reason"]

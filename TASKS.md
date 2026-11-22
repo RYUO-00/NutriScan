@@ -89,3 +89,29 @@ Work one phase at a time. Mark a phase done only after its tests pass; update th
 - [x] Keep the same meaning on narrow screens by stacking the complete original above the complete processed image and sizing their rows from the slider.
 - [x] Remove forced `capture="environment"` from the shared photo input so phone users can select saved JPG/PNG photos; retain the browser's optional camera picker where available.
 - [x] Verify in the main project: focused route checks pass; full `.venv` pytest — 143 passed. The in-app browser showed the sample comparison correctly at desktop and 360 px, and the picker input has no `capture` attribute. A physical phone was not tested.
+
+## OCR evidence recovery — revision 5, 22 Nov 2026
+
+- [x] Reproduce failures from recent main-project uploads and trace OCR, serving/value association, comparison and scoring.
+- [x] Add bounded bordered grayscale block/single-column recovery for partial panels, retain useful OCR after optional timeouts, and add a heading/row-based crop fallback.
+- [x] Parse reversed adjacent serving declarations, split Calories, English bilingual anchors and fatty-acid aliases; isolate serving-number confidence and require repeated evidence for borderline serving amounts.
+- [x] Prevent unresolved prepared-food columns from supplying product-only scores. Keep weights, coverage minimum, independent allergens and score arithmetic intact.
+- [x] Add regression tests and document assumptions, real replay evidence and limitations. Browser testing uses isolated uploads/history rather than the user's stored scans.
+
+- [x] Final verification: full main-project pytest **161 passed**; in-app browser confirms recovered 79/78 results, independent allergens, loaded comparison images, saved reopening/logo navigation and explicit rejection of unresolved prepared-food columns. No physical-phone test.
+
+## Native-resolution OCR and limited score scopes — revision 6, 22 Nov 2026
+
+- [x] Use native grayscale up to 4500 px for initial OCR; keep 1800 px preprocessing for preview/panel detection and map retry/detection coordinates correctly.
+- [x] Normalize retries toward median observed word height 30 px, with a pixel cap and explicit no-height fallback; add divided-background illumination flattening.
+- [x] Add ingredient-only scoring with existing weights, clear scope warnings and preserved insufficient nutrition status.
+- [x] Show provisional based on N of 5 nutrients and cap its band at Moderate below 60% coverage, without changing numeric scores.
+- [x] Add the missing scripts/benchmark_ocr.py, capture a version-5 baseline and rerun the identical hashed manifest under version 6. Report all gains/regressions: total 12/60 to 12/60, real package photos 3/50 to 3/50.
+- [x] Run main-project pytest: 174 passed (45.57 s), including scope/history rendering, normalization, illumination, geometry and benchmark matching checks. No existing test was removed; old expectations were updated for the explicitly requested contract changes.
+
+## Publish integrated main — 22 Nov 2026
+
+- [x] Save local OCR/scoring work in commit 289d114 and fast-forward the main project checkout to GitHub main 28032af.
+- [x] Resolve conflicts while preserving the remote OCR/model/geometry features and both test sets; retain report files and design-review notes outside the commit.
+- [x] Preserve both legacy benchmark modes and --manifest replay. Version the merged evidence pipeline as revision 7.
+- [x] Run full pytest on the merged implementation: 196 passed, 2 skipped (optional OCR packs not installed), 18.95 s. Matched-image benchmark completes without OCR errors and records 14/60 core fields versus 12/60 in the saved revision-5 baseline; this is parser admission, not independent accuracy.

@@ -1,9 +1,10 @@
+from preprocess import ocr_variant, deskew_for_ocr
+
 import cv2
 import numpy as np
 import pytest
 
 from preprocess import PreprocessError, preprocess_image
-from preprocess import ocr_variant, deskew_for_ocr
 
 
 def test_preprocess_returns_binary_output_and_diagnostics(tmp_path):
@@ -45,6 +46,16 @@ def test_unreadable_image_has_friendly_error(tmp_path):
     path.write_bytes(b"not an image")
     with pytest.raises(PreprocessError, match="not a readable image"):
         preprocess_image(path)
+
+
+@pytest.mark.parametrize("long_side, expected", [(3200, 3200), (5000, 4500)])
+def test_ocr_resolution_is_independent_of_display_resize(long_side, expected):
+    import config
+    result = preprocess_image(np.full((200, long_side, 3), 220, dtype=np.uint8))
+    assert max(result["original_gray"].shape) == expected
+    assert max(result["processed"].shape) == config.PREPROCESS_LONG_SIDE
+    assert max(result["display_gray"].shape) == config.PREPROCESS_LONG_SIDE
+    assert result["diagnostics"]["ocr_width"] == expected
 
 
 def test_requested_variants_preserve_input_and_geometry():

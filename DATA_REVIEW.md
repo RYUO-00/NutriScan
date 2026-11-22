@@ -350,6 +350,19 @@ Assumption records: 300 of 300.
 - **Project assumption - needs verification:** the numeric OCR confidence gate of 65, with a lower bound of 45 only when independent OCR passes agree on the exact value, unit, basis, and serving size. Tesseract confidence and agreement are imperfect; evaluate this heuristic against a larger labelled set, especially decimal losses and multi-column labels.
 - The small Nutella `v2_...jpg` test image still does not yield reliable nutrition or allergen text. Do not infer a product's allergens or fill values from its identity; acquire a closer image and validate manually.
 
+## OCR admission assumptions — revision 5, 22 Nov 2026
+
+- Project assumption - needs verification: the existing 45/65 Tesseract confidence gates now also permit a borderline serving mass/volume only when at least two separate OCR attempts repeat the exact amount and unit. Both contributing readings must meet the 45 gate; below it remains unverified. Repeated recognition of the same pixels can repeat the same mistake, so this is heuristic evidence, not independent ground truth.
+- OCR resizing, border, row-count crop gate and timeout settings are engineering limits in config.py / ocr.py, not dietary thresholds. They need broader real-photo evaluation. Do not interpret the local difficult-image replay as universal accuracy.
+- Product-only and prepared-with-milk columns must not be mixed. Unresolved prepared-food columns remain excluded even when they contain plausible, high-confidence numbers.
+
+## Revision 6 policy and benchmark review — 22 Nov 2026
+
+- Ingredient-only scores use existing configured additive/flag weights when nutrition is insufficient. They are labelled as ingredient-only, retain insufficient nutritional status, and cannot imply an assessment of unread nutrients. A zero-deduction ingredient ledger can be 100; it is not a perfect nutrition result.
+- The below-60% provisional-band cap and Moderate maximum for ingredient-only are explicit project coverage policies requested in this task. They change categories only, not score weights, nutrition thresholds or the ledger. They are not official dietary guidance.
+- Median word height 30 px, native/retry cap 4500 px and illumination Gaussian sigma 30 are configurable engineering choices, not calibrated guarantees. Repeated OCR remains heuristic evidence.
+- The ten-package-photo benchmark stays at 3/50 admitted core fields overall. Gains and regressions must remain visible; no universal OCR accuracy improvement is demonstrated. The separate two reference images must not be described as additional real camera photos.
+
 ## OCR enhancement evaluation limits — 20 Nov 2026
 
 - The curated OCR words are recognition hints, not authoritative ingredient/additive/allergen records. JSON knowledge files retain their existing role and source caveats. Vocabulary is opt-in because its paired comparison showed no measured gain.

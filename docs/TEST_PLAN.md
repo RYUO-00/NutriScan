@@ -73,3 +73,35 @@ Additional tests cover four reliable low readings with 80% coverage, a single un
 - Verify the desktop frame shows the uploaded original on the left and the preprocessed image on the right; moving the slider toward 95% reveals more processed image.
 - Verify the narrow layout shows the complete original above the complete processed image and allocates the row heights consistently with the slider.
 - Verify the upload control accepts JPG/PNG without a forced `capture` attribute, allowing mobile users to select saved photos. Browser-provided camera options may vary by device.
+
+## Revision 5 verification — 22 Nov 2026
+
+New automated cases cover reversed same-line/preceding-line serving amounts, conflicting or borrowed serving quantities, bilingual English anchors, split unitless Calories, fatty-acid labels, confidence isolated to serving amount, exact repeated borderline serving evidence (including rejection below the minimum), bounded rescue for partial and empty OCR, optional timeout preservation, coordinate-crop admission and unresolved prepared-food columns. Existing score, normalization, allergen, history and route cases remain enabled.
+
+Real replay uses six distinct existing uploaded images, with before/after OCR and analysis written only to ignored uploads/.ocr-review. These were selected difficult examples, not a representative accuracy benchmark. The clear 227 g panel changes from insufficient to 79 with 100% core coverage (100 - 21); the bilingual chips panel changes from insufficient to provisional 78 with 80% coverage (100 - 22). Missing saturated-fat units on the latter remain unverified. A blurry pastry panel and glare-covered jar still cannot support a score. Prepared-with-milk cereal values are excluded if their column cannot be placed, including a previously published provisional 78 whose value association could not be defended. The three-column cereal is also withheld. All published numeric ledgers reconcile; no known product transcript fills unreadable image values.
+
+In-app browser verification uses a separate local server on port 5012 and isolated history/uploads: fresh 227 g and bilingual chips uploads show the above results, wheat selected before the chips scan produces a red alert, soy remains separate, both comparison images load, and saved reports reopen. Screenshots are stored under ignored uploads/.ocr-review. Physical phone use is not tested.
+
+Final automated run: **161 passed in 14.19 s** using .venv/Scripts/python.exe -m pytest -q. A further browser fresh scan on the final server confirmed insufficient data for the unresolved product/with-milk table, with the preparation-column reason and independent selected-allergen alerts retained. Preparation warnings are tested to survive an OCR retry that drops the heading.
+
+## Revision 6 verification and reproducible OCR benchmark
+
+New regressions verify independent native/display resolution (3200 retained, 5000 capped to 4500), first-pass native grayscale, observed median-based scale including small fonts beyond 3x, pixel-bound handling, missing TSV fallback, illumination gradient reduction without losing dark ink, and retry-coordinate mapping back to native panels. Scoring tests cover ingredient-only weights/ledger, caution-only scope, no-evidence refusal, 20% band limiting, and the exact 60% boundary. Upload/save/reopen/history tests check ingredient-only warnings and provisional N-of-5 labels. The clean real-Tesseract Nutella test continues to require 55/sufficient and reads the selected separate panel evidence when present, as the production pipeline does.
+
+The benchmark script was absent and has now been added. Before editing OCR/scoring, run:
+
+    .venv/Scripts/python.exe scripts/benchmark_ocr.py --manifest results/ocr_benchmark_manifest.json --output results/ocr_before_v6.json
+
+After changes, run:
+
+    .venv/Scripts/python.exe scripts/benchmark_ocr.py --manifest results/ocr_benchmark_manifest.json --output results/ocr_after_v6.json --compare results/ocr_before_v6.json
+
+The saved before report records version 5; the after report records version 6. SHA-256 joins ensure identical source bytes, duplicate inputs are not double counted, failed/unmatched inputs cannot become fabricated zero-count comparisons, and the script isolates Flask startup/history in temporary storage. Ten package photos plus two separately identified reference images are included. Counts mean distinct parser-admitted comparable core fields out of five, not manually confirmed correctness. No OCR failures occurred in either final run. Total 12/60 to 12/60; ten photos 3/50 to 3/50. Per-image counts and reasons are in results/ocr_after_v6.md and the JSON nutrient arrays. Gains: pastry 0 to 1 and bilingual chips 4 to 5. Regressions: cream 3 to 2 and clear graphic 5 to 4. Remaining eight images unchanged. This diagnostic set demonstrates mixed recovery and persistent limitations, not a general accuracy gain.
+
+Full pytest after the phase's code/test changes: 174 passed in 45.57 s. Browser verification uses port 5012 and uploads/.ocr-review-v6 with isolated history; original scan history is not used for test writes.
+
+Browser evidence: real ingredient photo = 97 ingredient-only with explicit nutrition warning; pastry = 93 provisional, based on 1 of 5, band Moderate. Checked the result at 360 px (no horizontal overflow) and history scope labels. Screenshots retained under ignored uploads/.ocr-review-v6. No physical-phone connection was tested.
+
+## Main integration verification — 22 Nov 2026
+
+Merged both existing test sets rather than deleting competing tests. Main integration run: **196 passed, 2 skipped in 18.95 s**; optional model-pack tests skip when their binaries are absent. The installed OCR, confidence/geometry safety, serving conversion, score ledger, new scope/band rules, saved-report routes, model configuration and both benchmark interfaces pass. Re-ran --manifest with the same SHA-256-matched input bytes; results/ocr_after_v7.json/.md contains 14/60 admitted core fields against the saved version-5 baseline's 12/60. Do not reinterpret this count as independently checked accuracy or overwrite the earlier version-6 observations.

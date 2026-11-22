@@ -154,7 +154,7 @@ On Windows, use `.\.venv\Scripts\python.exe` in place of `python` if the virtual
 
 ## Known limitations
 
-Results distinguish **Sufficient**, **Provisional**, and **Insufficient data**. The configured minimum is a majority of core fields or a verified nutritional concern. Empty/unreadable data and a lone low reading cannot generate 100. Reliable partial readings remain usable and are labelled provisional with coverage and confidence. Four verified low fields may produce a provisional 100 at 80% coverage; that score describes the assessed readings only. The report lists missing/unverified information and every applied contribution. Older reports are reviewed from their stored OCR without changing history files. See [the current scoring audit and coverage policy](docs/SCORING.md).
+Results distinguish **Sufficient**, **Provisional**, **Ingredient-only**, and **Insufficient data**. A nutritional assessment needs a majority of core fields or a verified nutritional concern. Empty/unreadable nutrition and a lone low reading cannot generate a nutritional score of 100. Known additive/ingredient matches can instead support a clearly labelled ingredient-only score, with nutrition explicitly unassessed. Reliable partial readings remain usable and are labelled provisional with coverage and confidence. Four verified low fields may produce a provisional 100 at 80% coverage; that score describes the assessed readings only. The report lists missing/unverified information and every applied contribution. Older reports are reviewed from their stored OCR without changing history files. See [the current scoring audit and coverage policy](docs/SCORING.md).
 
 - OCR and keyword matching can miss text due to glare, blur, folds, curvature, small print, unsupported languages, or OCR errors. Review the raw OCR text and original/processed comparison.
 - The knowledge base is intentionally reviewable and is not a comprehensive or legally authoritative list. Some of its identity, risk, ingredient, and allergen interpretations are unverified.
@@ -166,3 +166,17 @@ Results distinguish **Sufficient**, **Provisional**, and **Insufficient data**. 
 ## Local assets
 
 The bundled Source Serif 4 font is served from `static/fonts/` so the interface does not rely on a font CDN. It is distributed under the SIL Open Font License 1.1; the license is included as `static/fonts/OFL.txt`. The font source and license are available in the [Adobe Source Serif repository](https://github.com/adobe-fonts/source-serif).
+
+### OCR recovery and difficult labels
+
+Incomplete scans now try additional enlarged grayscale block/single-column readings with a border; each Tesseract call has a 15-second timeout. Parsing supports serving amounts immediately before their heading and English nutrient names beside translated labels. Recognition confidence is a heuristic, not a guarantee. Weights and screening thresholds are unchanged.
+
+For a difficult package, photograph one flat nutrition panel closely, keeping its serving-size and per-100/serving heading visible. Avoid glare and include the ingredient/allergen text where possible. For tables that also list prepared food (for example cereal with milk), use a clear product-only column with its heading: unresolved columns are excluded rather than mixed. Missing/unreadable values remain unverified. Restart the running Flask process after updating the code and submit a fresh scan to use the new OCR; reopening an older report only reviews the OCR evidence already stored.
+
+### Native OCR and limited score scope
+
+OCR reads native grayscale up to a 4500 px long side. The comparison preview and panel detector use their own 1800 px display bound. Retry size is based on observed word height (target 30 px), with grayscale and illumination-flattened variants. These improve the available choices but do not guarantee better readings on every image.
+
+If nutrition is insufficient but known additive/ingredient flags were matched, an Ingredient-only score describes only those matches. It does not assess nutrition. No evidence still means no score. Provisional results show based on N of 5 nutrients; below 60% coverage the band is capped at Moderate while the numeric ledger is unchanged. Ingredient-only is also capped at Moderate. Review the stated scope, actual fields and missing information.
+
+For reproducible local OCR evaluation, use scripts/benchmark_ocr.py with the manifest and commands in docs/TEST_PLAN.md. The current ten-package-photo set shows no aggregate verified-field gain; results/ocr_after_v6.md records both gains and regressions. Restart the Flask process and make fresh scans to use the new OCR.

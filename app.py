@@ -16,7 +16,7 @@ from werkzeug.utils import secure_filename
 
 import config
 from matcher import decode_additives, match_allergens, match_ingredient_tokens
-from nutrition import parse_nutrition
+from nutrition import _has_prepared_columns, parse_nutrition
 from ocr import OCRNoTextError, OCRSetupError, recognize_text
 from parser import parse_label_text
 from preprocess import PreprocessError, preprocess_image
@@ -312,7 +312,13 @@ def _analyze_label(raw_text, selected_allergens, knowledge, ocr_context=None, *,
     if nutrition_ocr:
         panel = parse_label_text(nutrition_ocr["text"])
         parsed["nutrition_text"] = panel["nutrition_text"]
-        nutrient_context = nutrition_ocr
+        nutrient_context = {
+            **nutrition_ocr,
+            "prepared_columns": bool(nutrition_ocr.get("prepared_columns")
+                                     or (ocr_context or {}).get("prepared_columns")
+                                     or _has_prepared_columns(parsed["nutrition_text"])
+                                     or _has_prepared_columns(parse_label_text(raw_text)["nutrition_text"])),
+        }
         nutrient_source = nutrition_ocr["text"]
     else:
         nutrient_context = ocr_context
@@ -375,6 +381,9 @@ def _run_pipeline(upload_path, processed_path, image_name, scan_id, selected_all
         **prepared["diagnostics"],
         "ocr": {
             "mean_confidence": ocr_result["mean_confidence"],
+            "first_median_word_height": ocr_result.get("first_median_word_height"),
+            "retry_scale": ocr_result.get("retry_scale"),
+            "ocr_width": ocr_result.get("ocr_width"), "ocr_height": ocr_result.get("ocr_height"),
             "retried": ocr_result["retried"],
             "attempt_count": ocr_result["attempt_count"],
             "psm": ocr_result["psm"],
@@ -384,6 +393,8 @@ def _run_pipeline(upload_path, processed_path, image_name, scan_id, selected_all
             "lines": ocr_result.get("lines", []),
             "nutrition_ocr": ocr_result.get("nutrition_ocr"),
             "corroborated_readings": ocr_result.get("corroborated_readings", []),
+            "corroborated_serving_sizes": ocr_result.get("corroborated_serving_sizes", []),
+            "prepared_columns": ocr_result.get("prepared_columns", False),
             **{key: ocr_result.get(key) for key in ("model", "oem", "model_fallback", "variant", "seconds", "whole_attempt_count", "panel_attempt_count")},
         },
         "processing_seconds": round(time.perf_counter() - started, 3),
@@ -407,6 +418,8 @@ def create_app(test_config=None):
     app.config.update(
         MAX_CONTENT_LENGTH=config.MAX_CONTENT_LENGTH + config.MULTIPART_OVERHEAD,
         JSON_SORT_KEYS=False,
+        SCORE_LIMITED_COVERAGE_PERCENT=config.SCORE_LIMITED_COVERAGE_PERCENT,
+        SCORE_LIMITED_BAND=config.SCORE_LIMITED_BAND,
     )
     if test_config:
         app.config.update(test_config)

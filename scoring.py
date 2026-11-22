@@ -66,12 +66,22 @@ def calculate_health_score(additives=None, ingredient_flags=None, nutrients=None
     nutrients = nutrients or []
     usable = comparable_nutrients(nutrients)
     completeness = _data_completeness(nutrients, usable)
-    if completeness["status"] == "insufficient":
+    ingredient_only = completeness["status"] == "insufficient" and bool(additives or ingredient_flags)
+    if completeness["status"] == "insufficient" and not ingredient_only:
         return {
             "health_score": None, "score_band": None, "score_status": "insufficient",
             "data_completeness": completeness, "score_breakdown": [],
             "totals": {"additive_deduction": 0, "harmful_flag_deduction": 0, "nutrient_deduction": 0, "beneficial_credit": 0},
         }
+    completeness["nutrition_status"] = completeness["status"]
+    if ingredient_only:
+        completeness["status"] = "ingredient-only"
+        completeness["confidence"] = "limited"
+        completeness["messages"].insert(0, "Ingredient-only score: only matched additives and ingredient flags were assessed. Nutrition is insufficient and is not represented by this score.")
+        usable = {}  # This explicitly separate score does not represent nutrition.
+    elif completeness["status"] == "provisional":
+        completeness["messages"].insert(0,
+            f"Based on {completeness['verified_core_count']} of {completeness['required_core_count']} nutrients.")
     breakdown = [{"category": "starting score", "item": "Starting value", "points": config.STARTING_SCORE, "reason": f"The score starts at {config.STARTING_SCORE} points."}]
     additive_used = 0
     harmful_used = 0
@@ -161,9 +171,17 @@ def calculate_health_score(additives=None, ingredient_flags=None, nutrients=None
             "points": score - raw_score,
             "reason": "The score is limited to the 0 to 100 range.",
         })
+    band = _band(score)
+    if ingredient_only or (completeness["status"] == "provisional"
+                           and completeness["coverage_percent"] < config.SCORE_LIMITED_COVERAGE_PERCENT):
+        labels = [label for _bound, label in config.SCORE_BANDS]
+        if labels.index(band) < labels.index(config.SCORE_LIMITED_BAND):
+            band = config.SCORE_LIMITED_BAND
+            completeness["messages"].append(
+                "The band is capped at " + band + " because nutrition coverage is limited; the numeric ledger is unchanged.")
     return {
         "health_score": score,
-        "score_band": _band(score),
+        "score_band": band,
         "score_status": completeness["status"],
         "data_completeness": completeness,
         "score_breakdown": breakdown,

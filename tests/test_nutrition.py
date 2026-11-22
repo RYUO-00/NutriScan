@@ -1,3 +1,4 @@
+
 from nutrition import parse_nutrition
 from storage import load_knowledge
 import pytest
@@ -275,3 +276,81 @@ def test_borderline_numeric_confidence_requires_matching_independent_evidence():
     assert _by_name(parse_nutrition(text, ocr_context=context), "sugar")["verified"]
     context["corroborated_readings"] = [["sugar", 1.2, "g", "100g", None, None]]
     assert not _by_name(parse_nutrition(text, ocr_context=context), "sugar")["verified"]
+
+
+@pytest.mark.parametrize("header", ["1 cup (227g)\nServing size", "1 cup (227g) Serving size"])
+def test_serving_amount_before_heading_is_normalized_without_guessing(header):
+    values = parse_nutrition(header + "\nAmount per serving\nSaturated Fat 4.5g\nSodium 850mg")
+    fat = _by_name(values, "saturated_fat")
+    assert fat["serving_size"]["amount"] == 227
+    assert fat["original_basis"] == "per_serving"
+    assert fat["basis"] == "100g"
+    assert fat["value"] == pytest.approx(4.5 * 100 / 227)
+    assert fat["verified"]
+
+
+def test_serving_heading_does_not_borrow_preceding_nutrient_or_conflicting_size():
+    values = parse_nutrition("Sugar 30g\nServing size\nAmount per serving\nSodium 500mg")
+    assert _by_name(values, "sodium")["basis"] == "per_serving"
+    assert not _by_name(values, "sodium")["verified"]
+    values = parse_nutrition("Serving size 30g\nServing size 55g\nPer serving\nSugar 12g")
+    assert not _by_name(values, "sugar")["verified"]
+    assert _by_name(values, "sugar").get("serving_size") is None
+
+
+def test_english_anchors_on_bilingual_panel_keep_values_and_serving_basis():
+    text = ("Nutrition Facts\nServing size/Tamano por racion\n(1 oz/28g)\n"
+            "Amount per serving/Cantidad por racion\nCalories/Calorias 150\n"
+            "Total Fat/Grasa Total 9g\nSaturated Fat/Grasa Saturada 2.5g\n"
+            "Trans Fat/Grasa Trans 0g\nSodium/Sodio 150mg\n"
+            "Total Sugars/Azucares Totales 0g\nPotassium/Potasio 110mg")
+    values = parse_nutrition(text)
+    assert _by_name(values, "energy")["original_value"] == 150
+    assert _by_name(values, "energy")["original_unit"] == "kcal"
+    assert _by_name(values, "sodium")["value"] == pytest.approx(150 * 100 / 28)
+    assert _by_name(values, "saturated_fat")["value"] == pytest.approx(2.5 * 100 / 28)
+    assert _by_name(values, "trans_fat")["value"] == 0
+    assert all(item["verified"] for item in values)
+
+
+def test_split_unitless_calories_and_fatty_acid_names():
+    values = parse_nutrition("Per 100g\nCalories\n280\nSaturated fatty acids 4.5g\nTrans fatty acids 0g")
+    assert _by_name(values, "energy")["value"] == 280
+    assert _by_name(values, "saturated_fat")["value"] == 4.5
+    assert _by_name(values, "trans_fat")["value"] == 0
+
+
+def test_serving_confidence_uses_its_amount_not_other_header_numbers():
+    text = "Serving size 1 cup (227g) 4 servings\nPer serving\nSugar 12g"
+    context = {"mean_confidence": 90, "lines": [
+        {"text": "Serving size 1 cup (227g) 4 servings", "words": [
+            {"text": "1", "confidence": 20}, {"text": "(227g)", "confidence": 95},
+            {"text": "4", "confidence": 10}]},
+        {"text": "Sugar 12g", "words": [{"text": "12g", "confidence": 95}]}]}
+    assert _by_name(parse_nutrition(text, ocr_context=context), "sugar")["verified"]
+
+
+def test_borderline_serving_size_needs_exact_repeated_evidence_and_minimum_confidence():
+    text = "Serving size 28g\nPer serving\nSugar 12g"
+    context = {"mean_confidence": 95, "lines": [
+        {"text": "Serving size 28g", "words": [{"text": "28g", "confidence": 51}]},
+        {"text": "Sugar 12g", "words": [{"text": "12g", "confidence": 95}]}]}
+    assert not _by_name(parse_nutrition(text, ocr_context=context), "sugar")["verified"]
+    context["corroborated_serving_sizes"] = [[28.0, "g"]]
+    assert _by_name(parse_nutrition(text, ocr_context=context), "sugar")["verified"]
+    context["corroborated_serving_sizes"] = [[28.0, "ml"]]
+    assert not _by_name(parse_nutrition(text, ocr_context=context), "sugar")["verified"]
+    context["corroborated_serving_sizes"] = [[28.0, "g"]]
+    context["lines"][0]["words"][0]["confidence"] = 20
+    assert not _by_name(parse_nutrition(text, ocr_context=context), "sugar")["verified"]
+
+
+@pytest.mark.parametrize("header", [
+    "PER100g O%RDAPERSERVE (30g) 30g SERVING WITH\n200 ml COW'S MILK",
+    "with 1/2 cup\nAmount Per Serving\nCereal skim milk",
+])
+def test_prepared_food_columns_cannot_be_mistaken_for_product_only_values(header):
+    values = parse_nutrition("Nutrition Information\nServing size 30g\n" + header
+                             + "\nTotal Fat 109 0.4% 93g\nSodium 40mg 207mg\nTrans Fat 0g")
+    assert all(not item["verified"] for item in values)
+    assert "prepared-food column" in _by_name(values, "sodium")["reason"]

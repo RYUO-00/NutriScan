@@ -1,3 +1,4 @@
+
 """Real label syntax regression; values are the user-supplied reference transcript."""
 import pytest
 from io import BytesIO
@@ -206,8 +207,9 @@ def test_readable_nutella_reference_image_uses_real_ocr():
     ImageDraw.Draw(image).multiline_text((40, 30), NUTELLA_REFERENCE, font=ImageFont.truetype(str(font_path), 40), fill="black", spacing=18)
     prepared = preprocess_image(np.asarray(image)[:, :, ::-1])
     ocr_result = recognize_text(prepared["processed"], prepared["original_gray"])
-    parsed = parse_label_text(ocr_result["text"])
-    values = parse_nutrition(parsed["nutrition_text"], ocr_context=ocr_result, context_text=ocr_result["text"])
+    nutrient_ocr = ocr_result.get("nutrition_ocr") or ocr_result
+    parsed = parse_label_text(nutrient_ocr["text"])
+    values = parse_nutrition(parsed["nutrition_text"], ocr_context=nutrient_ocr, context_text=nutrient_ocr["text"])
     assert next(item for item in values if item["name"] == "saturated_fat")["value"] == pytest.approx(4 * 100 / 37)
     score = calculate_health_score(nutrients=values)
     assert score["health_score"] == 55

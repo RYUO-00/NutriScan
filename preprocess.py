@@ -129,6 +129,12 @@ def preprocess_image(source, *, enabled=True, processed_path=None):
     original_color = image if image.ndim == 3 else cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
     original_for_display = original_color.copy()
     gray = image if image.ndim == 2 else cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    # OCR keeps native detail up to its independent safety cap. Display and
+    # panel-detection preprocessing must not determine recognition resolution.
+    ocr_scale = min(1.0, config.OCR_MAX_LONG_SIDE / max(gray.shape))
+    ocr_gray = gray.copy() if ocr_scale == 1 else cv2.resize(
+        gray, None, fx=ocr_scale, fy=ocr_scale, interpolation=cv2.INTER_AREA
+    )
     scale = min(1.0, config.PREPROCESS_LONG_SIDE / max(gray.shape))
     if scale < 1.0:
         size = (max(1, round(gray.shape[1] * scale)), max(1, round(gray.shape[0] * scale)))
@@ -138,6 +144,8 @@ def preprocess_image(source, *, enabled=True, processed_path=None):
     diagnostics = {
         "input_width": original_width,
         "input_height": original_height,
+        "ocr_width": int(ocr_gray.shape[1]),
+        "ocr_height": int(ocr_gray.shape[0]),
         "output_width": int(gray.shape[1]),
         "output_height": int(gray.shape[0]),
         "resized": scale < 1.0,
@@ -191,7 +199,8 @@ def preprocess_image(source, *, enabled=True, processed_path=None):
 
     return {
         "original": original_for_display,
-        "original_gray": gray.copy(),
+        "original_gray": ocr_gray,
+        "display_gray": gray.copy(),
         "processed": processed,
         "diagnostics": diagnostics,
     }

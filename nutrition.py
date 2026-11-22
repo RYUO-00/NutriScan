@@ -16,17 +16,17 @@ SERVING_SIZE_RE = re.compile(
 )
 
 LABELS = (
-    ("energy", re.compile(r"(?<![a-z])(?:energy|calories|calorific\s*value)(?=\s|[(:=0-9]|$)", re.IGNORECASE)),
-    ("added_sugar", re.compile(r"(?<![a-z])added\s*sugars?(?=\s|[(:=0-9]|$)", re.IGNORECASE)),
-    ("saturated_fat", re.compile(r"(?<![a-z])(?:saturat(?:ed|e)\s*fats?|sat\.?\s*fat|^\s*[-~]?\s*saturated)(?=\s|[(:=0-9]|$)", re.IGNORECASE)),
-    ("trans_fat", re.compile(r"(?<![a-z])trans\s*(?:fat(?:ty\s*acids?)?)(?=\s|[(:=0-9]|$)", re.IGNORECASE)),
-    ("total_fat", re.compile(r"(?<![a-z])(?:total\s*fat|fat\s*,\s*total)(?=\s|[(:=0-9]|$)|(?<![a-z])fat(?=\s|[(:=0-9]|$)", re.IGNORECASE)),
-    ("sodium", re.compile(r"(?<![a-z])sodium(?=\s|[(:=0-9]|$)", re.IGNORECASE)),
-    ("salt", re.compile(r"(?<![a-z])salt(?=\s|[(:=0-9]|$)", re.IGNORECASE)),
-    ("sugar", re.compile(r"(?<![a-z])(?:total\s*sugars?|sugars?)(?=\s|[(:=0-9]|$)", re.IGNORECASE)),
-    ("protein", re.compile(r"(?<![a-z])protein(?=\s|[(:=0-9]|$)", re.IGNORECASE)),
-    ("potassium", re.compile(r"(?<![a-z])potassium(?=\s|[(:=0-9]|$)", re.IGNORECASE)),
-    ("fibre", re.compile(r"(?<![a-z])(?:dietary\s*)?(?:fibre|fiber)(?=\s|[(:=0-9]|$)", re.IGNORECASE)),
+    ("energy", re.compile(r"(?<![a-z])(?:energy|calories|calorific\s*value)(?=\s|[(/:=0-9]|$)", re.IGNORECASE)),
+    ("added_sugar", re.compile(r"(?<![a-z])added\s*sugars?(?=\s|[(/:=0-9]|$)", re.IGNORECASE)),
+    ("saturated_fat", re.compile(r"(?<![a-z])(?:saturat(?:ed|e)\s*fat(?:ty\s*acids?)?s?|sat\.?\s*fat|^\s*[-~]?\s*saturated)(?=\s|[(/:=0-9]|$)", re.IGNORECASE)),
+    ("trans_fat", re.compile(r"(?<![a-z])trans\s*fat(?:ty\s*acids?)?(?=\s|[(/:=0-9]|$)", re.IGNORECASE)),
+    ("total_fat", re.compile(r"(?<![a-z])(?:total\s*fat|fat\s*,\s*total)(?=\s|[(/:=0-9]|$)|(?<![a-z])fat(?=\s|[(/:=0-9]|$)", re.IGNORECASE)),
+    ("sodium", re.compile(r"(?<![a-z])sodium(?=\s|[(/:=0-9]|$)", re.IGNORECASE)),
+    ("salt", re.compile(r"(?<![a-z])salt(?=\s|[(/:=0-9]|$)", re.IGNORECASE)),
+    ("sugar", re.compile(r"(?<![a-z])(?:total\s*sugars?|sugars?)(?=\s|[(/:=0-9]|$)", re.IGNORECASE)),
+    ("protein", re.compile(r"(?<![a-z])protein(?=\s|[(/:=0-9]|$)", re.IGNORECASE)),
+    ("potassium", re.compile(r"(?<![a-z])potassium(?=\s|[(/:=0-9]|$)", re.IGNORECASE)),
+    ("fibre", re.compile(r"(?<![a-z])(?:dietary\s*)?(?:fibre|fiber)(?=\s|[(/:=0-9]|$)", re.IGNORECASE)),
 )
 
 # Unsupported fields still delimit a row. Their quantities must never be
@@ -74,37 +74,75 @@ def _basis_occurrences(text):
 
 
 def _serving_size(text):
-    # A serving heading must not borrow a nutrient quantity later on its line.
+    """Read a declared mass/volume beside an explicit serving heading.
+
+    OCR can reverse a heading and its amount. Only inspect adjacent header
+    lines, never borrow a nutrient quantity, and reject conflicting sizes.
+    """
     lines = (text or "").splitlines()
     candidates = []
+
+    def prefix_before_nutrient(value):
+        ends = [start for start, *_ in _label_matches(value)]
+        other = OTHER_LABEL_RE.search(value)
+        if other:
+            ends.append(other.start())
+        return value[:min(ends)] if ends else value
+
     for index, line in enumerate(lines):
         marker = re.search(r"\b(?:serving\b|serve\b|serv[.,]|portion\b)[ \t]*(?:size)?", line, re.IGNORECASE)
         if not marker:
             continue
-        def prefix_before_nutrient(value):
-            ends = [start for start, *_ in _label_matches(value)]
-            other = OTHER_LABEL_RE.search(value)
-            if other:
-                ends.append(other.start())
-            return value[:min(ends)] if ends else value
+        if "size" not in marker.group(0).casefold() and (
+                _label_matches(line) or re.search(r"\bper\s*$", line[:marker.start()], re.IGNORECASE)
+                or re.match(r"\s*(?:per|and)\b", line[marker.end():], re.IGNORECASE)):
+            continue  # A column heading or nutrient row is not a serving size.
         tail = prefix_before_nutrient(line[marker.end():])
         candidate = line[marker.start():marker.end()] + tail
-        if "size" in marker.group(0).casefold():
+        source = candidate
+        if "size" in marker.group(0).casefold() and not SERVING_SIZE_RE.search(candidate):
+            # Prefer the normal forward declaration. An amount before the
+            # heading is admitted only when the next line is not its amount.
             for following_line in lines[index + 1:index + 3]:
                 if not re.search(r"[a-z0-9]", following_line, re.IGNORECASE):
-                    continue  # Ignore an OCR table rule between heading and size.
+                    continue
                 following = prefix_before_nutrient(following_line)
                 if re.match(r"\s*[=(]*\s*\d", following) or re.search(r"\(\s*\d+(?:[.,]\d+)?\s*(?:g|ml)\s*\)", following, re.IGNORECASE):
                     candidate += " " + following
+                    source += "\n" + following
                 break
-        candidates.append(candidate)
-    match = SERVING_SIZE_RE.search("\n".join(candidates))
-    if not match:
+            if not SERVING_SIZE_RE.search(candidate):
+                preceding = line[:marker.start()].strip()
+                if not preceding and index:
+                    preceding = lines[index - 1].strip()
+                # Keep an actual portion declaration (e.g. 1 cup (227g)).
+                # A nutrient or arbitrary product quantity is not a serving.
+                if (not _label_matches(preceding) and not OTHER_LABEL_RE.search(preceding)
+                        and re.match(r"^[=(]*\s*\d", preceding)):
+                    candidate = marker.group(0) + " " + preceding
+                    source = preceding + "\n" + marker.group(0)
+        match = SERVING_SIZE_RE.search(candidate)
+        if match:
+            amount = _number(match.group("amount"))
+            unit = _unit(match.group("unit"))
+            if math.isfinite(amount) and amount > 0:
+                candidates.append({"amount": amount, "unit": unit, "source_span": source})
+    if len({(item["amount"], item["unit"]) for item in candidates}) != 1:
         return None
-    amount = _number(match.group("amount"))
-    if not math.isfinite(amount) or amount <= 0:
-        return None
-    return {"amount": amount, "unit": _unit(match.group("unit")), "source_span": match.group(0)}
+    return candidates[0]
+
+
+def _has_prepared_columns(text):
+    """Recognize an explicit preparation header, without inferring its values."""
+    header = []
+    for line in (text or "").splitlines():
+        if _label_matches(line):
+            break
+        header.append(line)
+    return bool(re.search(
+        r"\bserv(?:ing|e)\s+with\b|\bwith\s+\d.*?\b(?:milk|water)\b|\bcereal\s+skim\s+milk\b",
+        " ".join(header), re.IGNORECASE,
+    ))
 
 
 def _basis_for_line(line, global_basis, global_conflict):
@@ -202,6 +240,11 @@ def _logical_lines(text):
     index = 0
     while index < len(lines):
         line = lines[index]
+        if (re.fullmatch(r"\s*calories\s*", line, re.IGNORECASE)
+                and index + 1 < len(lines)
+                and re.fullmatch(r"\s*\d+(?:[.,]\d+)?\s*", lines[index + 1])):
+            line += "\n" + lines[index + 1]
+            index += 1
         if (_label_matches(line) and not _values_in_span(line[_label_matches(line)[-1][1]:])
                 and index + 1 < len(lines)
                 and re.fullmatch(r"\s*(?:[<>~]?\s*\d+(?:[.,]\d+)?\s*(?:kcal|kj|mg|g)\s*(?:\d+(?:[.,]\d+)?\s*%)?\s*)+", lines[index + 1], re.IGNORECASE)):
@@ -222,9 +265,10 @@ def _ocr_uncertainty(span, ocr_context, number=None, minimum=None):
                 word["confidence"] for word in line.get("words", [])
                 if re.search(r"\d", word["text"]) and word.get("confidence") is not None
                 and normalize_text(word["text"]).strip(" ,;:()").replace(" ", "") in source.replace(" ", "")
-                and (number is None or ("%" not in word["text"] and number in re.findall(r"\d+(?:[.,]\d+)?", word["text"])))
+                and (number is None or ("%" not in word["text"] and any(_number(token) == _number(number)
+                    for token in re.findall(r"\d+(?:[.,]\d+)?", word["text"]))))
             )
-            if not confidences and line.get("confidence") is not None:
+            if not confidences and line.get("confidence") is not None and (number is None or not line.get("words")):
                 confidences.append(line["confidence"])
     if not confidences and ocr_context.get("mean_confidence") is not None:
         confidences.append(ocr_context["mean_confidence"])
@@ -371,6 +415,7 @@ def _coordinate_rows(ocr_context):
     return output
 
 
+
 def comparable_nutrients(nutrients):
     """Validate at the scoring boundary; a status string alone is not evidence."""
     grouped = {}
@@ -406,7 +451,14 @@ def parse_nutrition(nutrition_text, nutrition_limit_records=None, *, ocr_context
     global_conflict = len(distinct_bases) > 1
     global_basis = distinct_bases[0] if len(distinct_bases) == 1 else None
     serving_size = _serving_size(context_text or text)
-    serving_warning = _ocr_uncertainty(serving_size["source_span"], ocr_context) if serving_size else None
+    serving_warning = _ocr_uncertainty(
+        serving_size["source_span"], ocr_context, number=f"{serving_size['amount']:g}"
+    ) if serving_size else None
+    if (serving_warning and serving_size and ocr_context
+            and not _ocr_uncertainty(serving_size["source_span"], ocr_context,
+                                     number=f"{serving_size['amount']:g}", minimum=config.OCR_MIN_CONFIDENCE)
+            and [serving_size["amount"], serving_size["unit"]] in ocr_context.get("corroborated_serving_sizes", [])):
+        serving_warning = None
     # Explicit serving-size declarations identify the nutrition basis only when
     # no other basis is printed. Do not infer the size from nutrient quantities.
     if global_basis is None and not global_conflict and serving_size:
@@ -432,6 +484,10 @@ def parse_nutrition(nutrition_text, nutrition_limit_records=None, *, ocr_context
             and re.search(r"\bserv(?:ing|e)\b.*?\b100\s*(?:g|ml)\b", header_text, re.IGNORECASE)):
         unit = re.search(r"\bserv(?:ing|e)\b.*?\b100\s*(g|ml)\b", header_text, re.IGNORECASE).group(1).lower()
         header_bases = ["per_serving", "100" + unit]
+    # A prepared-food column (for example cereal with milk) is a different
+    # composition, not another unit basis for the same product. Counting values
+    # cannot establish their column when OCR drops quantities or header spacing.
+    prepared_columns = _has_prepared_columns(text) or bool((ocr_context or {}).get("prepared_columns"))
     basis_warning = next((
         warning for line in text.splitlines() if _basis_occurrences(line)
         for warning in [_ocr_uncertainty(line, ocr_context)] if warning
@@ -450,7 +506,8 @@ def parse_nutrition(nutrition_text, nutrition_limit_records=None, *, ocr_context
             value_matches = _values_in_span(suffix)
             confidence_start = label_start
             if not value_matches and selected_key == "energy" and re.fullmatch(r"calories", line[label_start:label_end], re.IGNORECASE):
-                calories = re.match(r"\s*[:=]?\s*(\d+(?:[.,]\d+)?)(?![\d.])(?:\s|$)", suffix)
+                calorie_suffix = re.sub(r"^\s*/[^0-9\n]+", " ", suffix)
+                calories = re.match(r"\s*[:=]?\s*(\d+(?:[.,]\d+)?)(?![\d.])(?:\s|$)", calorie_suffix)
                 if calories:
                     value_matches = [(calories.group(1), "kcal")]
             if not value_matches and selected_key == "added_sugar":
@@ -483,6 +540,9 @@ def parse_nutrition(nutrition_text, nutrition_limit_records=None, *, ocr_context
                 uncertain = "Multiple quantities were read without an explicit matching column header; the value association is uncertain."
             elif len(value_matches) == 1 and len(header_bases) > 1 and not local_bases and not line_bases:
                 uncertain = "The panel has multiple columns and the OCR did not identify which column this value belongs to."
+            if prepared_columns and not local_bases:
+                uncertain = ("The panel includes a prepared-food column; the OCR could not verify "
+                             "which values describe this product alone. Crop to the product-only column.")
             for index, (raw_number, raw_unit) in enumerate(value_matches):
                 value_uncertainty = _ocr_uncertainty(line[confidence_start:next_start].strip(), ocr_context, number=raw_number)
                 row_uncertainty = uncertain or value_uncertainty
@@ -589,7 +649,7 @@ def parse_nutrition(nutrition_text, nutrition_limit_records=None, *, ocr_context
                     item["column_index"] = index
                 extracted.append(item)
 
-    if _use_geometry:
+    if _use_geometry and not prepared_columns:
         for row in _coordinate_rows(ocr_context):
             row_context = {**ocr_context, "lines": [*ocr_context.get("lines", []), row]}
             recovered = parse_nutrition(row["text"], limit_records, ocr_context=row_context,

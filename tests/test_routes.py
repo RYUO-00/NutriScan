@@ -395,3 +395,27 @@ def test_unselected_detected_allergens_never_create_red_banner(client):
     assert 'class="allergen-alert critical"' not in page
     assert '<section class="also-contains-section"' in page
     assert "Also contains" in page
+
+
+@pytest.mark.parametrize("text, expected_status, expected_score, visible_text", [
+    ("Ingredients: sodium benzoate (E211)\nNutrition unreadable", "ingredient-only", 97, "Ingredient-only score"),
+    ("Nutrition per 100g\nSugar 35g", "provisional", 85, "based on 1 of 5 nutrients"),
+])
+def test_limited_score_scope_survives_upload_storage_and_rendering(client, monkeypatch, text, expected_status, expected_score, visible_text):
+    monkeypatch.setattr(app_module, "recognize_text", lambda *_: {
+        "text": text, "mean_confidence": 95, "retried": False,
+        "attempt_count": 1, "psm": 6, "used_original": True, "attempts": [],
+    })
+    response = client.post("/scan", data={"image": (BytesIO(_sample_bytes()), "limited.png", "image/png")},
+                           headers={"Accept": "application/json"})
+    assert response.status_code == 200
+    result = response.get_json()
+    assert result["score_status"] == expected_status
+    assert result["health_score"] == expected_score and result["score_band"] == "Moderate"
+    assert sum(row["points"] for row in result["score_breakdown"]) == expected_score
+    saved = client.get(f"/api/history/{result['scan_id']}").get_json()
+    assert saved == result
+    html = client.get(f"/history?scan_id={result['scan_id']}").get_data(as_text=True)
+    assert visible_text in html
+    assert ('nutrition not assessed' if expected_status == 'ingredient-only' else 'band is capped at Moderate') in html
+    assert expected_status in client.get('/history').get_data(as_text=True)

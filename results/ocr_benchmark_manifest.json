@@ -1,0 +1,62 @@
+[
+  {
+    "name": "pastry",
+    "path": "uploads/scan_20261120_125556_7a396d37.jpg",
+    "kind": "package photo"
+  },
+  {
+    "name": "package-c0",
+    "path": "uploads/scan_20261120_125803_49a39283.jpg",
+    "kind": "package photo"
+  },
+  {
+    "name": "nutella-ingredients",
+    "path": "uploads/scan_20261120_143413_2c72d90c.jpg",
+    "kind": "package photo"
+  },
+  {
+    "name": "cream-carton",
+    "path": "uploads/scan_20261120_154358_b1144fea.jpg",
+    "kind": "package photo"
+  },
+  {
+    "name": "phone-photo-3",
+    "path": "uploads/scan_20261120_161154_82aa079a.jpg",
+    "kind": "package photo"
+  },
+  {
+    "name": "phone-photo-1",
+    "path": "uploads/scan_20261120_161228_b317aafa.jpg",
+    "kind": "package photo"
+  },
+  {
+    "name": "phone-photo-4",
+    "path": "uploads/scan_20261120_161238_9bc2f76a.jpg",
+    "kind": "package photo"
+  },
+  {
+    "name": "peanut-tin",
+    "path": "uploads/scan_20261121_115223_401c9724.jpg",
+    "kind": "package photo"
+  },
+  {
+    "name": "green-bottle",
+    "path": "uploads/scan_20261121_122457_177eb702.jpg",
+    "kind": "package photo"
+  },
+  {
+    "name": "glare-jar",
+    "path": "uploads/scan_20261121_122641_8104ca13.jpg",
+    "kind": "package photo"
+  },
+  {
+    "name": "clear-227g",
+    "path": "uploads/scan_20261121_114933_72c00d5d.png",
+    "kind": "reference graphic"
+  },
+  {
+    "name": "bilingual-chips",
+    "path": "uploads/scan_20261121_114848_8d47af48.jpg",
+    "kind": "package reference image"
+  }
+]

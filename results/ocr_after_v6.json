@@ -1,0 +1,2394 @@
+{
+  "analysis_version": 6,
+  "count_definition": "Distinct comparable core nutrient fields admitted by the parser; not independently checked accuracy.",
+  "manifest": "ocr_benchmark_manifest.json",
+  "images": [
+    {
+      "name": "pastry",
+      "path": "uploads/scan_20261120_125556_7a396d37.jpg",
+      "kind": "package photo",
+      "sha256": "0118543f845b813e84b0708af38e107b03f94a07eeebd1139216a3d822a7682a",
+      "verified_core_count": 1,
+      "verified_core_fields": [
+        "sodium"
+      ],
+      "verified_fields": [
+        "energy",
+        "protein",
+        "sodium"
+      ],
+      "score": 93,
+      "status": "provisional",
+      "nutrients": [
+        {
+          "name": "energy",
+          "value": 420.0,
+          "unit": "kcal",
+          "basis": "100g",
+          "original_value": 210.0,
+          "original_unit": "kcal",
+          "original_basis": "per_serving",
+          "source_span": "Calories 210 ~ Calories from Fat 6¢",
+          "status": "Informational",
+          "reason": "Shown for context only because no verified energy screening threshold is available. Converted from per_serving using the stated serving size.",
+          "estimated": false,
+          "verified": true,
+          "serving_size": {
+            "amount": 50.0,
+            "unit": "g",
+            "source_span": "Serving Size 1 Pastry (50g"
+          },
+          "threshold_source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py).",
+          "rounding_tolerance": 1.0
+        },
+        {
+          "name": "energy",
+          "value": null,
+          "unit": null,
+          "basis": "per_serving",
+          "original_value": null,
+          "original_unit": null,
+          "original_basis": "per_serving",
+          "source_span": "Calories 210 ~ Calories from Fat 6¢",
+          "status": "not comparable",
+          "verified": false,
+          "reason": "The nutrient name was read, but its value or unit could not be verified.",
+          "estimated": false,
+          "threshold_source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py)."
+        },
+        {
+          "name": "total_fat",
+          "value": null,
+          "unit": null,
+          "basis": "per_serving",
+          "original_value": null,
+          "original_unit": null,
+          "original_basis": "per_serving",
+          "source_span": "Total Fat t79_",
+          "status": "not comparable",
+          "verified": false,
+          "reason": "The nutrient name was read, but its value or unit could not be verified.",
+          "estimated": false,
+          "threshold_source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py)."
+        },
+        {
+          "name": "saturated_fat",
+          "value": null,
+          "unit": null,
+          "basis": "per_serving",
+          "original_value": null,
+          "original_unit": null,
+          "original_basis": "per_serving",
+          "source_span": "Saturated F Fat 2.59 1",
+          "status": "not comparable",
+          "verified": false,
+          "reason": "The nutrient name was read, but its value or unit could not be verified.",
+          "estimated": false,
+          "threshold_source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py)."
+        },
+        {
+          "name": "trans_fat",
+          "value": 0.0,
+          "unit": "g",
+          "basis": "100g",
+          "original_value": 0.0,
+          "original_unit": "g",
+          "original_basis": "per_serving",
+          "source_span": "Trans Fat 0g",
+          "status": "not comparable",
+          "reason": "OCR confidence is low for this reading; check the value and basis against the photo.",
+          "estimated": false,
+          "verified": false,
+          "serving_size": {
+            "amount": 50.0,
+            "unit": "g",
+            "source_span": "Serving Size 1 Pastry (50g"
+          },
+          "threshold_source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py).",
+          "rounding_tolerance": 1.0
+        },
+        {
+          "name": "sodium",
+          "value": 340.0,
+          "unit": "mg",
+          "basis": "100g",
+          "original_value": 170.0,
+          "original_unit": "mg",
+          "original_basis": "per_serving",
+          "source_span": "Sodium 170mg ; : 7",
+          "status": "Medium",
+          "reason": "Compared with the screening values for 100g. Converted from per_serving using the stated serving size.",
+          "estimated": false,
+          "verified": true,
+          "serving_size": {
+            "amount": 50.0,
+            "unit": "g",
+            "source_span": "Serving Size 1 Pastry (50g"
+          },
+          "threshold_source": "UK Department of Health, Guide to creating a front of pack nutrition label (2016), tables 2 and 3: https://assets.publishing.service.gov.uk/media/5a80cd03ed915d74e33fc7c5/FoP_Nutrition_labelling_UK_guidance.pdf; sodium cutoffs expressed from salt using salt = 2.5 x sodium.",
+          "rounding_tolerance": 1.0,
+          "thresholds": {
+            "medium_above": 120,
+            "high_above": 600,
+            "basis": "100g",
+            "unit": "mg",
+            "high_inclusive": false
+          }
+        },
+        {
+          "name": "fibre",
+          "value": 2.0,
+          "unit": "g",
+          "basis": "100g",
+          "original_value": 1.0,
+          "original_unit": "g",
+          "original_basis": "per_serving",
+          "source_span": "Dietary | Fiber le less than 1g 3%",
+          "status": "not comparable",
+          "reason": "OCR confidence is low for this reading; check the value and basis against the photo.",
+          "estimated": false,
+          "verified": false,
+          "serving_size": {
+            "amount": 50.0,
+            "unit": "g",
+            "source_span": "Serving Size 1 Pastry (50g"
+          },
+          "threshold_source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py).",
+          "rounding_tolerance": 1.0
+        },
+        {
+          "name": "protein",
+          "value": 4.0,
+          "unit": "g",
+          "basis": "100g",
+          "original_value": 2.0,
+          "original_unit": "g",
+          "original_basis": "per_serving",
+          "source_span": "Protein 2g",
+          "status": "Informational",
+          "reason": "Shown for context only; this nutrient does not reduce the screening score. Converted from per_serving using the stated serving size.",
+          "estimated": false,
+          "verified": true,
+          "serving_size": {
+            "amount": 50.0,
+            "unit": "g",
+            "source_span": "Serving Size 1 Pastry (50g"
+          },
+          "threshold_source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py).",
+          "rounding_tolerance": 1.0
+        },
+        {
+          "name": "energy",
+          "value": null,
+          "unit": null,
+          "basis": "per_serving",
+          "original_value": null,
+          "original_unit": null,
+          "original_basis": "per_serving",
+          "source_span": "Calories",
+          "status": "not comparable",
+          "verified": false,
+          "reason": "The nutrient name was read, but its value or unit could not be verified.",
+          "estimated": false,
+          "threshold_source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py)."
+        },
+        {
+          "name": "total_fat",
+          "value": null,
+          "unit": null,
+          "basis": "per_serving",
+          "original_value": null,
+          "original_unit": null,
+          "original_basis": "per_serving",
+          "source_span": "Total Fat",
+          "status": "not comparable",
+          "verified": false,
+          "reason": "The nutrient name was read, but its value or unit could not be verified.",
+          "estimated": false,
+          "threshold_source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py)."
+        }
+      ],
+      "ocr_attempts": [
+        {
+          "psm": 6,
+          "variant": "grayscale_native",
+          "characters": 432,
+          "mean_confidence": 60.77
+        },
+        {
+          "psm": 11,
+          "variant": "word_height_sparse",
+          "characters": 407,
+          "mean_confidence": 69.06
+        },
+        {
+          "psm": 3,
+          "variant": "word_height_layout",
+          "characters": 147,
+          "mean_confidence": 80.0
+        },
+        {
+          "psm": 6,
+          "variant": "word_height_grayscale",
+          "characters": 530,
+          "mean_confidence": 51.36
+        },
+        {
+          "psm": 4,
+          "variant": "word_height_grayscale",
+          "characters": 374,
+          "mean_confidence": 74.69
+        },
+        {
+          "psm": 6,
+          "variant": "illumination_flattened",
+          "characters": 697,
+          "mean_confidence": 48.34
+        }
+      ],
+      "mean_confidence": 80.0,
+      "first_median_word_height": 15.0,
+      "retry_scale": 2.0,
+      "preprocessing": {
+        "input_width": 900,
+        "input_height": 600,
+        "ocr_width": 900,
+        "ocr_height": 600,
+        "output_width": 900,
+        "output_height": 600,
+        "resized": false,
+        "preprocessing_enabled": true,
+        "perspective_corrected": false,
+        "steps": [
+          "grayscale",
+          "resize",
+          "median denoise",
+          "CLAHE contrast",
+          "adaptive threshold"
+        ]
+      },
+      "seconds": 9.33
+    },
+    {
+      "name": "package-c0",
+      "path": "uploads/scan_20261120_125803_49a39283.jpg",
+      "kind": "package photo",
+      "sha256": "9490fa2ebc36c60fb5faa68c0f55e9156b0df087c251cc1bffb5a5b3ad76f9f4",
+      "verified_core_count": 0,
+      "verified_core_fields": [],
+      "verified_fields": [],
+      "score": null,
+      "status": "insufficient",
+      "nutrients": [
+        {
+          "name": "fibre",
+          "value": null,
+          "unit": null,
+          "basis": "unknown",
+          "original_value": null,
+          "original_unit": null,
+          "original_basis": "unknown",
+          "source_span": "Fiber",
+          "status": "not comparable",
+          "verified": false,
+          "reason": "The nutrient name was read, but its value or unit could not be verified.",
+          "estimated": false,
+          "threshold_source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py)."
+        },
+        {
+          "name": "total_fat",
+          "value": null,
+          "unit": null,
+          "basis": "unknown",
+          "original_value": null,
+          "original_unit": null,
+          "original_basis": "unknown",
+          "source_span": "Total Fat 119",
+          "status": "not comparable",
+          "verified": false,
+          "reason": "The nutrient name was read, but its value or unit could not be verified.",
+          "estimated": false,
+          "threshold_source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py)."
+        },
+        {
+          "name": "saturated_fat",
+          "value": null,
+          "unit": null,
+          "basis": "unknown",
+          "original_value": null,
+          "original_unit": null,
+          "original_basis": "unknown",
+          "source_span": "Saturated Fat 49",
+          "status": "not comparable",
+          "verified": false,
+          "reason": "The nutrient name was read, but its value or unit could not be verified.",
+          "estimated": false,
+          "threshold_source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py)."
+        },
+        {
+          "name": "trans_fat",
+          "value": null,
+          "unit": null,
+          "basis": "unknown",
+          "original_value": null,
+          "original_unit": null,
+          "original_basis": "unknown",
+          "source_span": "Trans Fat 09",
+          "status": "not comparable",
+          "verified": false,
+          "reason": "The nutrient name was read, but its value or unit could not be verified.",
+          "estimated": false,
+          "threshold_source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py)."
+        },
+        {
+          "name": "sodium",
+          "value": 15.0,
+          "unit": "mg",
+          "basis": "unknown",
+          "original_value": 15.0,
+          "original_unit": "mg",
+          "original_basis": "unknown",
+          "source_span": "Sodium 15mg",
+          "status": "not comparable",
+          "reason": "The panel does not state whether this value is per 100 g, per 100 ml, or per serving.",
+          "estimated": false,
+          "verified": false,
+          "serving_size": null,
+          "threshold_source": "UK Department of Health, Guide to creating a front of pack nutrition label (2016), tables 2 and 3: https://assets.publishing.service.gov.uk/media/5a80cd03ed915d74e33fc7c5/FoP_Nutrition_labelling_UK_guidance.pdf; sodium cutoffs expressed from salt using salt = 2.5 x sodium.",
+          "rounding_tolerance": 0.5,
+          "thresholds": {
+            "medium_above": 120,
+            "high_above": 600,
+            "basis": "100g",
+            "unit": "mg",
+            "high_inclusive": false
+          }
+        },
+        {
+          "name": "potassium",
+          "value": null,
+          "unit": null,
+          "basis": "unknown",
+          "original_value": null,
+          "original_unit": null,
+          "original_basis": "unknown",
+          "source_span": "Potassium",
+          "status": "not comparable",
+          "verified": false,
+          "reason": "The nutrient name was read, but its value or unit could not be verified.",
+          "estimated": false,
+          "threshold_source": null
+        }
+      ],
+      "ocr_attempts": [
+        {
+          "psm": 6,
+          "variant": "grayscale_native",
+          "characters": 267,
+          "mean_confidence": 49.06
+        },
+        {
+          "psm": 11,
+          "variant": "word_height_sparse",
+          "characters": 341,
+          "mean_confidence": 62.83
+        },
+        {
+          "psm": 6,
+          "variant": "word_height_grayscale",
+          "characters": 339,
+          "mean_confidence": 47.38
+        },
+        {
+          "psm": 4,
+          "variant": "word_height_grayscale",
+          "characters": 215,
+          "mean_confidence": 56.17
+        },
+        {
+          "psm": 6,
+          "variant": "illumination_flattened",
+          "characters": 273,
+          "mean_confidence": 50.33
+        }
+      ],
+      "mean_confidence": 62.83,
+      "first_median_word_height": 90.0,
+      "retry_scale": 0.3333333333333333,
+      "preprocessing": {
+        "input_width": 3000,
+        "input_height": 4000,
+        "ocr_width": 3000,
+        "ocr_height": 4000,
+        "output_width": 1350,
+        "output_height": 1800,
+        "resized": true,
+        "preprocessing_enabled": true,
+        "perspective_corrected": false,
+        "steps": [
+          "grayscale",
+          "resize",
+          "median denoise",
+          "CLAHE contrast",
+          "adaptive threshold"
+        ]
+      },
+      "seconds": 6.957
+    },
+    {
+      "name": "nutella-ingredients",
+      "path": "uploads/scan_20261120_143413_2c72d90c.jpg",
+      "kind": "package photo",
+      "sha256": "cf9965f54e34194dde37c9960beeab76a7692b626d598fd5458c676364bd4632",
+      "verified_core_count": 0,
+      "verified_core_fields": [],
+      "verified_fields": [],
+      "score": 97,
+      "status": "ingredient-only",
+      "nutrients": [
+        {
+          "name": "sugar",
+          "value": null,
+          "unit": null,
+          "basis": "unknown",
+          "original_value": null,
+          "original_unit": null,
+          "original_basis": "unknown",
+          "source_span": "INGREDIENTS: SUGAR",
+          "status": "not comparable",
+          "verified": false,
+          "reason": "The nutrient name was read, but its value or unit could not be verified.",
+          "estimated": false,
+          "threshold_source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py)."
+        }
+      ],
+      "ocr_attempts": [
+        {
+          "psm": 6,
+          "variant": "grayscale_native",
+          "characters": 262,
+          "mean_confidence": 61.96
+        },
+        {
+          "psm": 11,
+          "variant": "word_height_sparse",
+          "characters": 282,
+          "mean_confidence": 73.76
+        },
+        {
+          "psm": 3,
+          "variant": "word_height_layout",
+          "characters": 210,
+          "mean_confidence": 89.91
+        },
+        {
+          "psm": 6,
+          "variant": "word_height_grayscale",
+          "characters": 240,
+          "mean_confidence": 58.2
+        },
+        {
+          "psm": 4,
+          "variant": "word_height_grayscale",
+          "characters": 240,
+          "mean_confidence": 61.39
+        },
+        {
+          "psm": 6,
+          "variant": "illumination_flattened",
+          "characters": 261,
+          "mean_confidence": 55.18
+        }
+      ],
+      "mean_confidence": 89.91,
+      "first_median_word_height": 24.0,
+      "retry_scale": 1.25,
+      "preprocessing": {
+        "input_width": 640,
+        "input_height": 480,
+        "ocr_width": 640,
+        "ocr_height": 480,
+        "output_width": 640,
+        "output_height": 480,
+        "resized": false,
+        "preprocessing_enabled": true,
+        "perspective_corrected": false,
+        "steps": [
+          "grayscale",
+          "resize",
+          "median denoise",
+          "CLAHE contrast",
+          "adaptive threshold"
+        ]
+      },
+      "seconds": 2.645
+    },
+    {
+      "name": "cream-carton",
+      "path": "uploads/scan_20261120_154358_b1144fea.jpg",
+      "kind": "package photo",
+      "sha256": "9d55e9860020f763441029f06f031e069530fe5a81ef75ee19e6236483240692",
+      "verified_core_count": 2,
+      "verified_core_fields": [
+        "sodium",
+        "sugar"
+      ],
+      "verified_fields": [
+        "sodium",
+        "sugar"
+      ],
+      "score": null,
+      "status": "insufficient",
+      "nutrients": [
+        {
+          "name": "energy",
+          "value": null,
+          "unit": null,
+          "basis": "per_serving",
+          "original_value": null,
+          "original_unit": null,
+          "original_basis": "per_serving",
+          "source_span": "Calories 60} cxrecosmncn |",
+          "status": "not comparable",
+          "verified": false,
+          "reason": "The nutrient name was read, but its value or unit could not be verified.",
+          "estimated": false,
+          "threshold_source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py)."
+        },
+        {
+          "name": "saturated_fat",
+          "value": 233.33333333333334,
+          "unit": "g",
+          "basis": "100ml",
+          "original_value": 35.0,
+          "original_unit": "g",
+          "original_basis": "per_serving",
+          "source_span": "me} Saturated Fat35g 18% | oo and packanalll",
+          "status": "not comparable",
+          "reason": "OCR confidence is low for this reading; check the value and basis against the photo.",
+          "estimated": false,
+          "verified": false,
+          "serving_size": {
+            "amount": 15.0,
+            "unit": "ml",
+            "source_span": "Serving size_1Tbsp(15ml)| -ooe saan i"
+          },
+          "threshold_source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py).",
+          "rounding_tolerance": 3.3333333333333335
+        },
+        {
+          "name": "trans_fat",
+          "value": null,
+          "unit": null,
+          "basis": "per_serving",
+          "original_value": null,
+          "original_unit": null,
+          "original_basis": "per_serving",
+          "source_span": "B) _ Trans Fat Og __| at plant stamped on",
+          "status": "not comparable",
+          "verified": false,
+          "reason": "The nutrient name was read, but its value or unit could not be verified.",
+          "estimated": false,
+          "threshold_source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py)."
+        },
+        {
+          "name": "sodium",
+          "value": 33.333333333333336,
+          "unit": "mg",
+          "basis": "100ml",
+          "original_value": 5.0,
+          "original_unit": "mg",
+          "original_basis": "per_serving",
+          "source_span": "Sodium 5mg 0° Org",
+          "status": "Low",
+          "reason": "Compared with the screening values for 100ml. Converted from per_serving using the stated serving size.",
+          "estimated": false,
+          "verified": true,
+          "serving_size": {
+            "amount": 15.0,
+            "unit": "ml",
+            "source_span": "Serving size_1Tbsp(15ml)| -ooe saan i"
+          },
+          "threshold_source": "UK Department of Health, Guide to creating a front of pack nutrition label (2016), tables 2 and 3: https://assets.publishing.service.gov.uk/media/5a80cd03ed915d74e33fc7c5/FoP_Nutrition_labelling_UK_guidance.pdf; sodium cutoffs expressed from salt using salt = 2.5 x sodium.",
+          "rounding_tolerance": 3.3333333333333335,
+          "thresholds": {
+            "medium_above": 120,
+            "high_above": 300,
+            "basis": "100ml",
+            "unit": "mg",
+            "high_inclusive": false
+          }
+        },
+        {
+          "name": "sugar",
+          "value": 0.0,
+          "unit": "g",
+          "basis": "100ml",
+          "original_value": 0.0,
+          "original_unit": "g",
+          "original_basis": "per_serving",
+          "source_span": "Total Sugars 0g a",
+          "status": "Low",
+          "reason": "Compared with the screening values for 100ml. Converted from per_serving using the stated serving size.",
+          "estimated": false,
+          "verified": true,
+          "serving_size": {
+            "amount": 15.0,
+            "unit": "ml",
+            "source_span": "Serving size_1Tbsp(15ml)| -ooe saan i"
+          },
+          "threshold_source": "UK Department of Health, Guide to creating a front of pack nutrition label (2016), tables 2 and 3: https://assets.publishing.service.gov.uk/media/5a80cd03ed915d74e33fc7c5/FoP_Nutrition_labelling_UK_guidance.pdf",
+          "rounding_tolerance": 3.3333333333333335,
+          "thresholds": {
+            "medium_above": 2.5,
+            "high_above": 11.25,
+            "basis": "100ml",
+            "unit": "g",
+            "high_inclusive": false
+          }
+        },
+        {
+          "name": "protein",
+          "value": null,
+          "unit": null,
+          "basis": "per_serving",
+          "original_value": null,
+          "original_unit": null,
+          "original_basis": "per_serving",
+          "source_span": "=| Protein Og ———————— ae",
+          "status": "not comparable",
+          "verified": false,
+          "reason": "The nutrient name was read, but its value or unit could not be verified.",
+          "estimated": false,
+          "threshold_source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py)."
+        },
+        {
+          "name": "total_fat",
+          "value": null,
+          "unit": null,
+          "basis": "per_serving",
+          "original_value": null,
+          "original_unit": null,
+          "original_basis": "per_serving",
+          "source_span": "EE eee o Total Fat 0",
+          "status": "not comparable",
+          "verified": false,
+          "reason": "The nutrient name was read, but its value or unit could not be verified.",
+          "estimated": false,
+          "threshold_source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py)."
+        },
+        {
+          "name": "sodium",
+          "value": null,
+          "unit": null,
+          "basis": "per_serving",
+          "original_value": null,
+          "original_unit": null,
+          "original_basis": "per_serving",
+          "source_span": "——— —_— Sodium 50)",
+          "status": "not comparable",
+          "verified": false,
+          "reason": "The nutrient name was read, but its value or unit could not be verified.",
+          "estimated": false,
+          "threshold_source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py)."
+        }
+      ],
+      "ocr_attempts": [
+        {
+          "psm": 6,
+          "variant": "grayscale_native",
+          "characters": 541,
+          "mean_confidence": 50.86
+        },
+        {
+          "psm": 11,
+          "variant": "word_height_sparse",
+          "characters": 678,
+          "mean_confidence": 70.75
+        },
+        {
+          "psm": 3,
+          "variant": "word_height_layout",
+          "characters": 613,
+          "mean_confidence": 76.91
+        },
+        {
+          "psm": 6,
+          "variant": "word_height_grayscale",
+          "characters": 839,
+          "mean_confidence": 55.47
+        },
+        {
+          "psm": 4,
+          "variant": "word_height_grayscale",
+          "characters": 602,
+          "mean_confidence": 73.16
+        },
+        {
+          "psm": 6,
+          "variant": "illumination_flattened",
+          "characters": 808,
+          "mean_confidence": 58.66
+        }
+      ],
+      "mean_confidence": 55.47,
+      "first_median_word_height": 12.0,
+      "retry_scale": 2.5,
+      "preprocessing": {
+        "input_width": 494,
+        "input_height": 619,
+        "ocr_width": 494,
+        "ocr_height": 619,
+        "output_width": 494,
+        "output_height": 619,
+        "resized": false,
+        "preprocessing_enabled": true,
+        "perspective_corrected": true,
+        "steps": [
+          "grayscale",
+          "resize",
+          "median denoise",
+          "CLAHE contrast",
+          "perspective correction",
+          "adaptive threshold"
+        ]
+      },
+      "seconds": 11.775
+    },
+    {
+      "name": "phone-photo-3",
+      "path": "uploads/scan_20261120_161154_82aa079a.jpg",
+      "kind": "package photo",
+      "sha256": "fa9b424e72de46f4b3b44d41a461a35e2167e7cb62a1a7a56e799628821a1836",
+      "verified_core_count": 0,
+      "verified_core_fields": [],
+      "verified_fields": [
+        "added_sugar"
+      ],
+      "score": null,
+      "status": "insufficient",
+      "nutrients": [
+        {
+          "name": "sugar",
+          "value": 0.52,
+          "unit": "g",
+          "basis": "per_serving",
+          "original_value": 0.52,
+          "original_unit": "g",
+          "original_basis": "per_serving",
+          "source_span": "Otal Sugars\n0.52 g",
+          "status": "not comparable",
+          "reason": "The extracted basis is per_serving; this screening threshold uses 100g.",
+          "estimated": false,
+          "verified": false,
+          "serving_size": null,
+          "threshold_source": "UK Department of Health, Guide to creating a front of pack nutrition label (2016), tables 2 and 3: https://assets.publishing.service.gov.uk/media/5a80cd03ed915d74e33fc7c5/FoP_Nutrition_labelling_UK_guidance.pdf",
+          "rounding_tolerance": 0.005,
+          "thresholds": {
+            "medium_above": 5,
+            "high_above": 22.5,
+            "basis": "100g",
+            "unit": "g",
+            "high_inclusive": false
+          }
+        },
+        {
+          "name": "added_sugar",
+          "value": 0.0,
+          "unit": "g",
+          "basis": "per_serving",
+          "original_value": 0.0,
+          "original_unit": "g",
+          "original_basis": "per_serving",
+          "source_span": "Added Sugars\n0g",
+          "status": "Low",
+          "reason": "Compared with the screening values for per_serving.",
+          "estimated": false,
+          "verified": true,
+          "serving_size": null,
+          "threshold_source": "US FDA, Added Sugars on the Nutrition Facts Label: 50 g Daily Value, <=5% DV low and >=20% DV high per serving: https://www.fda.gov/food/nutrition-facts-label/added-sugars-nutrition-facts-label",
+          "rounding_tolerance": 0.5,
+          "thresholds": {
+            "medium_above": 2.5,
+            "high_above": 10.0,
+            "basis": "per_serving",
+            "unit": "g",
+            "high_inclusive": true
+          }
+        },
+        {
+          "name": "fibre",
+          "value": null,
+          "unit": null,
+          "basis": "per_serving",
+          "original_value": null,
+          "original_unit": null,
+          "original_basis": "per_serving",
+          "source_span": "Dietary Fiber",
+          "status": "not comparable",
+          "verified": false,
+          "reason": "The nutrient name was read, but its value or unit could not be verified.",
+          "estimated": false,
+          "threshold_source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py)."
+        },
+        {
+          "name": "total_fat",
+          "value": null,
+          "unit": null,
+          "basis": "per_serving",
+          "original_value": null,
+          "original_unit": null,
+          "original_basis": "per_serving",
+          "source_span": "| Fat",
+          "status": "not comparable",
+          "verified": false,
+          "reason": "The nutrient name was read, but its value or unit could not be verified.",
+          "estimated": false,
+          "threshold_source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py)."
+        },
+        {
+          "name": "saturated_fat",
+          "value": null,
+          "unit": null,
+          "basis": "per_serving",
+          "original_value": null,
+          "original_unit": null,
+          "original_basis": "per_serving",
+          "source_span": "Saturated Fat",
+          "status": "not comparable",
+          "verified": false,
+          "reason": "The nutrient name was read, but its value or unit could not be verified.",
+          "estimated": false,
+          "threshold_source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py)."
+        }
+      ],
+      "ocr_attempts": [
+        {
+          "psm": 6,
+          "variant": "grayscale_native",
+          "characters": 818,
+          "mean_confidence": 46.98
+        },
+        {
+          "psm": 11,
+          "variant": "word_height_sparse",
+          "characters": 610,
+          "mean_confidence": 61.49
+        },
+        {
+          "psm": 3,
+          "variant": "word_height_layout",
+          "characters": 355,
+          "mean_confidence": 61.15
+        },
+        {
+          "psm": 6,
+          "variant": "word_height_grayscale",
+          "characters": 716,
+          "mean_confidence": 46.17
+        },
+        {
+          "psm": 4,
+          "variant": "word_height_grayscale",
+          "characters": 294,
+          "mean_confidence": 58.39
+        },
+        {
+          "psm": 6,
+          "variant": "illumination_flattened",
+          "characters": 927,
+          "mean_confidence": 53.43
+        }
+      ],
+      "mean_confidence": 61.49,
+      "first_median_word_height": 20.0,
+      "retry_scale": 1.5,
+      "preprocessing": {
+        "input_width": 963,
+        "input_height": 1280,
+        "ocr_width": 963,
+        "ocr_height": 1280,
+        "output_width": 963,
+        "output_height": 1280,
+        "resized": false,
+        "preprocessing_enabled": true,
+        "perspective_corrected": false,
+        "steps": [
+          "grayscale",
+          "resize",
+          "median denoise",
+          "CLAHE contrast",
+          "adaptive threshold"
+        ]
+      },
+      "seconds": 7.144
+    },
+    {
+      "name": "phone-photo-1",
+      "path": "uploads/scan_20261120_161228_b317aafa.jpg",
+      "kind": "package photo",
+      "sha256": "e4977aa4063823b1f25b8a98d21f5aa65210405d5274cd9ad76f5bcf126c4904",
+      "verified_core_count": 0,
+      "verified_core_fields": [],
+      "verified_fields": [],
+      "score": null,
+      "status": "insufficient",
+      "nutrients": [
+        {
+          "name": "total_fat",
+          "value": null,
+          "unit": null,
+          "basis": "unknown",
+          "original_value": null,
+          "original_unit": null,
+          "original_basis": "unknown",
+          "source_span": "TOTAL FAT",
+          "status": "not comparable",
+          "verified": false,
+          "reason": "The nutrient name was read, but its value or unit could not be verified.",
+          "estimated": false,
+          "threshold_source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py)."
+        },
+        {
+          "name": "protein",
+          "value": null,
+          "unit": null,
+          "basis": "unknown",
+          "original_value": null,
+          "original_unit": null,
+          "original_basis": "unknown",
+          "source_span": "PROTEIN",
+          "status": "not comparable",
+          "verified": false,
+          "reason": "The nutrient name was read, but its value or unit could not be verified.",
+          "estimated": false,
+          "threshold_source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py)."
+        }
+      ],
+      "ocr_attempts": [
+        {
+          "psm": 6,
+          "variant": "grayscale_native",
+          "characters": 278,
+          "mean_confidence": 39.79
+        },
+        {
+          "psm": 11,
+          "variant": "word_height_sparse",
+          "characters": 264,
+          "mean_confidence": 53.03
+        },
+        {
+          "psm": 3,
+          "variant": "word_height_layout",
+          "characters": 0,
+          "mean_confidence": null
+        },
+        {
+          "psm": 6,
+          "variant": "word_height_grayscale",
+          "characters": 164,
+          "mean_confidence": 35.89
+        },
+        {
+          "psm": 4,
+          "variant": "word_height_grayscale",
+          "characters": 170,
+          "mean_confidence": 50.54
+        },
+        {
+          "psm": 6,
+          "variant": "illumination_flattened",
+          "characters": 84,
+          "mean_confidence": 33.48
+        }
+      ],
+      "mean_confidence": 53.03,
+      "first_median_word_height": 35.0,
+      "retry_scale": 0.8571428571428571,
+      "preprocessing": {
+        "input_width": 963,
+        "input_height": 1280,
+        "ocr_width": 963,
+        "ocr_height": 1280,
+        "output_width": 963,
+        "output_height": 1280,
+        "resized": false,
+        "preprocessing_enabled": true,
+        "perspective_corrected": false,
+        "steps": [
+          "grayscale",
+          "resize",
+          "median denoise",
+          "CLAHE contrast",
+          "adaptive threshold"
+        ]
+      },
+      "seconds": 4.23
+    },
+    {
+      "name": "phone-photo-4",
+      "path": "uploads/scan_20261120_161238_9bc2f76a.jpg",
+      "kind": "package photo",
+      "sha256": "d788f5833458cfe3d59879846fdc9502481935b535cada42d8db703a32977df8",
+      "verified_core_count": 0,
+      "verified_core_fields": [],
+      "verified_fields": [],
+      "score": 91,
+      "status": "ingredient-only",
+      "nutrients": [],
+      "ocr_attempts": [
+        {
+          "psm": 6,
+          "variant": "grayscale_native",
+          "characters": 633,
+          "mean_confidence": 42.01
+        },
+        {
+          "psm": 11,
+          "variant": "word_height_sparse",
+          "characters": 560,
+          "mean_confidence": 52.84
+        },
+        {
+          "psm": 3,
+          "variant": "word_height_layout",
+          "characters": 328,
+          "mean_confidence": 59.12
+        },
+        {
+          "psm": 6,
+          "variant": "word_height_grayscale",
+          "characters": 589,
+          "mean_confidence": 39.6
+        },
+        {
+          "psm": 4,
+          "variant": "word_height_grayscale",
+          "characters": 439,
+          "mean_confidence": 62.71
+        },
+        {
+          "psm": 6,
+          "variant": "illumination_flattened",
+          "characters": 482,
+          "mean_confidence": 27.89
+        }
+      ],
+      "mean_confidence": 62.71,
+      "first_median_word_height": 42.0,
+      "retry_scale": 0.7142857142857143,
+      "preprocessing": {
+        "input_width": 963,
+        "input_height": 1280,
+        "ocr_width": 963,
+        "ocr_height": 1280,
+        "output_width": 963,
+        "output_height": 1280,
+        "resized": false,
+        "preprocessing_enabled": true,
+        "perspective_corrected": false,
+        "steps": [
+          "grayscale",
+          "resize",
+          "median denoise",
+          "CLAHE contrast",
+          "adaptive threshold"
+        ]
+      },
+      "seconds": 5.12
+    },
+    {
+      "name": "peanut-tin",
+      "path": "uploads/scan_20261121_115223_401c9724.jpg",
+      "kind": "package photo",
+      "sha256": "84b73fbd68a7d57982f8de4bc23aec78128fc9764dc0883755646b35b5e28604",
+      "verified_core_count": 0,
+      "verified_core_fields": [],
+      "verified_fields": [],
+      "score": 99,
+      "status": "ingredient-only",
+      "nutrients": [
+        {
+          "name": "energy",
+          "value": 160.0,
+          "unit": "kcal",
+          "basis": "unknown",
+          "original_value": 160.0,
+          "original_unit": "kcal",
+          "original_basis": "unknown",
+          "source_span": "Calories 160 Calories from Fat 110",
+          "status": "not comparable",
+          "reason": "Conflicting readings were extracted for this nutrient; check the photo.",
+          "estimated": false,
+          "verified": false,
+          "serving_size": null,
+          "threshold_source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py).",
+          "rounding_tolerance": 0.5
+        },
+        {
+          "name": "energy",
+          "value": null,
+          "unit": null,
+          "basis": "unknown",
+          "original_value": null,
+          "original_unit": null,
+          "original_basis": "unknown",
+          "source_span": "Calories 160 Calories from Fat 110",
+          "status": "not comparable",
+          "verified": false,
+          "reason": "The nutrient name was read, but its value or unit could not be verified.",
+          "estimated": false,
+          "threshold_source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py)."
+        },
+        {
+          "name": "total_fat",
+          "value": 12.0,
+          "unit": "g",
+          "basis": "unknown",
+          "original_value": 12.0,
+          "original_unit": "g",
+          "original_basis": "unknown",
+          "source_span": "Total Fat 12g 18%",
+          "status": "not comparable",
+          "reason": "The panel does not state whether this value is per 100 g, per 100 ml, or per serving.",
+          "estimated": false,
+          "verified": false,
+          "serving_size": null,
+          "threshold_source": "UK Department of Health, Guide to creating a front of pack nutrition label (2016), tables 2 and 3: https://assets.publishing.service.gov.uk/media/5a80cd03ed915d74e33fc7c5/FoP_Nutrition_labelling_UK_guidance.pdf",
+          "rounding_tolerance": 0.5,
+          "thresholds": {
+            "medium_above": 3,
+            "high_above": 17.5,
+            "basis": "100g",
+            "unit": "g",
+            "high_inclusive": false
+          }
+        },
+        {
+          "name": "saturated_fat",
+          "value": null,
+          "unit": null,
+          "basis": "unknown",
+          "original_value": null,
+          "original_unit": null,
+          "original_basis": "unknown",
+          "source_span": "Saturated Fat 1.59 8%",
+          "status": "not comparable",
+          "verified": false,
+          "reason": "The nutrient name was read, but its value or unit could not be verified.",
+          "estimated": false,
+          "threshold_source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py)."
+        },
+        {
+          "name": "trans_fat",
+          "value": 0.0,
+          "unit": "g",
+          "basis": "unknown",
+          "original_value": 0.0,
+          "original_unit": "g",
+          "original_basis": "unknown",
+          "source_span": "Trans Fat 0g",
+          "status": "not comparable",
+          "reason": "The panel does not state whether this value is per 100 g, per 100 ml, or per serving.",
+          "estimated": false,
+          "verified": false,
+          "serving_size": null,
+          "threshold_source": "Project assumption - needs verification (legacy trans-fat concentration bins). WHO's <1% energy intake guidance is not a per-100-g cutoff: https://www.who.int/news-room/fact-sheets/detail/trans-fat",
+          "rounding_tolerance": 0.5,
+          "thresholds": {
+            "medium_above": 0.5,
+            "high_above": 2,
+            "basis": "100g",
+            "unit": "g",
+            "high_inclusive": false
+          }
+        },
+        {
+          "name": "fibre",
+          "value": null,
+          "unit": null,
+          "basis": "unknown",
+          "original_value": null,
+          "original_unit": null,
+          "original_basis": "unknown",
+          "source_span": "Dietary Fiber 2",
+          "status": "not comparable",
+          "verified": false,
+          "reason": "The nutrient name was read, but its value or unit could not be verified.",
+          "estimated": false,
+          "threshold_source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py)."
+        },
+        {
+          "name": "sugar",
+          "value": 5.0,
+          "unit": "g",
+          "basis": "unknown",
+          "original_value": 5.0,
+          "original_unit": "g",
+          "original_basis": "unknown",
+          "source_span": "Sugars 5g 8%",
+          "status": "not comparable",
+          "reason": "The panel does not state whether this value is per 100 g, per 100 ml, or per serving.",
+          "estimated": false,
+          "verified": false,
+          "serving_size": null,
+          "threshold_source": "UK Department of Health, Guide to creating a front of pack nutrition label (2016), tables 2 and 3: https://assets.publishing.service.gov.uk/media/5a80cd03ed915d74e33fc7c5/FoP_Nutrition_labelling_UK_guidance.pdf",
+          "rounding_tolerance": 0.5,
+          "thresholds": {
+            "medium_above": 5,
+            "high_above": 22.5,
+            "basis": "100g",
+            "unit": "g",
+            "high_inclusive": false
+          }
+        },
+        {
+          "name": "energy",
+          "value": 2000.0,
+          "unit": "kcal",
+          "basis": "unknown",
+          "original_value": 2000.0,
+          "original_unit": "kcal",
+          "original_basis": "unknown",
+          "source_span": "Calories: 2,000 _—2,500",
+          "status": "not comparable",
+          "reason": "Conflicting readings were extracted for this nutrient; check the photo.",
+          "estimated": false,
+          "verified": false,
+          "serving_size": null,
+          "threshold_source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py).",
+          "rounding_tolerance": 0.0005
+        },
+        {
+          "name": "total_fat",
+          "value": null,
+          "unit": null,
+          "basis": "unknown",
+          "original_value": null,
+          "original_unit": null,
+          "original_basis": "unknown",
+          "source_span": "Total Fat please have package anit",
+          "status": "not comparable",
+          "verified": false,
+          "reason": "The nutrient name was read, but its value or unit could not be verified.",
+          "estimated": false,
+          "threshold_source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py)."
+        },
+        {
+          "name": "saturated_fat",
+          "value": null,
+          "unit": null,
+          "basis": "unknown",
+          "original_value": null,
+          "original_unit": null,
+          "original_basis": "unknown",
+          "source_span": "Sat Fat",
+          "status": "not comparable",
+          "verified": false,
+          "reason": "The nutrient name was read, but its value or unit could not be verified.",
+          "estimated": false,
+          "threshold_source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py)."
+        },
+        {
+          "name": "sodium",
+          "value": null,
+          "unit": null,
+          "basis": "unknown",
+          "original_value": null,
+          "original_unit": null,
+          "original_basis": "unknown",
+          "source_span": "Sodium",
+          "status": "not comparable",
+          "verified": false,
+          "reason": "The nutrient name was read, but its value or unit could not be verified.",
+          "estimated": false,
+          "threshold_source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py)."
+        },
+        {
+          "name": "potassium",
+          "value": null,
+          "unit": null,
+          "basis": "unknown",
+          "original_value": null,
+          "original_unit": null,
+          "original_basis": "unknown",
+          "source_span": "Potassium",
+          "status": "not comparable",
+          "verified": false,
+          "reason": "The nutrient name was read, but its value or unit could not be verified.",
+          "estimated": false,
+          "threshold_source": null
+        },
+        {
+          "name": "protein",
+          "value": null,
+          "unit": null,
+          "basis": "unknown",
+          "original_value": null,
+          "original_unit": null,
+          "original_basis": "unknown",
+          "source_span": "Protein",
+          "status": "not comparable",
+          "verified": false,
+          "reason": "The nutrient name was read, but its value or unit could not be verified.",
+          "estimated": false,
+          "threshold_source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py)."
+        }
+      ],
+      "ocr_attempts": [
+        {
+          "psm": 6,
+          "variant": "grayscale_native",
+          "characters": 1152,
+          "mean_confidence": 59.57
+        },
+        {
+          "psm": 11,
+          "variant": "word_height_sparse",
+          "characters": 1091,
+          "mean_confidence": 79.15
+        },
+        {
+          "psm": 3,
+          "variant": "word_height_layout",
+          "characters": 943,
+          "mean_confidence": 79.17
+        },
+        {
+          "psm": 6,
+          "variant": "word_height_grayscale",
+          "characters": 1000,
+          "mean_confidence": 60.52
+        },
+        {
+          "psm": 4,
+          "variant": "word_height_grayscale",
+          "characters": 898,
+          "mean_confidence": 64.68
+        },
+        {
+          "psm": 6,
+          "variant": "illumination_flattened",
+          "characters": 657,
+          "mean_confidence": 41.61
+        }
+      ],
+      "mean_confidence": 79.17,
+      "first_median_word_height": 33.0,
+      "retry_scale": 0.9090909090909091,
+      "preprocessing": {
+        "input_width": 1600,
+        "input_height": 1479,
+        "ocr_width": 1600,
+        "ocr_height": 1479,
+        "output_width": 1600,
+        "output_height": 1479,
+        "resized": false,
+        "preprocessing_enabled": true,
+        "perspective_corrected": true,
+        "steps": [
+          "grayscale",
+          "resize",
+          "median denoise",
+          "CLAHE contrast",
+          "perspective correction",
+          "adaptive threshold"
+        ]
+      },
+      "seconds": 20.972
+    },
+    {
+      "name": "green-bottle",
+      "path": "uploads/scan_20261121_122457_177eb702.jpg",
+      "kind": "package photo",
+      "sha256": "7ba7b4e3c16173fe46c33d0d676ef557d278e044e1deccaa778d8c42dfe6a36a",
+      "verified_core_count": 0,
+      "verified_core_fields": [],
+      "verified_fields": [],
+      "score": null,
+      "status": "insufficient",
+      "nutrients": [],
+      "ocr_attempts": [
+        {
+          "psm": 6,
+          "variant": "grayscale_native",
+          "characters": 115,
+          "mean_confidence": 29.95
+        },
+        {
+          "psm": 11,
+          "variant": "word_height_sparse",
+          "characters": 36,
+          "mean_confidence": 30.37
+        },
+        {
+          "psm": 3,
+          "variant": "word_height_layout",
+          "characters": 0,
+          "mean_confidence": null
+        },
+        {
+          "psm": 6,
+          "variant": "word_height_grayscale",
+          "characters": 58,
+          "mean_confidence": 27.08
+        },
+        {
+          "psm": 4,
+          "variant": "word_height_grayscale",
+          "characters": 35,
+          "mean_confidence": 59.5
+        },
+        {
+          "psm": 6,
+          "variant": "illumination_flattened",
+          "characters": 63,
+          "mean_confidence": 18.93
+        }
+      ],
+      "mean_confidence": 59.5,
+      "first_median_word_height": 46.0,
+      "retry_scale": 0.6521739130434783,
+      "preprocessing": {
+        "input_width": 1440,
+        "input_height": 1920,
+        "ocr_width": 1440,
+        "ocr_height": 1920,
+        "output_width": 1350,
+        "output_height": 1800,
+        "resized": true,
+        "preprocessing_enabled": true,
+        "perspective_corrected": false,
+        "steps": [
+          "grayscale",
+          "resize",
+          "median denoise",
+          "CLAHE contrast",
+          "adaptive threshold"
+        ]
+      },
+      "seconds": 7.116
+    },
+    {
+      "name": "glare-jar",
+      "path": "uploads/scan_20261121_122641_8104ca13.jpg",
+      "kind": "package photo",
+      "sha256": "ea1c4e8bd5a9f69d65552ebad018371fbc0aeb7d80df00b58e79fcc3c44fdb54",
+      "verified_core_count": 0,
+      "verified_core_fields": [],
+      "verified_fields": [],
+      "score": null,
+      "status": "insufficient",
+      "nutrients": [
+        {
+          "name": "sugar",
+          "value": null,
+          "unit": null,
+          "basis": "unknown",
+          "original_value": null,
+          "original_unit": null,
+          "original_basis": "unknown",
+          "source_span": "| Sugars",
+          "status": "not comparable",
+          "verified": false,
+          "reason": "The nutrient name was read, but its value or unit could not be verified.",
+          "estimated": false,
+          "threshold_source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py)."
+        },
+        {
+          "name": "fibre",
+          "value": null,
+          "unit": null,
+          "basis": "unknown",
+          "original_value": null,
+          "original_unit": null,
+          "original_basis": "unknown",
+          "source_span": "| Dietary Fiber",
+          "status": "not comparable",
+          "verified": false,
+          "reason": "The nutrient name was read, but its value or unit could not be verified.",
+          "estimated": false,
+          "threshold_source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py)."
+        }
+      ],
+      "ocr_attempts": [
+        {
+          "psm": 6,
+          "variant": "grayscale_native",
+          "characters": 268,
+          "mean_confidence": 36.44
+        },
+        {
+          "psm": 11,
+          "variant": "word_height_sparse",
+          "characters": 394,
+          "mean_confidence": 44.3
+        },
+        {
+          "psm": 3,
+          "variant": "word_height_layout",
+          "characters": 118,
+          "mean_confidence": 50.12
+        },
+        {
+          "psm": 6,
+          "variant": "word_height_grayscale",
+          "characters": 268,
+          "mean_confidence": 37.99
+        },
+        {
+          "psm": 4,
+          "variant": "word_height_grayscale",
+          "characters": 96,
+          "mean_confidence": 43.35
+        },
+        {
+          "psm": 6,
+          "variant": "illumination_flattened",
+          "characters": 544,
+          "mean_confidence": 42.93
+        }
+      ],
+      "mean_confidence": 50.12,
+      "first_median_word_height": 39.0,
+      "retry_scale": 0.7692307692307693,
+      "preprocessing": {
+        "input_width": 1440,
+        "input_height": 1920,
+        "ocr_width": 1440,
+        "ocr_height": 1920,
+        "output_width": 1350,
+        "output_height": 1800,
+        "resized": true,
+        "preprocessing_enabled": true,
+        "perspective_corrected": false,
+        "steps": [
+          "grayscale",
+          "resize",
+          "median denoise",
+          "CLAHE contrast",
+          "adaptive threshold"
+        ]
+      },
+      "seconds": 15.576
+    },
+    {
+      "name": "clear-227g",
+      "path": "uploads/scan_20261121_114933_72c00d5d.png",
+      "kind": "reference graphic",
+      "sha256": "6c8afa8f73f5499267c6103ff644d691d51b43b6cd9be71ed5df74929ca7a9aa",
+      "verified_core_count": 4,
+      "verified_core_fields": [
+        "saturated_fat",
+        "sugar",
+        "total_fat",
+        "trans_fat"
+      ],
+      "verified_fields": [
+        "added_sugar",
+        "energy",
+        "fibre",
+        "potassium",
+        "protein",
+        "saturated_fat",
+        "sugar",
+        "total_fat",
+        "trans_fat"
+      ],
+      "score": 86,
+      "status": "provisional",
+      "nutrients": [
+        {
+          "name": "energy",
+          "value": 123.34801762114537,
+          "unit": "kcal",
+          "basis": "100g",
+          "original_value": 280.0,
+          "original_unit": "kcal",
+          "original_basis": "per_serving",
+          "source_span": "Calories\n280",
+          "status": "Informational",
+          "reason": "Shown for context only because no verified energy screening threshold is available. Converted from per_serving using the stated serving size.",
+          "estimated": false,
+          "verified": true,
+          "serving_size": {
+            "amount": 227.0,
+            "unit": "g",
+            "source_span": "Serving size\n1 cup (227g)"
+          },
+          "threshold_source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py).",
+          "rounding_tolerance": 0.22026431718061673
+        },
+        {
+          "name": "total_fat",
+          "value": 3.9647577092511015,
+          "unit": "g",
+          "basis": "100g",
+          "original_value": 9.0,
+          "original_unit": "g",
+          "original_basis": "per_serving",
+          "source_span": "Total Fat 9g",
+          "status": "Medium",
+          "reason": "Compared with the screening values for 100g. Converted from per_serving using the stated serving size.",
+          "estimated": false,
+          "verified": true,
+          "serving_size": {
+            "amount": 227.0,
+            "unit": "g",
+            "source_span": "Serving size\n1 cup (227g)"
+          },
+          "threshold_source": "UK Department of Health, Guide to creating a front of pack nutrition label (2016), tables 2 and 3: https://assets.publishing.service.gov.uk/media/5a80cd03ed915d74e33fc7c5/FoP_Nutrition_labelling_UK_guidance.pdf",
+          "rounding_tolerance": 0.22026431718061673,
+          "thresholds": {
+            "medium_above": 3,
+            "high_above": 17.5,
+            "basis": "100g",
+            "unit": "g",
+            "high_inclusive": false
+          }
+        },
+        {
+          "name": "saturated_fat",
+          "value": 1.9823788546255507,
+          "unit": "g",
+          "basis": "100g",
+          "original_value": 4.5,
+          "original_unit": "g",
+          "original_basis": "per_serving",
+          "source_span": "Saturated Fat 4.5g",
+          "status": "Medium",
+          "reason": "Compared with the screening values for 100g. Converted from per_serving using the stated serving size.",
+          "estimated": false,
+          "verified": true,
+          "serving_size": {
+            "amount": 227.0,
+            "unit": "g",
+            "source_span": "Serving size\n1 cup (227g)"
+          },
+          "threshold_source": "UK Department of Health, Guide to creating a front of pack nutrition label (2016), tables 2 and 3: https://assets.publishing.service.gov.uk/media/5a80cd03ed915d74e33fc7c5/FoP_Nutrition_labelling_UK_guidance.pdf",
+          "rounding_tolerance": 0.022026431718061675,
+          "thresholds": {
+            "medium_above": 1.5,
+            "high_above": 5,
+            "basis": "100g",
+            "unit": "g",
+            "high_inclusive": false
+          }
+        },
+        {
+          "name": "trans_fat",
+          "value": 0.0,
+          "unit": "g",
+          "basis": "100g",
+          "original_value": 0.0,
+          "original_unit": "g",
+          "original_basis": "per_serving",
+          "source_span": "Trans Fat 0g",
+          "status": "Low",
+          "reason": "Compared with the screening values for 100g. Converted from per_serving using the stated serving size.",
+          "estimated": false,
+          "verified": true,
+          "serving_size": {
+            "amount": 227.0,
+            "unit": "g",
+            "source_span": "Serving size\n1 cup (227g)"
+          },
+          "threshold_source": "Project assumption - needs verification (legacy trans-fat concentration bins). WHO's <1% energy intake guidance is not a per-100-g cutoff: https://www.who.int/news-room/fact-sheets/detail/trans-fat",
+          "rounding_tolerance": 0.22026431718061673,
+          "thresholds": {
+            "medium_above": 0.5,
+            "high_above": 2,
+            "basis": "100g",
+            "unit": "g",
+            "high_inclusive": false
+          }
+        },
+        {
+          "name": "sodium",
+          "value": 374.44933920704847,
+          "unit": "mg",
+          "basis": "100g",
+          "original_value": 850.0,
+          "original_unit": "mg",
+          "original_basis": "per_serving",
+          "source_span": "Sodium 850mg",
+          "status": "not comparable",
+          "reason": "OCR confidence is low for this reading; check the value and basis against the photo.",
+          "estimated": false,
+          "verified": false,
+          "serving_size": {
+            "amount": 227.0,
+            "unit": "g",
+            "source_span": "Serving size\n1 cup (227g)"
+          },
+          "threshold_source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py).",
+          "rounding_tolerance": 0.22026431718061673
+        },
+        {
+          "name": "fibre",
+          "value": 1.7621145374449338,
+          "unit": "g",
+          "basis": "100g",
+          "original_value": 4.0,
+          "original_unit": "g",
+          "original_basis": "per_serving",
+          "source_span": "Dietary Fiber 4g",
+          "status": "Informational",
+          "reason": "Shown for context only; this nutrient does not reduce the screening score. Converted from per_serving using the stated serving size.",
+          "estimated": false,
+          "verified": true,
+          "serving_size": {
+            "amount": 227.0,
+            "unit": "g",
+            "source_span": "Serving size\n1 cup (227g)"
+          },
+          "threshold_source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py).",
+          "rounding_tolerance": 0.22026431718061673
+        },
+        {
+          "name": "sugar",
+          "value": 2.643171806167401,
+          "unit": "g",
+          "basis": "100g",
+          "original_value": 6.0,
+          "original_unit": "g",
+          "original_basis": "per_serving",
+          "source_span": "Total Sugars 6g",
+          "status": "Low",
+          "reason": "Compared with the screening values for 100g. Converted from per_serving using the stated serving size.",
+          "estimated": false,
+          "verified": true,
+          "serving_size": {
+            "amount": 227.0,
+            "unit": "g",
+            "source_span": "Serving size\n1 cup (227g)"
+          },
+          "threshold_source": "UK Department of Health, Guide to creating a front of pack nutrition label (2016), tables 2 and 3: https://assets.publishing.service.gov.uk/media/5a80cd03ed915d74e33fc7c5/FoP_Nutrition_labelling_UK_guidance.pdf",
+          "rounding_tolerance": 0.22026431718061673,
+          "thresholds": {
+            "medium_above": 5,
+            "high_above": 22.5,
+            "basis": "100g",
+            "unit": "g",
+            "high_inclusive": false
+          }
+        },
+        {
+          "name": "added_sugar",
+          "value": 0.0,
+          "unit": "g",
+          "basis": "100g",
+          "original_value": 0.0,
+          "original_unit": "g",
+          "original_basis": "per_serving",
+          "source_span": "Includes 0g Added Sugars",
+          "status": "Low",
+          "reason": "Compared with the screening values for 100g. Converted from per_serving using the stated serving size.",
+          "estimated": false,
+          "verified": true,
+          "serving_size": {
+            "amount": 227.0,
+            "unit": "g",
+            "source_span": "Serving size\n1 cup (227g)"
+          },
+          "threshold_source": "US FDA, Added Sugars on the Nutrition Facts Label: 50 g Daily Value, <=5% DV low and >=20% DV high per serving: https://www.fda.gov/food/nutrition-facts-label/added-sugars-nutrition-facts-label",
+          "rounding_tolerance": 0.22026431718061673,
+          "thresholds": {
+            "medium_above": 1.1013215859030836,
+            "high_above": 4.405286343612334,
+            "basis": "100g",
+            "unit": "g",
+            "high_inclusive": true
+          }
+        },
+        {
+          "name": "protein",
+          "value": 6.607929515418502,
+          "unit": "g",
+          "basis": "100g",
+          "original_value": 15.0,
+          "original_unit": "g",
+          "original_basis": "per_serving",
+          "source_span": "Protein 15g",
+          "status": "Informational",
+          "reason": "Shown for context only; this nutrient does not reduce the screening score. Converted from per_serving using the stated serving size.",
+          "estimated": false,
+          "verified": true,
+          "serving_size": {
+            "amount": 227.0,
+            "unit": "g",
+            "source_span": "Serving size\n1 cup (227g)"
+          },
+          "threshold_source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py).",
+          "rounding_tolerance": 0.22026431718061673
+        },
+        {
+          "name": "potassium",
+          "value": 224.66960352422907,
+          "unit": "mg",
+          "basis": "100g",
+          "original_value": 510.0,
+          "original_unit": "mg",
+          "original_basis": "per_serving",
+          "source_span": "Potassium 510mg",
+          "status": "Informational",
+          "reason": "Shown for context only; this nutrient does not reduce the screening score. Converted from per_serving using the stated serving size.",
+          "estimated": false,
+          "verified": true,
+          "serving_size": {
+            "amount": 227.0,
+            "unit": "g",
+            "source_span": "Serving size\n1 cup (227g)"
+          },
+          "threshold_source": null,
+          "rounding_tolerance": 0.22026431718061673
+        },
+        {
+          "name": "energy",
+          "value": null,
+          "unit": null,
+          "basis": "per_serving",
+          "original_value": null,
+          "original_unit": null,
+          "original_basis": "per_serving",
+          "source_span": "a serving of food contributes to a daily diet. 2,000 calories",
+          "status": "not comparable",
+          "verified": false,
+          "reason": "The nutrient name was read, but its value or unit could not be verified.",
+          "estimated": false,
+          "threshold_source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py)."
+        }
+      ],
+      "ocr_attempts": [
+        {
+          "psm": 6,
+          "variant": "grayscale_native",
+          "characters": 403,
+          "mean_confidence": 79.93
+        },
+        {
+          "psm": 11,
+          "variant": "word_height_sparse",
+          "characters": 444,
+          "mean_confidence": 91.76
+        },
+        {
+          "psm": 6,
+          "variant": "word_height_grayscale",
+          "characters": 404,
+          "mean_confidence": 89.33
+        },
+        {
+          "psm": 4,
+          "variant": "word_height_grayscale",
+          "characters": 448,
+          "mean_confidence": 92.65
+        },
+        {
+          "psm": 6,
+          "variant": "illumination_flattened",
+          "characters": 404,
+          "mean_confidence": 89.7
+        }
+      ],
+      "mean_confidence": 91.76,
+      "first_median_word_height": 13.0,
+      "retry_scale": 2.3076923076923075,
+      "preprocessing": {
+        "input_width": 328,
+        "input_height": 609,
+        "ocr_width": 328,
+        "ocr_height": 609,
+        "output_width": 328,
+        "output_height": 609,
+        "resized": false,
+        "preprocessing_enabled": true,
+        "perspective_corrected": true,
+        "steps": [
+          "grayscale",
+          "resize",
+          "median denoise",
+          "CLAHE contrast",
+          "perspective correction",
+          "adaptive threshold"
+        ]
+      },
+      "seconds": 3.333
+    },
+    {
+      "name": "bilingual-chips",
+      "path": "uploads/scan_20261121_114848_8d47af48.jpg",
+      "kind": "package reference image",
+      "sha256": "0ad41a244f9fdefb597d3e6da16a04917d67e779a7ef2b2d7a1ccc5a7ed35c11",
+      "verified_core_count": 5,
+      "verified_core_fields": [
+        "saturated_fat",
+        "sodium",
+        "sugar",
+        "total_fat",
+        "trans_fat"
+      ],
+      "verified_fields": [
+        "added_sugar",
+        "energy",
+        "potassium",
+        "protein",
+        "saturated_fat",
+        "sodium",
+        "sugar",
+        "total_fat",
+        "trans_fat"
+      ],
+      "score": 63,
+      "status": "sufficient",
+      "nutrients": [
+        {
+          "name": "energy",
+          "value": 535.7142857142857,
+          "unit": "kcal",
+          "basis": "100g",
+          "original_value": 150.0,
+          "original_unit": "kcal",
+          "original_basis": "per_serving",
+          "source_span": "Calories/Calorias 150",
+          "status": "Informational",
+          "reason": "Shown for context only because no verified energy screening threshold is available. Converted from per_serving using the stated serving size.",
+          "estimated": false,
+          "verified": true,
+          "serving_size": {
+            "amount": 28.0,
+            "unit": "g",
+            "source_span": "Serving size/Tamaio por racion\n(1 02/28g) (About 15 Crisps/Aprox. 15 Crujientes)"
+          },
+          "threshold_source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py).",
+          "rounding_tolerance": 1.7857142857142858
+        },
+        {
+          "name": "total_fat",
+          "value": 32.142857142857146,
+          "unit": "g",
+          "basis": "100g",
+          "original_value": 9.0,
+          "original_unit": "g",
+          "original_basis": "per_serving",
+          "source_span": "Total Fat/Grasa Total 9g 12%",
+          "status": "High",
+          "reason": "Compared with the screening values for 100g. Converted from per_serving using the stated serving size.",
+          "estimated": false,
+          "verified": true,
+          "serving_size": {
+            "amount": 28.0,
+            "unit": "g",
+            "source_span": "Serving size/Tamaio por racion\n(1 02/28g) (About 15 Crisps/Aprox. 15 Crujientes)"
+          },
+          "threshold_source": "UK Department of Health, Guide to creating a front of pack nutrition label (2016), tables 2 and 3: https://assets.publishing.service.gov.uk/media/5a80cd03ed915d74e33fc7c5/FoP_Nutrition_labelling_UK_guidance.pdf",
+          "rounding_tolerance": 1.7857142857142858,
+          "thresholds": {
+            "medium_above": 3,
+            "high_above": 17.5,
+            "basis": "100g",
+            "unit": "g",
+            "high_inclusive": false
+          }
+        },
+        {
+          "name": "saturated_fat",
+          "value": 8.928571428571429,
+          "unit": "g",
+          "basis": "100g",
+          "original_value": 2.5,
+          "original_unit": "g",
+          "original_basis": "per_serving",
+          "source_span": "Saturated Fat/Grasa Saturada 2.5g 13%",
+          "status": "High",
+          "reason": "Compared with the screening values for 100g. Converted from per_serving using the stated serving size.",
+          "estimated": false,
+          "verified": true,
+          "serving_size": {
+            "amount": 28.0,
+            "unit": "g",
+            "source_span": "Serving size/Tamaio por racion\n(1 02/28g) (About 15 Crisps/Aprox. 15 Crujientes)"
+          },
+          "threshold_source": "UK Department of Health, Guide to creating a front of pack nutrition label (2016), tables 2 and 3: https://assets.publishing.service.gov.uk/media/5a80cd03ed915d74e33fc7c5/FoP_Nutrition_labelling_UK_guidance.pdf",
+          "rounding_tolerance": 0.1785714285714286,
+          "thresholds": {
+            "medium_above": 1.5,
+            "high_above": 5,
+            "basis": "100g",
+            "unit": "g",
+            "high_inclusive": false
+          }
+        },
+        {
+          "name": "trans_fat",
+          "value": 0.0,
+          "unit": "g",
+          "basis": "100g",
+          "original_value": 0.0,
+          "original_unit": "g",
+          "original_basis": "per_serving",
+          "source_span": "Trans Fat/Grasa Trans 0g",
+          "status": "Low",
+          "reason": "Compared with the screening values for 100g. Converted from per_serving using the stated serving size.",
+          "estimated": false,
+          "verified": true,
+          "serving_size": {
+            "amount": 28.0,
+            "unit": "g",
+            "source_span": "Serving size/Tamaio por racion\n(1 02/28g) (About 15 Crisps/Aprox. 15 Crujientes)"
+          },
+          "threshold_source": "Project assumption - needs verification (legacy trans-fat concentration bins). WHO's <1% energy intake guidance is not a per-100-g cutoff: https://www.who.int/news-room/fact-sheets/detail/trans-fat",
+          "rounding_tolerance": 1.7857142857142858,
+          "thresholds": {
+            "medium_above": 0.5,
+            "high_above": 2,
+            "basis": "100g",
+            "unit": "g",
+            "high_inclusive": false
+          }
+        },
+        {
+          "name": "sodium",
+          "value": 535.7142857142857,
+          "unit": "mg",
+          "basis": "100g",
+          "original_value": 150.0,
+          "original_unit": "mg",
+          "original_basis": "per_serving",
+          "source_span": "Sodium/Sodio 150mg 7%",
+          "status": "Medium",
+          "reason": "Compared with the screening values for 100g. Converted from per_serving using the stated serving size.",
+          "estimated": false,
+          "verified": true,
+          "serving_size": {
+            "amount": 28.0,
+            "unit": "g",
+            "source_span": "Serving size/Tamaio por racion\n(1 02/28g) (About 15 Crisps/Aprox. 15 Crujientes)"
+          },
+          "threshold_source": "UK Department of Health, Guide to creating a front of pack nutrition label (2016), tables 2 and 3: https://assets.publishing.service.gov.uk/media/5a80cd03ed915d74e33fc7c5/FoP_Nutrition_labelling_UK_guidance.pdf; sodium cutoffs expressed from salt using salt = 2.5 x sodium.",
+          "rounding_tolerance": 1.7857142857142858,
+          "thresholds": {
+            "medium_above": 120,
+            "high_above": 600,
+            "basis": "100g",
+            "unit": "mg",
+            "high_inclusive": false
+          }
+        },
+        {
+          "name": "fibre",
+          "value": 3.5714285714285716,
+          "unit": "g",
+          "basis": "100g",
+          "original_value": 1.0,
+          "original_unit": "g",
+          "original_basis": "per_serving",
+          "source_span": "Dietary Fiber/Fibra Dietética <1g 3%",
+          "status": "not comparable",
+          "reason": "This reading is a bound, approximation, or negative value; an exact nutrient value could not be verified.",
+          "estimated": false,
+          "verified": false,
+          "serving_size": {
+            "amount": 28.0,
+            "unit": "g",
+            "source_span": "Serving size/Tamaio por racion\n(1 02/28g) (About 15 Crisps/Aprox. 15 Crujientes)"
+          },
+          "threshold_source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py).",
+          "rounding_tolerance": 1.7857142857142858
+        },
+        {
+          "name": "sugar",
+          "value": 0.0,
+          "unit": "g",
+          "basis": "100g",
+          "original_value": 0.0,
+          "original_unit": "g",
+          "original_basis": "per_serving",
+          "source_span": "Total Sugars/Azucares Totales 0g",
+          "status": "Low",
+          "reason": "Compared with the screening values for 100g. Converted from per_serving using the stated serving size.",
+          "estimated": false,
+          "verified": true,
+          "serving_size": {
+            "amount": 28.0,
+            "unit": "g",
+            "source_span": "Serving size/Tamaio por racion\n(1 02/28g) (About 15 Crisps/Aprox. 15 Crujientes)"
+          },
+          "threshold_source": "UK Department of Health, Guide to creating a front of pack nutrition label (2016), tables 2 and 3: https://assets.publishing.service.gov.uk/media/5a80cd03ed915d74e33fc7c5/FoP_Nutrition_labelling_UK_guidance.pdf",
+          "rounding_tolerance": 1.7857142857142858,
+          "thresholds": {
+            "medium_above": 5,
+            "high_above": 22.5,
+            "basis": "100g",
+            "unit": "g",
+            "high_inclusive": false
+          }
+        },
+        {
+          "name": "added_sugar",
+          "value": 0.0,
+          "unit": "g",
+          "basis": "100g",
+          "original_value": 0.0,
+          "original_unit": "g",
+          "original_basis": "per_serving",
+          "source_span": "Includes 0g Added Sugars/Incluye 0g azucares afiadidos 0%",
+          "status": "Low",
+          "reason": "Compared with the screening values for 100g. Converted from per_serving using the stated serving size.",
+          "estimated": false,
+          "verified": true,
+          "serving_size": {
+            "amount": 28.0,
+            "unit": "g",
+            "source_span": "Serving size/Tamaio por racion\n(1 02/28g) (About 15 Crisps/Aprox. 15 Crujientes)"
+          },
+          "threshold_source": "US FDA, Added Sugars on the Nutrition Facts Label: 50 g Daily Value, <=5% DV low and >=20% DV high per serving: https://www.fda.gov/food/nutrition-facts-label/added-sugars-nutrition-facts-label",
+          "rounding_tolerance": 1.7857142857142858,
+          "thresholds": {
+            "medium_above": 8.928571428571429,
+            "high_above": 35.714285714285715,
+            "basis": "100g",
+            "unit": "g",
+            "high_inclusive": true
+          }
+        },
+        {
+          "name": "protein",
+          "value": 3.5714285714285716,
+          "unit": "g",
+          "basis": "100g",
+          "original_value": 1.0,
+          "original_unit": "g",
+          "original_basis": "per_serving",
+          "source_span": "Protein/Proteinas 1g",
+          "status": "Informational",
+          "reason": "Shown for context only; this nutrient does not reduce the screening score. Converted from per_serving using the stated serving size.",
+          "estimated": false,
+          "verified": true,
+          "serving_size": {
+            "amount": 28.0,
+            "unit": "g",
+            "source_span": "Serving size/Tamaio por racion\n(1 02/28g) (About 15 Crisps/Aprox. 15 Crujientes)"
+          },
+          "threshold_source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py).",
+          "rounding_tolerance": 1.7857142857142858
+        },
+        {
+          "name": "potassium",
+          "value": 392.85714285714283,
+          "unit": "mg",
+          "basis": "100g",
+          "original_value": 110.0,
+          "original_unit": "mg",
+          "original_basis": "per_serving",
+          "source_span": "Potassium/Potasio 110mg 2%",
+          "status": "Informational",
+          "reason": "Shown for context only; this nutrient does not reduce the screening score. Converted from per_serving using the stated serving size.",
+          "estimated": false,
+          "verified": true,
+          "serving_size": {
+            "amount": 28.0,
+            "unit": "g",
+            "source_span": "Serving size/Tamaio por racion\n(1 02/28g) (About 15 Crisps/Aprox. 15 Crujientes)"
+          },
+          "threshold_source": null,
+          "rounding_tolerance": 1.7857142857142858
+        },
+        {
+          "name": "energy",
+          "value": null,
+          "unit": null,
+          "basis": "per_serving",
+          "original_value": null,
+          "original_unit": null,
+          "original_basis": "per_serving",
+          "source_span": "* The % Daily Value (DV) tells you how much a nutrient in a serving of food contributes to a dally diet. 2,000 calories a",
+          "status": "not comparable",
+          "verified": false,
+          "reason": "The nutrient name was read, but its value or unit could not be verified.",
+          "estimated": false,
+          "threshold_source": "Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py)."
+        }
+      ],
+      "ocr_attempts": [
+        {
+          "psm": 6,
+          "variant": "grayscale_native",
+          "characters": 1524,
+          "mean_confidence": 74.88
+        },
+        {
+          "psm": 11,
+          "variant": "word_height_sparse",
+          "characters": 1388,
+          "mean_confidence": 87.35
+        }
+      ],
+      "mean_confidence": 87.35,
+      "first_median_word_height": 30.0,
+      "retry_scale": 1.0,
+      "preprocessing": {
+        "input_width": 2400,
+        "input_height": 2400,
+        "ocr_width": 2400,
+        "ocr_height": 2400,
+        "output_width": 1800,
+        "output_height": 1800,
+        "resized": true,
+        "preprocessing_enabled": true,
+        "perspective_corrected": true,
+        "steps": [
+          "grayscale",
+          "resize",
+          "median denoise",
+          "CLAHE contrast",
+          "perspective correction",
+          "adaptive threshold"
+        ]
+      },
+      "seconds": 8.327
+    }
+  ],
+  "comparison": [
+    {
+      "name": "pastry",
+      "kind": "package photo",
+      "before": 0,
+      "after": 1,
+      "delta": 1,
+      "before_fields": [],
+      "after_fields": [
+        "sodium"
+      ]
+    },
+    {
+      "name": "package-c0",
+      "kind": "package photo",
+      "before": 0,
+      "after": 0,
+      "delta": 0,
+      "before_fields": [],
+      "after_fields": []
+    },
+    {
+      "name": "nutella-ingredients",
+      "kind": "package photo",
+      "before": 0,
+      "after": 0,
+      "delta": 0,
+      "before_fields": [],
+      "after_fields": []
+    },
+    {
+      "name": "cream-carton",
+      "kind": "package photo",
+      "before": 3,
+      "after": 2,
+      "delta": -1,
+      "before_fields": [
+        "saturated_fat",
+        "sugar",
+        "total_fat"
+      ],
+      "after_fields": [
+        "sodium",
+        "sugar"
+      ]
+    },
+    {
+      "name": "phone-photo-3",
+      "kind": "package photo",
+      "before": 0,
+      "after": 0,
+      "delta": 0,
+      "before_fields": [],
+      "after_fields": []
+    },
+    {
+      "name": "phone-photo-1",
+      "kind": "package photo",
+      "before": 0,
+      "after": 0,
+      "delta": 0,
+      "before_fields": [],
+      "after_fields": []
+    },
+    {
+      "name": "phone-photo-4",
+      "kind": "package photo",
+      "before": 0,
+      "after": 0,
+      "delta": 0,
+      "before_fields": [],
+      "after_fields": []
+    },
+    {
+      "name": "peanut-tin",
+      "kind": "package photo",
+      "before": 0,
+      "after": 0,
+      "delta": 0,
+      "before_fields": [],
+      "after_fields": []
+    },
+    {
+      "name": "green-bottle",
+      "kind": "package photo",
+      "before": 0,
+      "after": 0,
+      "delta": 0,
+      "before_fields": [],
+      "after_fields": []
+    },
+    {
+      "name": "glare-jar",
+      "kind": "package photo",
+      "before": 0,
+      "after": 0,
+      "delta": 0,
+      "before_fields": [],
+      "after_fields": []
+    },
+    {
+      "name": "clear-227g",
+      "kind": "reference graphic",
+      "before": 5,
+      "after": 4,
+      "delta": -1,
+      "before_fields": [
+        "saturated_fat",
+        "sodium",
+        "sugar",
+        "total_fat",
+        "trans_fat"
+      ],
+      "after_fields": [
+        "saturated_fat",
+        "sugar",
+        "total_fat",
+        "trans_fat"
+      ]
+    },
+    {
+      "name": "bilingual-chips",
+      "kind": "package reference image",
+      "before": 4,
+      "after": 5,
+      "delta": 1,
+      "before_fields": [
+        "sodium",
+        "sugar",
+        "total_fat",
+        "trans_fat"
+      ],
+      "after_fields": [
+        "saturated_fat",
+        "sodium",
+        "sugar",
+        "total_fat",
+        "trans_fat"
+      ]
+    }
+  ]
+}

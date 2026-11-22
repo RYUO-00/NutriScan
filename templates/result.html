@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Scan result · NutriScan{% endblock %}
 {% block content %}
+{% set score_title = 'Ingredient-only score' if result.score_status == 'ingredient-only' else 'Health Score' %}
 {% set selected_allergens = result.allergen_alerts|selectattr("selected")|list %}
 {% set other_allergens = result.allergen_alerts|rejectattr("selected")|list %}
 <article class="result-page">
@@ -11,19 +12,20 @@
       <p class="scan-date">Scanned {{ result.scanned_at|human_datetime }}</p>
       <p class="subtle">A screening summary of the label text NutriScan could read. Review the matches and comparison evidence below.</p>
     </div>
-    <div class="score-plate" aria-label="{% if result.health_score is not none %}Health Score {{ result.health_score }} out of 100, {{ result.score_band }}{% else %}Health Score: insufficient data{% endif %}">
+    <div class="score-plate" aria-label="{% if result.health_score is not none %}{{ score_title }} {{ result.health_score }} out of 100, {{ result.score_band }}{% else %}Health Score: insufficient data{% endif %}">
       {% if result.health_score is not none %}
       <div class="score-main">
         <div class="score-reading"><span class="score-value">{{ result.health_score }}</span><span class="score-total">/ 100</span></div>
         <span class="score-band">{{ result.score_band }}</span>
       </div>
-      <span class="score-label">Health Score · {% if result.score_status == 'provisional' %}provisional · {% endif %}informational</span>
+      <span class="score-label">{% if result.score_status == 'ingredient-only' %}Ingredient-only score · nutrition not assessed{% else %}Health Score · {% if result.score_status == 'provisional' %}provisional · based on {{ result.data_completeness.verified_core_count }} of {{ result.data_completeness.required_core_count }} nutrients{% endif %}{% endif %} · informational</span>
+      {% if result.score_status == 'ingredient-only' %}<p>This score covers matched additives and ingredient flags only. It is not a nutritional assessment.</p>{% elif result.score_status == 'provisional' and result.data_completeness.coverage_percent < config.SCORE_LIMITED_COVERAGE_PERCENT %}<p>The band is capped at {{ config.SCORE_LIMITED_BAND }} because nutrient coverage is below {{ config.SCORE_LIMITED_COVERAGE_PERCENT }}%.</p>{% endif %}
       <div class="score-scale-wrap">
-        <div class="score-scale" role="meter" aria-label="Health Score" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ result.health_score }}" aria-valuetext="{{ result.health_score }} out of 100, {{ result.score_band }}">
+        <div class="score-scale" role="meter" aria-label="{{ score_title }}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ result.health_score }}" aria-valuetext="{{ result.health_score }} out of 100, {{ result.score_band }}">
           {% for range in score_ranges %}<span class="score-range score-range-{{ range.label|lower }}" style="--range-width: {{ range.width }}%"></span>{% endfor %}
           <span class="score-indicator" style="--score-position: {{ result.health_score }}%"></span>
         </div>
-        <div class="score-range-labels" aria-label="Health Score ranges">
+        <div class="score-range-labels" aria-label="{{ score_title }} ranges">
           {% for range in score_ranges %}<span class="score-range-label" style="--range-width: {{ range.width }}%"><strong>{{ range.label }}</strong><small>{{ range.lower }}–{{ range.upper }}</small></span>{% endfor %}
         </div>
       </div>
@@ -197,7 +199,7 @@
       </li>
       {% endfor %}
     </ol>
-    {% if result.health_score is not none %}<p class="chart-caption">The final running balance is {{ balance.value }} points, matching the displayed Health Score of {{ result.health_score }}.</p>
+    {% if result.health_score is not none %}<p class="chart-caption">The final running balance is {{ balance.value }} points, matching the displayed {{ score_title }} of {{ result.health_score }}.</p>
     {% else %}<p class="chart-caption">These are the contributions supported by partial readings. No final score is published from this information.</p>{% endif %}
     {% else %}<p>No score contributions were applied because the minimum assessment requirements were not met. Matched ingredients and allergen alerts remain available above.</p>{% endif %}
   </section>
@@ -212,7 +214,7 @@
           <span class="image-fallback" data-image-fallback hidden><strong>Original photo unavailable</strong><span>The saved image could not be opened.</span></span>
         </figure>
         <figure class="comparison-panel processed-panel">
-          <img class="comparison-image processed-image" src="{{ url_for('uploaded_media', filename=result.processed_image_path[8:]) }}" alt="Standard preprocessed food label image">
+          <img class="comparison-image processed-image" src="{{ url_for('uploaded_media', filename=result.processed_image_path[8:]) }}" alt="Preprocessed food label display preview">
           <span class="image-fallback" data-image-fallback hidden><strong>Processed view unavailable</strong><span>The saved image could not be opened.</span></span>
         </figure>
       </div>
@@ -221,7 +223,7 @@
     <input id="comparison-slider" type="range" min="5" max="95" value="50" aria-describedby="comparison-help">
     <span id="comparison-help" class="visually-hidden">On wide screens, move the slider to reveal more of the processed image. On narrow screens, it adjusts the space for the stacked images.</span>
     {% set nutrition_retry = result.get('diagnostics', {}).get('ocr', {}).get('nutrition_ocr') %}
-    <p class="comparison-footnote">These views show the original and standard preprocessing; recognition can also use other local views. A clearer processed image does not guarantee a correct reading.{% if nutrition_retry %} A separate closer view of the original was also used to read the nutrition panel.{% endif %}</p>
+    <p class="comparison-footnote">The processed image is a display preview. Text recognition uses the original-resolution grayscale image and additional reading variants; a clearer preview does not guarantee a correct reading.{% if nutrition_retry %} A separate closer view of the original was also used to read the nutrition panel.{% endif %}</p>
   </section>
 
   <details class="raw-text"><summary>Read the OCR text and highlighted matches</summary><pre id="raw-ocr">{{ result.raw_text }}</pre>{% if nutrition_retry %}<h3>Nutrition panel retry</h3><pre>{{ nutrition_retry.text }}</pre>{% endif %}</details>
