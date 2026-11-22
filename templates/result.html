@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Scan result · NutriScan{% endblock %}
 {% block content %}
+{% set score_title = 'Ingredient-only score' if result.score_status == 'ingredient-only' else 'Health Score' %}
 {% set selected_allergens = result.allergen_alerts|selectattr("selected")|list %}
 {% set other_allergens = result.allergen_alerts|rejectattr("selected")|list %}
 <article class="result-page">
@@ -11,18 +12,20 @@
       <p class="scan-date">Scanned {{ result.scanned_at|human_datetime }}</p>
       <p class="subtle">A screening summary of the label text NutriScan could read. Review the matches and comparison evidence below.</p>
     </div>
-    <div class="score-plate" aria-label="Health Score {{ result.health_score }} out of 100, {{ result.score_band }}">
+    <div class="score-plate" aria-label="{% if result.health_score is not none %}{{ score_title }} {{ result.health_score }} out of 100, {{ result.score_band }}{% else %}Health Score: insufficient data{% endif %}">
+      {% if result.health_score is not none %}
       <div class="score-main">
         <div class="score-reading"><span class="score-value">{{ result.health_score }}</span><span class="score-total">/ 100</span></div>
         <span class="score-band">{{ result.score_band }}</span>
       </div>
-      <span class="score-label">Health Score · informational</span>
+      <span class="score-label">{% if result.score_status == 'ingredient-only' %}Ingredient-only score · nutrition not assessed{% else %}Health Score · {% if result.score_status == 'provisional' %}provisional · based on {{ result.data_completeness.verified_core_count }} of {{ result.data_completeness.required_core_count }} nutrients{% endif %}{% endif %} · informational</span>
+      {% if result.score_status == 'ingredient-only' %}<p>This score covers matched additives and ingredient flags only. It is not a nutritional assessment.</p>{% elif result.score_status == 'provisional' and result.data_completeness.coverage_percent < config.SCORE_LIMITED_COVERAGE_PERCENT %}<p>The band is capped at {{ config.SCORE_LIMITED_BAND }} because nutrient coverage is below {{ config.SCORE_LIMITED_COVERAGE_PERCENT }}%.</p>{% endif %}
       <div class="score-scale-wrap">
-        <div class="score-scale" role="meter" aria-label="Health Score" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ result.health_score }}" aria-valuetext="{{ result.health_score }} out of 100, {{ result.score_band }}">
+        <div class="score-scale" role="meter" aria-label="{{ score_title }}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ result.health_score }}" aria-valuetext="{{ result.health_score }} out of 100, {{ result.score_band }}">
           {% for range in score_ranges %}<span class="score-range score-range-{{ range.label|lower }}" style="--range-width: {{ range.width }}%"></span>{% endfor %}
           <span class="score-indicator" style="--score-position: {{ result.health_score }}%"></span>
         </div>
-        <div class="score-range-labels" aria-label="Health Score ranges">
+        <div class="score-range-labels" aria-label="{{ score_title }} ranges">
           {% for range in score_ranges %}<span class="score-range-label" style="--range-width: {{ range.width }}%"><strong>{{ range.label }}</strong><small>{{ range.lower }}–{{ range.upper }}</small></span>{% endfor %}
         </div>
       </div>
@@ -31,6 +34,12 @@
         <span aria-hidden="true">→</span>
         <span class="score-summary-group"><span>Final score:</span><strong>{{ score_summary.final_score }}</strong></span>
       </p>
+      {% else %}
+      <strong class="score-unavailable">Insufficient data</strong>
+      <span class="score-label">Health Score unavailable · {{ result.score_status|title }}</span>
+      <p>A reliable overall score could not be calculated from the verified readings. Review the missing information below.</p>
+      {% endif %}
+      <span class="score-label">Data coverage: {{ result.data_completeness.coverage_percent }}% · Confidence: {{ result.data_completeness.confidence|title }}</span>
     </div>
   </section>
 
@@ -85,27 +94,28 @@
       {% for nutrient in result.nutrients %}
       <li class="nutrient-row">
         <strong class="nutrient-name">{{ nutrient.name|replace("_", " ")|title }}{% if nutrient.estimated %}<span class="small-label">Estimate</span>{% endif %}</strong>
-        <span class="nutrient-value">{{ nutrient.value }} {{ nutrient.unit }}<small>{{ nutrient.basis }}</small></span>
+        <span class="nutrient-value">{% if nutrient.value is not none %}{{ nutrient.value|round(3) }} {{ nutrient.unit }}{% else %}Unreadable{% endif %}<small>{{ nutrient.basis }}</small></span>
         {% if nutrient.status == "Informational" %}
         <span class="nutrient-state informational-text">Context only</span>
-        {% elif nutrient.status == "Not Comparable" %}
+        {% elif nutrient.status|lower == "not comparable" %}
         <span class="nutrient-state status status-not-comparable">Not comparable</span>
         {% else %}
         <span class="nutrient-state status status-{{ nutrient.status|lower|replace(" ", "-") }}">{{ nutrient.status }}</span>
         {% endif %}
-        {% if nutrient.status not in ["Informational", "Not Comparable"] and nutrient.thresholds %}
+        {% if nutrient.status in ["High", "Medium", "Low"] and nutrient.thresholds %}
           {% set medium_stop = ((nutrient.thresholds.medium_above|float / nutrient.thresholds.high_above|float) * 80)|round(2) %}
           {% set reading_position = ([((nutrient.value|float / nutrient.thresholds.high_above|float) * 80), 80]|min)|round(2) %}
         <div class="nutrient-screening" aria-label="{{ nutrient.name|replace("_", " ")|title }} is {{ nutrient.status|lower }} compared with thresholds at {{ nutrient.thresholds.medium_above }} {{ nutrient.unit }} and {{ nutrient.thresholds.high_above }} {{ nutrient.unit }} per {{ nutrient.thresholds.basis }}">
           <div class="nutrient-scale" style="--medium-stop: {{ medium_stop }}%; --reading-position: {{ reading_position }}%" aria-hidden="true"><span class="range-low"></span><span class="range-medium"></span><span class="range-high"></span><span class="reading-marker"></span></div>
-          <div class="nutrient-thresholds"><span>0</span><span>Medium &gt; {{ nutrient.thresholds.medium_above }} {{ nutrient.unit }}</span><span>High &gt; {{ nutrient.thresholds.high_above }} {{ nutrient.unit }}</span><span>↑</span></div>
+          <div class="nutrient-thresholds"><span>0</span><span>Medium &gt; {{ nutrient.thresholds.medium_above|round(3) }} {{ nutrient.unit }}</span><span>High {% if nutrient.thresholds.high_inclusive %}≥{% else %}&gt;{% endif %} {{ nutrient.thresholds.high_above|round(3) }} {{ nutrient.unit }}</span><span>↑</span></div>
         </div>
         {% elif nutrient.status == "Informational" %}
         <p class="nutrient-reason">{{ nutrient.reason }}</p>
         {% else %}
         <p class="nutrient-reason">{{ nutrient.reason }}</p>
         {% endif %}
-        {% if nutrient.status not in ["Informational", "Not Comparable"] and nutrient.thresholds %}<p class="nutrient-reason">{{ nutrient.reason }}</p>{% endif %}
+        {% if nutrient.status in ["High", "Medium", "Low"] and nutrient.thresholds %}<p class="nutrient-reason">{{ nutrient.reason }}</p>{% endif %}
+        {% if nutrient.original_value is not none and (nutrient.original_basis != nutrient.basis or nutrient.original_unit != nutrient.unit) %}<p class="nutrient-reason">Declared: {{ nutrient.original_value }} {{ nutrient.original_unit }} · {{ nutrient.original_basis }}.{% if nutrient.serving_size %} Serving size: {{ nutrient.serving_size.amount }} {{ nutrient.serving_size.unit }}.{% endif %}</p>{% endif %}
       </li>
       {% endfor %}
     </ul>
@@ -143,14 +153,22 @@
   </section>
 
   <section class="report-section" aria-labelledby="score-heading">
-    <div class="section-heading"><div><h2 id="score-heading">Score breakdown</h2></div><p>The score starts at {{ score_summary.starting_score }} and applies only the contributions listed here.</p></div>
+    <div class="section-heading"><div><h2 id="score-heading">Score breakdown</h2></div><p>The calculation starts at {{ score_summary.starting_score }}. A starting value alone is not a screening result.</p></div>
+    <div class="quiet-note" aria-label="Data completeness">
+      <strong>Data status: {{ result.score_status|title }}</strong>
+      <p>{{ result.data_completeness.verified_core_count }} of {{ result.data_completeness.required_core_count }} core nutrient fields verified for comparison.</p>
+      <p>Confidence: {{ result.data_completeness.confidence|title }}.{% if result.data_completeness.ocr_mean_confidence is not none %} Mean OCR confidence: {{ result.data_completeness.ocr_mean_confidence }}; this is a text-reading diagnostic, not a probability that the assessment is correct.{% endif %}</p>
+      {% if result.data_completeness.messages %}<ul>{% for message in result.data_completeness.messages %}<li>{{ message }}</li>{% endfor %}</ul>{% endif %}
+      {% if result.score_review_note %}<p>{{ result.score_review_note }}</p>{% endif %}
+    </div>
     <div class="score-totals" aria-label="Score totals">
       <div><span>Starting score</span><strong>{{ score_summary.starting_score }}</strong></div>
       <div><span>Total deductions</span><strong>−{{ score_summary.deductions }}</strong></div>
       <div><span>Total credits</span><strong>+{{ score_summary.credits }}</strong></div>
       {% if score_summary.adjustment %}<div><span>Range adjustment</span><strong>{% if score_summary.adjustment > 0 %}+{% endif %}{{ score_summary.adjustment }}</strong></div>{% endif %}
-      <div class="score-total-final"><span>Final score</span><strong>{{ score_summary.final_score }} / 100</strong></div>
+      <div class="score-total-final"><span>Final score</span><strong>{% if score_summary.final_score is not none %}{{ score_summary.final_score }} / 100{% else %}Insufficient data{% endif %}</strong></div>
     </div>
+    {% if score_waterfall %}
     <p class="score-intro">This waterfall groups the same engine contributions shown in the detailed ledger below. Protein, fibre, and energy are informational and do not change the score.</p>
     <div class="score-waterfall" role="img" aria-label="Score waterfall from {{ score_summary.starting_score }} starting points through deductions, credits, and range adjustment to {{ score_summary.final_score }} final points">
       <div class="score-waterfall-axis" aria-hidden="true"><span></span><span class="score-waterfall-axis-values"><span>0</span><span>50</span><span>100</span></span><span></span></div>
@@ -164,6 +182,8 @@
         {% endfor %}
       </ol>
     </div>
+    {% endif %}
+    {% if result.score_breakdown %}
     <p class="score-intro score-detail-intro">Individual contributions, reasons, and running balances:</p>
     {% set balance = namespace(value=0) %}
     <ol class="score-ledger" aria-label="Score contributions and running total">
@@ -179,7 +199,9 @@
       </li>
       {% endfor %}
     </ol>
-    <p class="chart-caption">The final running balance is {{ balance.value }} points, matching the displayed Health Score of {{ result.health_score }}.</p>
+    {% if result.health_score is not none %}<p class="chart-caption">The final running balance is {{ balance.value }} points, matching the displayed {{ score_title }} of {{ result.health_score }}.</p>
+    {% else %}<p class="chart-caption">These are the contributions supported by partial readings. No final score is published from this information.</p>{% endif %}
+    {% else %}<p>No score contributions were applied because the minimum assessment requirements were not met. Matched ingredients and allergen alerts remain available above.</p>{% endif %}
   </section>
 
   <section class="report-section" aria-labelledby="comparison-heading">
@@ -192,7 +214,7 @@
           <span class="image-fallback" data-image-fallback hidden><strong>Original photo unavailable</strong><span>The saved image could not be opened.</span></span>
         </figure>
         <figure class="comparison-panel processed-panel">
-          <img class="comparison-image processed-image" src="{{ url_for('uploaded_media', filename=result.processed_image_path[8:]) }}" alt="Preprocessed food label image used for text recognition">
+          <img class="comparison-image processed-image" src="{{ url_for('uploaded_media', filename=result.processed_image_path[8:]) }}" alt="Preprocessed food label display preview">
           <span class="image-fallback" data-image-fallback hidden><strong>Processed view unavailable</strong><span>The saved image could not be opened.</span></span>
         </figure>
       </div>
@@ -200,11 +222,12 @@
     <label class="range-label" for="comparison-slider">Image comparison position</label>
     <input id="comparison-slider" type="range" min="5" max="95" value="50" aria-describedby="comparison-help">
     <span id="comparison-help" class="visually-hidden">On wide screens, move the slider to reveal more of the processed image. On narrow screens, it adjusts the space for the stacked images.</span>
-    <p class="comparison-footnote">The images are evidence of the OCR preprocessing step; a clearer processed view does not guarantee a correct reading.</p>
+    {% set nutrition_retry = result.get('diagnostics', {}).get('ocr', {}).get('nutrition_ocr') %}
+    <p class="comparison-footnote">The processed image is a display preview. Text recognition uses the original-resolution grayscale image and additional reading variants; a clearer preview does not guarantee a correct reading.{% if nutrition_retry %} A separate closer view of the original was also used to read the nutrition panel.{% endif %}</p>
   </section>
 
-  <details class="raw-text"><summary>Read the OCR text and highlighted matches</summary><pre id="raw-ocr">{{ result.raw_text }}</pre></details>
-  <details class="source-details"><summary>How this was calculated and sources</summary><p>The score starts at {{ result.starting_score }}. The listed ingredient, additive, and comparable nutrition contributions make up the displayed total. Energy, protein, and fibre are shown for context and do not change the score.</p><ul>{% for source in result.sources %}<li>{{ source }}</li>{% endfor %}</ul></details>
+  <details class="raw-text"><summary>Read the OCR text and highlighted matches</summary><pre id="raw-ocr">{{ result.raw_text }}</pre>{% if nutrition_retry %}<h3>Nutrition panel retry</h3><pre>{{ nutrition_retry.text }}</pre>{% endif %}</details>
+  <details class="source-details"><summary>How this was calculated and sources</summary><p>The calculation starts at {{ result.starting_score }} when the minimum nutrition assessment is met. Missing or uncertain values are never treated as zero. A partial score assesses only the verified readings. Total and added sugar share one deduction so the same sugar is not counted twice. Energy, protein, fibre, and potassium are informational. Concentration categories use the listed reference guidance; point weights, coverage policy, and any explicitly unverified screening bins remain project assumptions rather than a validated health rating.</p><ul>{% for source in result.sources %}<li>{{ source }}</li>{% endfor %}</ul></details>
   <script id="detected-findings" type="application/json">{{ result.highlight_findings|tojson }}</script>
   <section class="disclaimer"><strong>Informational screening only.</strong> NutriScan is not medical advice and does not guarantee that a product is safe for any person. OCR and keyword matching can miss or misread label text.</section>
   <p class="result-actions"><a class="button" href="{{ url_for('index') }}">Scan another label</a><a class="button button-quiet" href="{{ url_for('history_page') }}">View history</a></p>

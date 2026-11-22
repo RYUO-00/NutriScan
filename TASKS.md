@@ -58,9 +58,53 @@ Work one phase at a time. Mark a phase done only after its tests pass; update th
 - [x] Render and inspect the fresh sample at 1440×900 and 360×844, plus desktop/mobile score and image-comparison sections. Verify alerts, nutrient values, image responses, slider, logo, history reopening, and no horizontal overflow or browser errors.
 - [x] Final verification: `.venv` pytest 67 passed; the browser score summary reconciles to the saved backend result (100 − 34 + 2 = 68).
 
+## Scoring data-sufficiency correction — 20 Nov 2026
+
+- [x] Trace OCR through extraction, comparison, scoring, report rendering, and history. Reproduce the five misleading 100/100 saved reports; document unconditional initialization, skipped comparisons, and retry-selection failures in `docs/SCORING.md`.
+- [x] Preserve existing weights and cutoffs; validate evidence before deductions and publish sufficient/provisional/insufficient status. Withhold scores when no nutrients can be compared or partial information would yield 100; list missing/unverified information without penalties.
+- [x] Fix sugar-only heading fallback, split-row values, unsafe value association, numeric/basis confidence checks, plural/group allergens, measurement-versus-additive codes, and salt/sodium double counting. Keep per-serving and per-100-ml safeguards.
+- [x] Keep current and legacy report/history workflows functional; review old OCR in memory without altering saved JSON or images. Preserve routes, IDs, image serving, allergen alerts, and the existing interface identity.
+- [x] Add all ten requested upload-to-report regression cases and further extraction/scoring/history checks. Full `.venv` pytest: 108 passed. Re-read the four distinct failing original photos through real OpenCV/Tesseract; all correctly withheld a score. In-app browser visual QA remains unavailable because Work settings disable local browser use; rendered HTML is tested.
+
+## Nutella extraction and meaningful scoring — revision 3, 20 Nov 2026
+
+- [x] Reproduce the “container”/“contain” section collision and fix complete heading boundaries. Extract all nine supplied Nutella readings, 37 g serving metadata, unitless calories, value-before-name added sugar, and informational potassium.
+- [x] Normalize with explicit serving mass/volume, use separate sourced solid/liquid categories and FDA added-sugar serving rules, preserve precision at boundaries, and avoid total/added sugar double counting. Keep existing point weights configurable.
+- [x] Replace blanket partial-score withholding with an explicit evidence minimum; expose coverage and confidence and preserve unaffected readings when one field is missing or conflicting.
+- [x] Add all eight requested profiles, deterministic/configurable scoring, exact ledger reconciliation, real reference-image OCR, and bounded-layout retry coverage. Full pytest: 128 passed. Clean reference: 55, 100% core coverage; original blurry photo: 70 provisional, 40% core coverage, without invented right-column values.
+- [x] Update scoring/source limitations, architecture, review queue, README, memory, and append-only decisions. Existing routes, history storage, independent allergens, and result layout are retained.
+
+## Real-label OCR and scoring follow-up — 20 Nov 2026
+
+- [x] Recover explicitly marked panel text emitted before a nutrition heading; recognize Australian total-fat and saturated-fat row names.
+- [x] Retry suitable detected nutrition panels with bounded crops while retaining independent whole-page allergen/ingredient OCR; disclose and store the separate OCR evidence.
+- [x] Gate questionable numeric and serving-size OCR, allow exact independent corroboration, require defensible column mapping, and prefer explicitly printed per-100 quantities where rounding explains discrepancies.
+- [x] Test ambiguous decimals, column mapping, rounding, heading order, crop selection, score ledger, allergens, saved reports, and the bundled sample. Browser-rescan cereal and cream labels and review ingredient-only and low-resolution Nutella images; record unresolved OCR limitations.
+- [x] Final verification: `python -m pytest -q` with the existing project virtual environment — 143 passed. The in-app browser was used for fresh sample, cereal, cream, and Nutella scans.
+- [x] Transfer the revision 4 changes into the original project directory and run its own test suite — 143 passed.
+
 ## Image comparison and mobile photo selection — 21 Nov 2026
 
-- [x] Correct desktop comparison orientation: the original is revealed on the left and the processed image is on the right; the slider still reveals more processed image as its value increases.
+- [x] Correct desktop comparison orientation: the original is revealed on the left and the processed image on the right; the slider still reveals more processed image as its value increases.
 - [x] Keep the same meaning on narrow screens by stacking the complete original above the complete processed image and sizing their rows from the slider.
-- [x] Remove forced capture=environment from the shared photo input so phone users can select saved JPG/PNG photos; retain the browser's optional camera picker where available.
-- [x] Verify in the main project: focused route checks pass; full .venv pytest — 143 passed. The in-app browser showed the sample comparison correctly at desktop and 360 px, and the picker input has no capture attribute. A physical phone was not tested.
+- [x] Remove forced `capture="environment"` from the shared photo input so phone users can select saved JPG/PNG photos; retain the browser's optional camera picker where available.
+- [x] Verify in the main project: focused route checks pass; full `.venv` pytest — 143 passed. The in-app browser showed the sample comparison correctly at desktop and 360 px, and the picker input has no `capture` attribute. A physical phone was not tested.
+
+## OCR evidence recovery — revision 5, 22 Nov 2026
+
+- [x] Reproduce failures from recent main-project uploads and trace OCR, serving/value association, comparison and scoring.
+- [x] Add bounded bordered grayscale block/single-column recovery for partial panels, retain useful OCR after optional timeouts, and add a heading/row-based crop fallback.
+- [x] Parse reversed adjacent serving declarations, split Calories, English bilingual anchors and fatty-acid aliases; isolate serving-number confidence and require repeated evidence for borderline serving amounts.
+- [x] Prevent unresolved prepared-food columns from supplying product-only scores. Keep weights, coverage minimum, independent allergens and score arithmetic intact.
+- [x] Add regression tests and document assumptions, real replay evidence and limitations. Browser testing uses isolated uploads/history rather than the user's stored scans.
+
+- [x] Final verification: full main-project pytest **161 passed**; in-app browser confirms recovered 79/78 results, independent allergens, loaded comparison images, saved reopening/logo navigation and explicit rejection of unresolved prepared-food columns. No physical-phone test.
+
+## Native-resolution OCR and limited score scopes — revision 6, 22 Nov 2026
+
+- [x] Use native grayscale up to 4500 px for initial OCR; keep 1800 px preprocessing for preview/panel detection and map retry/detection coordinates correctly.
+- [x] Normalize retries toward median observed word height 30 px, with a pixel cap and explicit no-height fallback; add divided-background illumination flattening.
+- [x] Add ingredient-only scoring with existing weights, clear scope warnings and preserved insufficient nutrition status.
+- [x] Show provisional based on N of 5 nutrients and cap its band at Moderate below 60% coverage, without changing numeric scores.
+- [x] Add the missing scripts/benchmark_ocr.py, capture a version-5 baseline and rerun the identical hashed manifest under version 6. Report all gains/regressions: total 12/60 to 12/60, real package photos 3/50 to 3/50.
+- [x] Run main-project pytest: 174 passed (45.57 s), including scope/history rendering, normalization, illumination, geometry and benchmark matching checks. No existing test was removed; old expectations were updated for the explicitly requested contract changes.

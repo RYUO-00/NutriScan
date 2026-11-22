@@ -36,3 +36,25 @@ def test_same_line_headings_are_split_correctly():
 def test_ocr_number_corrections_do_not_change_nutrition_values():
     assert normalize_text("s0dium 12.50 mg; pr0tein 4.1 g") == "sodium 12.50 mg; protein 4.1 g"
     assert normalize_text("Saturated Fat5g Energy 425kcal") == "saturated fat5g energy 425kcal"
+
+
+def test_sugar_only_panel_without_heading_keeps_its_basis_and_value():
+    raw = "Per 100 g\nTotal Sugars 35 g"
+    assert parse_label_text(raw)["nutrition_text"] == raw
+
+
+def test_nutrition_heading_with_ocr_space_is_supported():
+    assert "Sugar 35 g" in parse_label_text("Nutr ition Facts per 100 g\nSugar 35 g")["nutrition_text"]
+
+
+def test_ocr_panel_body_before_heading_is_preserved_with_explicit_marker():
+    text = "Amount Per Serving\nTotal Fat 6g\nSaturated Fat 3.5g\nNutrition Facts\nServing size 15 ml\nIngredients: cream"
+    result = parse_label_text(text)
+    assert "Total Fat 6g" in result["nutrition_text"]
+    assert "Serving size 15 ml" in result["nutrition_text"]
+    assert "cream" not in result["nutrition_text"]
+
+
+def test_unmarked_preamble_is_not_added_to_nutrition_panel():
+    result = parse_label_text("Ingredients sugar 10g\nNutrition Facts per 100g\nSodium 100 mg")
+    assert "sugar" not in result["nutrition_text"]

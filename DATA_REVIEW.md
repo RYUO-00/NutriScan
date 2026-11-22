@@ -2,6 +2,25 @@
 
 Additive identity and functional-class sources are recorded in the JSON data. The provisional screening labels, keyword expansions, and nutrition cutoffs remain project assumptions and require review before academic submission.
 
+## Scoring coverage and extraction audit — 20 Nov 2026
+
+The following initial-audit notes are superseded where indicated by the revision 3 review below; the original knowledge source strings remain intact.
+
+- The existing numeric per-100-g bins and score weights remain **Project assumption - needs verification**. FSSAI label declarations and WHO daily-intake guidance do not verify these exact bins. No weights were changed to compensate for missing data; see `docs/SCORING.md` for the audited methodology and source links.
+- The coverage policy requires the existing total-fat, saturated-fat, trans-fat, total-sugar, and sodium fields (or directly declared salt for the sodium/salt group) to call nutrition data sufficient. This policy is **Project assumption - needs verification**. Missing fields add no penalty; partial results are provisional, and no-comparison results have no score or band. A partial calculation of 100 is withheld.
+- Salt and its derived sodium estimate must not generate two deductions. Direct sodium takes precedence when both sodium and salt are declared. The existing independent total-sugar and added-sugar deductions remain unchanged; review the methodology for possible overlap before treating the heuristic as a validated nutrient model.
+- OCR confidence is an extraction diagnostic, not a guarantee of correctness. Low-confidence numeric/basis readings, unreadable quantities, conflicting duplicates, or unmapped columns are not verified. Real photos with unreadable units or serving sizes still need a clearer scan; do not infer missing values.
+- Regular plural nut names and explicit group declarations such as “tree nuts” now match the existing JSON keywords/group names. Unsectioned OCR matches are labelled with their source section; absence of a keyword remains inconclusive. No new medical or allergen-safety claims have been added.
+
+## Revision 3 screening references and policy review — 20 Nov 2026
+
+- UK front-of-pack guidance tables 2/3 now source the implemented solid/liquid fat, saturates, total-sugar, and salt concentration categories; sodium is expressed from salt cutoffs. These are reference concentration categories, not FSSAI cutoffs, a full UK labelling implementation, or a validated composite score.
+- Added sugar now uses FDA serving-based Daily Value interpretation rather than the unsupported copy of total-sugar per-100-g bins. The sugar group takes the strongest applicable deduction; this avoids counting included added sugar twice. References and equations are recorded in `docs/SCORING.md`.
+- Existing 15/7 nutritional deduction weights, ingredient/additive weights, credits, caps, and bands remain **Project assumption - needs verification** as a composite methodology. No new point penalty is introduced for missing fields.
+- Trans-fat per-100-g bins remain **Project assumption - needs verification**. WHO's energy-intake guidance does not establish these concentration bins; no corresponding liquid cutoff has been invented.
+- The 3-of-5 coverage minimum, with an exception for an actual validated nutritional concern, remains **Project assumption - needs verification**. A supported partial neutral score is provisional and shows coverage/confidence; empty evidence never earns 100. Review this policy before using scores as validated product rankings.
+- The Nutella test transcript uses the user-provided reference values. The actual blurry photo is assessed from OCR only; missing right-column values are not filled from the transcript. The healthy reference uses the manufacturer's plain nonfat yogurt nutrition panel: https://usa.fage/products/yogurt/fage-total-0 (150 g variant, checked 20 Nov 2026).
+
 ## Additive-class audit — 31 Oct 2026
 
 All 180 additive records were checked for a code-specific class source. The result page shows the listed functional class where the record has one selected; INS 211 Sodium benzoate is Preservative and INS 322 Lecithins is Emulsifier. Twelve entries have multiple listed functions or no confidently selected primary class, so they remain marked “Class under review” and are itemized below rather than assigned a guessed class.
@@ -325,3 +344,21 @@ Assumption records: 300 of 300.
 - `nutrition_limits.json` record None (fibre): Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py).
 - `nutrition_limits.json` record None (added_sugar): Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py).
 - `nutrition_limits.json` record None (salt): Project assumption - needs verification (screening cutoff; numeric values are defined only in config.py).
+
+## OCR numeric confidence follow-up — 20 Nov 2026
+
+- **Project assumption - needs verification:** the numeric OCR confidence gate of 65, with a lower bound of 45 only when independent OCR passes agree on the exact value, unit, basis, and serving size. Tesseract confidence and agreement are imperfect; evaluate this heuristic against a larger labelled set, especially decimal losses and multi-column labels.
+- The small Nutella `v2_...jpg` test image still does not yield reliable nutrition or allergen text. Do not infer a product's allergens or fill values from its identity; acquire a closer image and validate manually.
+
+## OCR admission assumptions — revision 5, 22 Nov 2026
+
+- Project assumption - needs verification: the existing 45/65 Tesseract confidence gates now also permit a borderline serving mass/volume only when at least two separate OCR attempts repeat the exact amount and unit. Both contributing readings must meet the 45 gate; below it remains unverified. Repeated recognition of the same pixels can repeat the same mistake, so this is heuristic evidence, not independent ground truth.
+- OCR resizing, border, row-count crop gate and timeout settings are engineering limits in config.py / ocr.py, not dietary thresholds. They need broader real-photo evaluation. Do not interpret the local difficult-image replay as universal accuracy.
+- Product-only and prepared-with-milk columns must not be mixed. Unresolved prepared-food columns remain excluded even when they contain plausible, high-confidence numbers.
+
+## Revision 6 policy and benchmark review — 22 Nov 2026
+
+- Ingredient-only scores use existing configured additive/flag weights when nutrition is insufficient. They are labelled as ingredient-only, retain insufficient nutritional status, and cannot imply an assessment of unread nutrients. A zero-deduction ingredient ledger can be 100; it is not a perfect nutrition result.
+- The below-60% provisional-band cap and Moderate maximum for ingredient-only are explicit project coverage policies requested in this task. They change categories only, not score weights, nutrition thresholds or the ledger. They are not official dietary guidance.
+- Median word height 30 px, native/retry cap 4500 px and illumination Gaussian sigma 30 are configurable engineering choices, not calibrated guarantees. Repeated OCR remains heuristic evidence.
+- The ten-package-photo benchmark stays at 3/50 admitted core fields overall. Gains and regressions must remain visible; no universal OCR accuracy improvement is demonstrated. The separate two reference images must not be described as additional real camera photos.

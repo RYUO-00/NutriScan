@@ -16,7 +16,7 @@
         {% if scan.image_path %}<span class="archive-thumb"><img src="{{ url_for('uploaded_media', filename=scan.image_path[8:]) }}" alt="" class="archive-thumb-image"><span data-thumb-fallback hidden>Photo unavailable</span></span>{% endif %}
         <span><strong>{{ scan.image_name }}</strong><small>Open saved result</small></span>
       </span>
-      <span class="archive-score"><strong>{{ scan.health_score }}</strong><span>{{ scan.score_band }} band</span></span>
+      <span class="archive-score" data-status="{{ scan.score_status }}"><strong>{% if scan.health_score is not none %}{{ scan.health_score }}{% else %}Insufficient data{% endif %}</strong><span>{% if scan.health_score is not none %}{{ scan.score_band }} · {{ scan.score_status }}{% if scan.score_status == 'provisional' %} · based on {{ scan.data_completeness.verified_core_count }} of {{ scan.data_completeness.required_core_count }} nutrients{% endif %}{% else %}Score unavailable{% endif %}</span></span>
       {% if selected_alerts %}<span class="archive-alert selected">{{ selected_alerts|length }} selected allergen alert{% if selected_alerts|length != 1 %}s{% endif %}</span>
       {% elif other_alerts %}<span class="archive-alert other">{{ other_alerts|length }} allergen group{% if other_alerts|length != 1 %}s{% endif %} detected</span>
       {% else %}<span class="archive-alert">No keywords matched</span>{% endif %}

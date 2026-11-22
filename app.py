@@ -16,7 +16,7 @@ from werkzeug.utils import secure_filename
 
 import config
 from matcher import decode_additives, match_allergens, match_ingredient_tokens
-from nutrition import parse_nutrition
+from nutrition import _has_prepared_columns, parse_nutrition
 from ocr import OCRNoTextError, OCRSetupError, recognize_text
 from parser import parse_label_text
 from preprocess import PreprocessError, preprocess_image
@@ -163,6 +163,8 @@ def _score_summary(result):
 
 def _score_waterfall(summary):
     """Build grouped waterfall bars from the backend-derived score summary."""
+    if summary["final_score"] is None:
+        return []
     bars = []
 
     def add_bar(label, points, start, end, kind):
@@ -293,35 +295,106 @@ def _highlight_findings(additives, ingredient_flags, allergen_alerts, unknown_co
     }
 
 
-def _run_pipeline(upload_path, processed_path, image_name, scan_id, selected_allergens, knowledge, progress_id=None):
-    started = time.perf_counter()
-    _update_scan_progress(progress_id, start="image_preprocessing")
-    prepared = preprocess_image(upload_path, processed_path=processed_path)
-    _update_scan_progress(progress_id, complete="image_preprocessing", start="text_extraction")
-    ocr_result = recognize_text(prepared["processed"], prepared["original_gray"])
-    parsed = parse_label_text(ocr_result["text"])
-    _update_scan_progress(progress_id, complete="text_extraction", start="ingredient_additive_analysis")
+def _analyze_label(raw_text, selected_allergens, knowledge, ocr_context=None, *, progress_id=None):
+    """Analyze evidence identically for a fresh scan or a legacy saved report."""
+    parsed = parse_label_text(raw_text)
     named_additives, ingredient_flags, unrecognised_tokens = match_ingredient_tokens(
         parsed["ingredient_tokens"], knowledge["additives"], knowledge["ingredient_flags"]
     )
     coded_additives, unknown_codes = decode_additives(parsed["raw_text"], knowledge["additives"])
     additives = _merge_additive_matches(coded_additives, named_additives)
     allergens = match_allergens(
-        parsed["ingredient_text"], parsed["contains_text"], knowledge["allergens"], selected_allergens
+        parsed["ingredient_text"], parsed["contains_text"], knowledge["allergens"], selected_allergens,
+        fallback_text=parsed["raw_text"] if not parsed["ingredient_text"] or not parsed["contains_text"] else "",
     )
     _update_scan_progress(progress_id, complete="ingredient_additive_analysis", start="nutrition_screening")
-    nutrients = parse_nutrition(parsed["nutrition_text"], knowledge["nutrition_limits"])
+    nutrition_ocr = (ocr_context or {}).get("nutrition_ocr")
+    if nutrition_ocr:
+        panel = parse_label_text(nutrition_ocr["text"])
+        parsed["nutrition_text"] = panel["nutrition_text"]
+        nutrient_context = {
+            **nutrition_ocr,
+            "prepared_columns": bool(nutrition_ocr.get("prepared_columns")
+                                     or (ocr_context or {}).get("prepared_columns")
+                                     or _has_prepared_columns(parsed["nutrition_text"])
+                                     or _has_prepared_columns(parse_label_text(raw_text)["nutrition_text"])),
+        }
+        nutrient_source = nutrition_ocr["text"]
+    else:
+        nutrient_context = ocr_context
+        nutrient_source = parsed["raw_text"]
+    nutrients = parse_nutrition(parsed["nutrition_text"], knowledge["nutrition_limits"], ocr_context=nutrient_context, context_text=nutrient_source)
     _update_scan_progress(progress_id, complete="nutrition_screening", start="result_generation")
     score = calculate_health_score(additives, ingredient_flags, nutrients)
+    completeness = score["data_completeness"]
+    completeness["ocr_mean_confidence"] = (nutrient_context or {}).get("mean_confidence")
+    completeness["sections"] = {
+        "nutrition": "verified readings" if completeness["comparable_nutrients"] else "unverified or unavailable",
+        "ingredients": "read" if parsed["ingredient_text"] else "section not identified",
+        "allergens": "keyword matches found" if allergens else "no matches; absence cannot be verified",
+    }
+    if not parsed["ingredient_text"]:
+        completeness["messages"].append("The ingredient section could not be identified; ingredient and additive-name checks are incomplete.")
+    if any(item.get("verified") is False for item in nutrients):
+        completeness["messages"].append("Some readings or estimates could not be verified for scoring; review their row explanations.")
+        if completeness["confidence"] == "supported":
+            completeness["confidence"] = "limited"
+    return {
+        **parsed,
+        "additives": additives, "unknown_additive_codes": unknown_codes,
+        "ingredient_flags": ingredient_flags, "allergen_alerts": allergens,
+        "nutrients": nutrients, "unrecognised_tokens": unrecognised_tokens,
+        "serving_size": next((item.get("serving_size") for item in nutrients if item.get("serving_size")), None),
+        "sources": list(dict.fromkeys(_source_strings(additives, ingredient_flags, allergens, nutrients) + [item["source"] for item in knowledge["nutrition_limits"]])),
+        "highlight_findings": _highlight_findings(additives, ingredient_flags, allergens, unknown_codes),
+        "health_score": score["health_score"], "starting_score": config.STARTING_SCORE,
+        "score_band": score["score_band"], "score_breakdown": score["score_breakdown"],
+        "score_totals": score["totals"], "score_status": score["score_status"],
+        "data_completeness": completeness, "analysis_version": config.ANALYSIS_VERSION,
+    }
+
+
+def _review_saved_result(result, knowledge):
+    """Review old OCR evidence in memory without changing the history file."""
+    if result.get("analysis_version") == config.ANALYSIS_VERSION:
+        return result
+    reviewed = _analyze_label(
+        result.get("raw_text", ""), result.get("user_allergens", []), knowledge,
+        result.get("diagnostics", {}).get("ocr"),
+    )
+    return {
+        **result, **reviewed,
+        "previous_scoring": {key: result.get(key) for key in ("health_score", "score_band", "score_breakdown", "score_totals")},
+        "score_review_note": "This saved report was reviewed from its stored label text. Its original scan files and history entry have not been changed.",
+    }
+
+
+def _run_pipeline(upload_path, processed_path, image_name, scan_id, selected_allergens, knowledge, progress_id=None):
+    started = time.perf_counter()
+    _update_scan_progress(progress_id, start="image_preprocessing")
+    prepared = preprocess_image(upload_path, processed_path=processed_path)
+    _update_scan_progress(progress_id, complete="image_preprocessing", start="text_extraction")
+    ocr_result = recognize_text(prepared["processed"], prepared["original_gray"])
+    _update_scan_progress(progress_id, complete="text_extraction", start="ingredient_additive_analysis")
+    analysis = _analyze_label(ocr_result["text"], selected_allergens, knowledge, ocr_result, progress_id=progress_id)
     diagnostics = {
         **prepared["diagnostics"],
         "ocr": {
             "mean_confidence": ocr_result["mean_confidence"],
+            "first_median_word_height": ocr_result.get("first_median_word_height"),
+            "retry_scale": ocr_result.get("retry_scale"),
+            "ocr_width": ocr_result.get("ocr_width"), "ocr_height": ocr_result.get("ocr_height"),
             "retried": ocr_result["retried"],
             "attempt_count": ocr_result["attempt_count"],
             "psm": ocr_result["psm"],
             "used_original": ocr_result["used_original"],
+            "upscaled": ocr_result.get("upscaled", False),
             "attempts": ocr_result["attempts"],
+            "lines": ocr_result.get("lines", []),
+            "nutrition_ocr": ocr_result.get("nutrition_ocr"),
+            "corroborated_readings": ocr_result.get("corroborated_readings", []),
+            "corroborated_serving_sizes": ocr_result.get("corroborated_serving_sizes", []),
+            "prepared_columns": ocr_result.get("prepared_columns", False),
         },
         "processing_seconds": round(time.perf_counter() - started, 3),
     }
@@ -332,25 +405,7 @@ def _run_pipeline(upload_path, processed_path, image_name, scan_id, selected_all
         "image_path": _asset_reference(upload_path),
         "processed_image_path": _asset_reference(processed_path),
         "user_allergens": selected_allergens,
-        "raw_text": parsed["raw_text"],
-        "normalized_text": parsed["normalized_text"],
-        "ingredient_tokens": parsed["ingredient_tokens"],
-        "ingredient_text": parsed["ingredient_text"],
-        "contains_text": parsed["contains_text"],
-        "nutrition_text": parsed["nutrition_text"],
-        "additives": additives,
-        "unknown_additive_codes": unknown_codes,
-        "ingredient_flags": ingredient_flags,
-        "allergen_alerts": allergens,
-        "nutrients": nutrients,
-        "sources": _source_strings(additives, ingredient_flags, allergens, nutrients),
-        "highlight_findings": _highlight_findings(additives, ingredient_flags, allergens, unknown_codes),
-        "health_score": score["health_score"],
-        "starting_score": config.STARTING_SCORE,
-        "score_band": score["score_band"],
-        "score_breakdown": score["score_breakdown"],
-        "score_totals": score["totals"],
-        "unrecognised_tokens": unrecognised_tokens,
+        **analysis,
         "diagnostics": diagnostics,
         "disclaimer": "Informational screening only. Not medical advice and not a guarantee of food safety.",
     }
@@ -362,6 +417,8 @@ def create_app(test_config=None):
     app.config.update(
         MAX_CONTENT_LENGTH=config.MAX_CONTENT_LENGTH + config.MULTIPART_OVERHEAD,
         JSON_SORT_KEYS=False,
+        SCORE_LIMITED_COVERAGE_PERCENT=config.SCORE_LIMITED_COVERAGE_PERCENT,
+        SCORE_LIMITED_BAND=config.SCORE_LIMITED_BAND,
     )
     if test_config:
         app.config.update(test_config)
@@ -441,12 +498,13 @@ def create_app(test_config=None):
                 result = get_scan_by_id(scan_id)
                 if result is None:
                     return render_template("error.html", message="That saved scan was not found."), 404
+                result = _review_saved_result(result, app.config["KNOWLEDGE"])
                 score_summary = _score_summary(result)
                 return render_template(
                     "result.html", result=result, score_summary=score_summary,
                     score_ranges=_score_ranges(), score_waterfall=_score_waterfall(score_summary),
                 )
-            scans = sorted(get_history(), key=lambda item: item.get("scanned_at", ""), reverse=True)
+            scans = sorted((_review_saved_result(item, app.config["KNOWLEDGE"]) for item in get_history()), key=lambda item: item.get("scanned_at", ""), reverse=True)
             return render_template("history.html", scans=scans)
         except StorageError as exc:
             return render_template("error.html", message=str(exc)), 500
@@ -458,11 +516,11 @@ def create_app(test_config=None):
     @app.get("/api/history")
     def history_api():
         try:
-            scans = sorted(get_history(), key=lambda item: item.get("scanned_at", ""), reverse=True)
+            scans = sorted((_review_saved_result(item, app.config["KNOWLEDGE"]) for item in get_history()), key=lambda item: item.get("scanned_at", ""), reverse=True)
         except StorageError as exc:
             return jsonify({"error": str(exc)}), 500
         return jsonify([
-            {key: item.get(key) for key in ("scan_id", "scanned_at", "image_name", "health_score", "score_band")}
+            {key: item.get(key) for key in ("scan_id", "scanned_at", "image_name", "health_score", "score_band", "score_status", "data_completeness")}
             for item in scans
         ])
 
@@ -474,7 +532,7 @@ def create_app(test_config=None):
             return jsonify({"error": str(exc)}), 500
         if result is None:
             abort(404)
-        return jsonify(result)
+        return jsonify(_review_saved_result(result, app.config["KNOWLEDGE"]))
 
     @app.get("/api/scan-progress/<progress_id>")
     def scan_progress_api(progress_id):
